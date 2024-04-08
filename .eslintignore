@@ -1,0 +1,4 @@
+node_modules
+yarn-lock.json
+dist
+index.html

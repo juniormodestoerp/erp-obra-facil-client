@@ -1,0 +1,14 @@
+@baseUrl = https://soure-pa.nobe-treino.com.br/saude
+
+# @name authenticate
+POST http://3.232.79.43:3333/user
+Content-Type: application/json
+
+{
+    "document": "09899291676",
+    "email": "bruno.clara@yahoo.com",
+    "name": "Bruno Vilefort Clara",
+    "password": "9431",
+    "phone": "+5531991505564"
+}
+
