@@ -1,10 +1,10 @@
-import { cn } from '@app/utils/cn'
-import { Toggle } from '@views/components/toggle'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 import { settingsOptions } from '@/assets/data'
 
+import { Card } from './components/card'
+import { PageTitle } from './components/page-title'
 import { UseSettingsController } from './use-settings-controller'
 
 export function Settings() {
@@ -14,43 +14,28 @@ export function Settings() {
     <Fragment>
       <Helmet title="Configurações" />
 
-      <h1 className="mb-2 text-2xl font-bold tracking-tight">Configurações</h1>
-      <h2 className="mb-8 text-lg">
-        Personalize o sistema para desbloquear uma eficiência sem precedentes.
-      </h2>
+      <PageTitle
+        title="Configurações"
+        description="Personalize o sistema para desbloquear uma eficiência sem precedentes."
+      />
 
       <div className="flex min-h-screen flex-wrap items-start justify-start gap-8">
         {settingsOptions.map((setting) => {
           return (
             <div
               key={setting.id}
-              className="w-full space-y-3 rounded border border-gy-300 p-3 shadow"
+              className="w-full space-y-1.5 overflow-hidden rounded border border-zinc-300 bg-white p-3 shadow dark:border-zinc-400 dark:bg-zinc-800"
             >
-              <div className="flex items-start justify-between">
-                <h3 className="font-medium tracking-tight">{setting.title}</h3>
-                <div className="flex h-4 w-4 items-center justify-center">
-                  <div
-                    className={cn(
-                      'mt-2 h-2.5 w-2.5 rounded-full',
-                      isActive ? 'bg-green-500' : 'bg-red-500',
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="">
-                <p className="text-sm">{setting.description}</p>
-              </div>
-              <div className="flex items-center justify-end">
-                <Toggle
-                  enabled={enabled}
-                  setEnabled={setEnabled}
-                  enableText="Obrigatório *"
-                  disableText="Opcional"
-                />
-                <button type="button" onClick={() => setIsActive(!isActive)}>
-                  {isActive ? 'Desabilitar' : 'Habilitar'}
-                </button>
-              </div>
+              <Card.Header title={setting.title} isActive={isActive} />
+
+              <Card.Content description={setting.description} />
+
+              <Card.Footer
+                enabled={enabled}
+                setEnabled={setEnabled}
+                isActive={isActive}
+                handleActive={() => setIsActive(!isActive)}
+              />
             </div>
           )
         })}

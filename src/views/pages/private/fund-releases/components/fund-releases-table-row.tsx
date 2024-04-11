@@ -43,13 +43,13 @@ export function FundReleasesTableRow() {
       </TableCell>
       <TableCell className="text-xs font-medium">R$ 18.400,00</TableCell>
       <TableCell>
-        <Button variant="default" size="xs" className="text-xs">
-          <CheckCircleIcon className="h-4 w-4" />
+        <Button variant="default" size="xs" className="px-2 text-xs">
+          <CheckCircleIcon className="h-5 w-5" strokeWidth={1.5} />
         </Button>
       </TableCell>
       <TableCell>
-        <Button variant="destructive" size="xs" className="text-xs">
-          <X className="h-3.5 w-3.5" />
+        <Button variant="destructive" size="xs" className="px-2 text-xs">
+          <X className="h-4 w-4" strokeWidth={1.5} />
         </Button>
       </TableCell>
     </TableRow>

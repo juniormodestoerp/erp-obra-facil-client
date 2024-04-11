@@ -1,0 +1,16 @@
+.animate-swing {
+  animation: swing 2s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); } /* Balança para a direita */
+  50% { transform: rotate(-10deg); } /* Balança para a esquerda, mas não tanto quanto para a direita */
+  75% { transform: rotate(5deg); } /* Balança novamente para a direita, menos do que a primeira vez */
+  100% { transform: rotate(0deg); } /* Volta à posição inicial */
+}
+
+@keyframes swing-dark {
+  0%, 100% { transform: rotate(15deg); }
+  50% { transform: rotate(-15deg); }
+}

@@ -1,23 +1,25 @@
+import {
+  Tooltip as SdcnTooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@views/components/ui/tooltip'
 import { ReactNode } from 'react'
-import { Tooltip } from 'react-tooltip'
 
 interface Props {
-  id: string
-  text?: string
-  children?: ReactNode
+  text: string
+  children: ReactNode
 }
 
-export function ReactTooltip({ id, text, children }: Props) {
+export function Tooltip({ text, children }: Props) {
   return (
-    <Tooltip
-      anchorSelect={`#${id}`}
-      style={{
-        backgroundColor: '#fff',
-        color: '#333',
-      }}
-      border="1px solid #333"
-    >
-      {text ?? children}
-    </Tooltip>
+    <TooltipProvider>
+      <SdcnTooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent>
+          <p className="text-sm font-medium text-white">{text}</p>
+        </TooltipContent>
+      </SdcnTooltip>
+    </TooltipProvider>
   )
 }

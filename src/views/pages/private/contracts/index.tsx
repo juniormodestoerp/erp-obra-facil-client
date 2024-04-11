@@ -1,7 +1,10 @@
+import { Fragment } from 'react'
+import { Helmet } from 'react-helmet-async'
+
 export function Contracts() {
   return (
-    <div>
-      <h1>Contracts</h1>
-    </div>
+    <Fragment>
+      <Helmet title="Contratos" />
+    </Fragment>
   )
 }

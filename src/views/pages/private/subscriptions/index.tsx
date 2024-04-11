@@ -1,6 +1,6 @@
 import { cn } from '@app/utils/cn'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { ReactTooltip } from '@views/components/tooltip'
+import { ReactTooltip } from '@views/components/tooltip-old'
 import { UseSubscriptionsController } from '@views/pages/private/subscriptions/use-subscriptions-controller'
 import { Plus } from 'lucide-react'
 import { Fragment } from 'react'

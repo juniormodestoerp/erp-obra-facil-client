@@ -77,7 +77,7 @@ export function Toggle({
         </span>
       </Switch>
 
-      <p className="text-main-300 ml-3 mt-0.5 font-medium">
+      <p className="text-main-300 ml-3 text-sm font-medium">
         {enabled ? enableText : disableText}
       </p>
     </div>
