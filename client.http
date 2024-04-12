@@ -1,7 +1,7 @@
-@baseUrl = https://soure-pa.nobe-treino.com.br/saude
+@baseUrl = http://localhost:3333/erp
 
 # @name authenticate
-POST http://3.232.79.43:3333/user
+POST {{baseUrl}}/user
 Content-Type: application/json
 
 {

@@ -92,8 +92,6 @@ export function useProfileController() {
 
     setIsPending(true)
     try {
-      console.log(user)
-
       const response = await httpClient.put(`/user/${user?.user?.id}`, {
         ...data,
         document: data.document.replace(/\D/g, ''),

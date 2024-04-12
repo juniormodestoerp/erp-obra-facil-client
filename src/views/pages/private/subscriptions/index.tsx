@@ -13,8 +13,6 @@ import { IncomeIcon } from '@/assets/icons/income'
 export function Subscriptions() {
   const { currentTab, setCurrentTab } = UseSubscriptionsController()
 
-  console.log(currentTab === 'Receitas')
-
   function organizeIncomeCategories(categories: Category[]) {
     // Organizando categorias primárias e suas subcategorias
     const organized = categories

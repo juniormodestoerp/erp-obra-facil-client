@@ -1,7 +1,6 @@
 import { Button } from '@views/components/button'
-import { Input } from '@views/components/input'
 import { InputPassword } from '@views/components/input-password'
-import { UseResetPasswordController } from '@views/pages/auth/reset-password/use-reset-password-controller'
+import { UseResetPasswordController } from '@views/pages/authentication/reset-password/use-reset-password-controller'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'

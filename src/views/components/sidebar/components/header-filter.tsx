@@ -15,7 +15,7 @@ export function HeaderFilter() {
       <input
         id="search-field"
         className="text-main-300 bg-main-100 my-auto block h-10 w-full rounded-xl border border-muted-foreground py-0 pl-10 pr-0 placeholder:text-gray-600 focus:ring-0 sm:text-sm"
-        placeholder="Search..."
+        placeholder="Pesquisar..."
         type="search"
         name="search"
       />

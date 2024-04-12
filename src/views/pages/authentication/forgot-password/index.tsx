@@ -1,6 +1,6 @@
 import { Button } from '@views/components/button'
 import { Input } from '@views/components/input'
-import { UseForgotPasswordController } from '@views/pages/auth/forgot-password/use-forgot-password-controller'
+import { UseForgotPasswordController } from '@views/pages/authentication/forgot-password/use-forgot-password-controller'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'

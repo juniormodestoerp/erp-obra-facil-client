@@ -1,10 +1,16 @@
-import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
+import {
+  ComputerDesktopIcon,
+  MoonIcon,
+  SunIcon,
+} from '@heroicons/react/24/outline'
 import { useTheme } from '@views/components/theme/theme-provider'
 import { Button } from '@views/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@views/components/ui/dropdown-menu'
 
@@ -12,7 +18,7 @@ export function ThemeToggle() {
   const { setTheme } = useTheme()
 
   return (
-    <div className="ml-auto mr-1 flex items-center gap-2">
+    <div className="ml-auto flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
@@ -27,16 +33,22 @@ export function ThemeToggle() {
             <span className="sr-only">Mudar de tema</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="p-3">
-          <DropdownMenuItem onClick={() => setTheme('light')}>
-            Claro
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('dark')}>
-            Escuro
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme('system')}>
-            Sistema
-          </DropdownMenuItem>
+        <DropdownMenuContent align="end" className="mt-[9px] p-1">
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={() => setTheme('light')}>
+              <SunIcon className="mr-1.5 h-5 w-5" strokeWidth={1.5} />
+              Claro
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme('dark')}>
+              <MoonIcon className="ml-0.5 mr-2 h-4 w-4" />
+              Escuro
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme('system')}>
+              <ComputerDesktopIcon className="ml-0.5 mr-2 h-4 w-4" />
+              Sistema
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
