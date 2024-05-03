@@ -1,4 +1,3 @@
-import { localStorageKeys } from '@app/config/local-storage-keys'
 import axios from 'axios'
 
 import { env } from '@/env'
@@ -11,12 +10,10 @@ export const httpClient = axios.create({
   withCredentials: true,
 })
 
-httpClient.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN)
+if (env.VITE_ENABLE_API_DELAY) {
+  httpClient.interceptors.request.use(async (config) => {
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000))
 
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
-  }
-
-  return config
-})
+    return config
+  })
+}

@@ -1,9 +1,10 @@
-import { Button } from '@views/components/button'
-import { Input } from '@views/components/input'
-import { InputPassword } from '@views/components/input-password'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
+
+import { Button } from '@views/components/button'
+import { Input } from '@views/components/input'
+import { InputPassword } from '@views/components/input-password'
 
 import logoImage from '@/assets/logos/logo.png'
 

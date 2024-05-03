@@ -1,11 +1,12 @@
-import { usePagination } from '@app/hooks/use-pagination'
 import {
   DocumentDuplicateIcon,
   DocumentIcon,
 } from '@heroicons/react/24/outline'
 
 export function Pagination() {
-  const { currentPage, setCurrentPage, itemsLength } = usePagination()
+  const currentPage = 1
+  const setCurrentPage = (value: number) => value
+  const itemsLength = 0
 
   const totalPages = Math.ceil(itemsLength / 10) ?? 1
 

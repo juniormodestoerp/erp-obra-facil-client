@@ -18,32 +18,28 @@ import { Subscriptions } from '@views/pages/private/subscriptions'
 import { Support } from '@views/pages/private/support'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { AuthGuard } from '@/router/auth-guard'
-
 export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Private Routes */}
-        <Route element={<AuthGuard isPrivate />}>
-          <Route element={<PrivateLayout />}>
-            <Route path="/" element={<InitialPage />} />
-            <Route path="/fund-releases" element={<FundReleases />} />
-            <Route path="/dashboards" element={<Dashboards />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/subscriptions" element={<Subscriptions />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/public-link" element={<PublicLink />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/log-out" element={<LogOut />} />
-          </Route>
+        <Route element={<PrivateLayout />}>
+          <Route path="/" element={<InitialPage />} />
+          <Route path="/fund-releases" element={<FundReleases />} />
+          <Route path="/dashboards" element={<Dashboards />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/contracts" element={<Contracts />} />
+          <Route path="/public-link" element={<PublicLink />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/log-out" element={<LogOut />} />
         </Route>
 
         {/* Public Routes */}
         <Route element={<AuthLayout />}>
-          <Route path="/sign-in" element={<SignIn />} />
+          <Route index path="/login" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
