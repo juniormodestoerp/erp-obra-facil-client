@@ -1,6 +1,6 @@
 import { cn } from '@app/utils/cn'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { ReactTooltip } from '@views/components/tooltip-old'
+import { Tooltip } from '@views/components/tooltip'
 import { UseSubscriptionsController } from '@views/pages/private/subscriptions/use-subscriptions-controller'
 import { Plus } from 'lucide-react'
 import { Fragment } from 'react'
@@ -191,12 +191,17 @@ export function Subscriptions() {
 
                     {isPrimary && (
                       <div className="flex gap-2">
-                        <button id="edit-category" className="">
-                          <PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
-                        </button>
-                        <button id="remove-category">
-                          <TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
-                        </button>
+                        <Tooltip text="Editar categoria">
+                          <button>
+                            <PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
+                          </button>
+                        </Tooltip>
+
+                        <Tooltip text="Remover categoria">
+                          <button>
+                            <TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
+                          </button>
+                        </Tooltip>
                       </div>
                     )}
                   </div>
@@ -204,12 +209,10 @@ export function Subscriptions() {
               )
             })}
       </body>
-      <ReactTooltip id="create-category" text="Criar categoria" />
-      <ReactTooltip id="edit-category" text="Editar categoria" />
-      <ReactTooltip id="remove-category" text="Remover categoria" />
+      {/* <ReactTooltip id="create-category" text="Criar categoria" />
       <ReactTooltip id="create-subcategory" text="Criar subcategoria" />
       <ReactTooltip id="edit-subcategory" text="Editar subcategoria" />
-      <ReactTooltip id="remove-subcategory" text="Remover subcategoria" />
+      <ReactTooltip id="remove-subcategory" text="Remover subcategoria" /> */}
     </Fragment>
   )
 }

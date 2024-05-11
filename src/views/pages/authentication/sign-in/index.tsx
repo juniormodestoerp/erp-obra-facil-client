@@ -3,15 +3,15 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@views/components/button'
-import { Input } from '@views/components/input'
-import { InputPassword } from '@views/components/input-password'
+import { InputPassword } from '@views/components/input/password'
 
 import logoImage from '@/assets/logos/logo.png'
 
-import { UseSignInController } from './use-sign-in-controller'
+import { InputDocument } from '@views/components/input/document'
+import { useSignInController } from './use-sign-in-controller'
 
 export function SignIn() {
-  const { register, handleSubmit, errors } = UseSignInController()
+  const { register, handleSubmit, control, errors } = useSignInController()
 
   return (
     <Fragment>
@@ -34,13 +34,14 @@ export function SignIn() {
           </p>
         </div>
 
-        <form className="w-[350px]">
-          <Input
+        <form onSubmit={handleSubmit} className="w-[350px]">
+          <InputDocument
+            control={control}
             label="E-mail:"
             placeholder="Digite seu e-mail *"
             className="mb-2"
-            error={errors.email?.message}
-            {...register('email')}
+            error={errors.document?.message}
+            {...register('document')}
           />
 
           <InputPassword
@@ -56,18 +57,20 @@ export function SignIn() {
 
         <Fragment>
           <Link to="/forgot-password">
-            <p className="mt-6 text-center font-semibold text-zinc-900 hover:text-foreground">
+            <p className="mt-6 text-center font-semibold text-slate-900 hover:text-foreground dark:text-slate-300">
               Recuperar minha senha
             </p>
           </Link>
 
-          <div className="mx-4 my-5 h-[1.5px] bg-dark-blue" />
+          <div className="mx-8 my-5 h-px bg-dark-blue dark:bg-white" />
 
           <p className="px-3 text-center">
-            <span className="select-none">Ainda não tem uma conta?</span>
+            <span className="select-none dark:text-slate-300">
+              Ainda não tem uma conta?
+            </span>
             <Link
               to="/sign-up"
-              className="ml-1 font-semibold text-zinc-900 hover:text-foreground"
+              className="ml-1 font-semibold text-slate-900 hover:text-foreground dark:text-slate-50"
             >
               Cadastre-se
             </Link>

@@ -38,7 +38,7 @@ export const InputMask = forwardRef<HTMLInputElement, Props>(
         <label
           htmlFor={inputId}
           className={cn(
-            'block text-sm font-medium leading-6 text-zinc-900',
+            'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
             props.disabled && 'cursor-not-allowed select-none',
           )}
         >

@@ -1,8 +1,8 @@
 import { Button } from '@views/components/button'
 import { Input } from '@views/components/input'
-import { InputDocument } from '@views/components/input-document'
-import { InputMask } from '@views/components/input-mask'
-import { InputPassword } from '@views/components/input-password'
+import { InputDocument } from '@views/components/input/document'
+import { InputMask } from '@views/components/input/mask'
+import { InputPassword } from '@views/components/input/password'
 import { UseSignUpController } from '@views/pages/authentication/sign-up/use-sign-up-controller'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -18,7 +18,7 @@ export function SignUp() {
       <Helmet title="Cadastro" />
 
       <div className="p-8">
-        <div className="flex w-[350px] flex-col justify-center gap-6">
+        <div className="flex w-[350px] flex-col justify-center gap-4">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             Damos as boas-vindas à Obra Fácil!
           </h1>
@@ -34,7 +34,7 @@ export function SignUp() {
           </p>
         </div>
 
-        <form className="w-[350px]">
+        <form onSubmit={handleSubmit} className="w-[350px]">
           <Input
             label="Nome:"
             placeholder="Digite o seu nome *"
@@ -104,7 +104,7 @@ export function SignUp() {
         <p className="mt-4 px-3 text-center">
           <span className="select-none">Já tem uma conta?</span>
           <Link
-            to="/sign-in"
+            to="/login"
             className="ml-1 font-semibold text-zinc-900 hover:text-foreground"
           >
             Faça login!

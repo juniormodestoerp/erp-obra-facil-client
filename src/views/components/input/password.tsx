@@ -24,7 +24,7 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
       <div className="flex flex-col">
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium leading-6 text-zinc-900"
+          className="block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100"
         >
           {label}
         </label>

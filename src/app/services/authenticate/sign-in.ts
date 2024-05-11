@@ -1,25 +1,42 @@
 import { httpClient } from '@app/services/http-client'
 
-export interface SignInParams {
-  email: string
+export interface Params {
+  document: string
   password: string
 }
 
-export interface SignInResponse {
-  accessToken: string
+export interface Response {
+  id: string
+  name: string
+  document: string
+  email: string
+  phone: string
+  birthDate: string
+  role: string
+  status: string
+  createdAt: string
 }
 
 export async function signIn({
-  email,
+  document,
   password,
-}: SignInParams): Promise<SignInResponse> {
-  const { data } = await httpClient.post<SignInResponse>(
-    '/authenticate/sessions',
-    {
-      email,
-      password,
-    },
-  )
+}: Params): Promise<Response> {
+  const { data } = await httpClient.post<Response>('/sessions', {
+    document: document.replace(/\D/g, ''),
+    password,
+  })
 
-  return data
+  console.log(data)
+
+  return {
+    id: data.id,
+    name: data.name,
+    document: data.document,
+    email: data.email,
+    phone: data.phone,
+    birthDate: data.birthDate,
+    role: data.role,
+    status: data.status,
+    createdAt: data.createdAt,
+  }
 }
