@@ -1,132 +1,80 @@
-// // import { useNotification } from '@app/hooks/use-notification'
-// import { httpClient } from '@app/services/http-client'
-// import { strMessage } from '@app/utils/custom-zod-error'
-// import { zodResolver } from '@hookform/resolvers/zod'
-// import { useEffect, useState } from 'react'
-// import { useForm } from 'react-hook-form'
-// import { z } from 'zod'
+import { authService } from '@app/services/authenticate'
+import { strMessage } from '@app/utils/custom-zod-error'
+import { Format } from '@app/utils/format'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-// export function useProfileController() {
-//   // const { successToast, errorToast, parseError } = useNotification()
+export function useProfileController() {
+  const queryClient = useQueryClient()
 
-//   const [isPending, setIsPending] = useState(false)
-//   const [user, setUser] = useState<any | null>(null)
+  const { data } = useQuery({
+    queryKey: ['profile'],
+    queryFn: authService.profile,
+  })
 
-//   useEffect(() => {
-//     let isMounted = true
+  const schema = z.object({
+    name: z.string(strMessage('nome')),
+    document: z
+      .string(strMessage('CPF'))
+      .transform((value) => value.replace(/[^\d]/g, ''))
+      .refine((value) => value.length === 11, {
+        message: 'O campo CPF deve conter 11 caracteres.',
+      })
+      .refine((value) => /^[0-9]+$/.test(value), {
+        message: 'O campo CPF deve conter apenas números.',
+      }),
+    email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
+    phone: z.string(strMessage('telefone')),
+  })
 
-//     const getUser = async () => {
-//       setIsPending(true)
-//       try {
-//         const { data } = await httpClient.get<{ user: User }>('/user/me')
-//         if (isMounted) {
-//           setUser(data)
-//           localStorage.setItem(localStorageKeys.KEY_USER, JSON.stringify(data))
-//         }
-//       } catch (error) {
-//         console.error('error in profile:', error)
-//       } finally {
-//         if (isMounted) setIsPending(false)
-//       }
-//     }
+  type FormData = z.infer<typeof schema>
 
-//     getUser()
+  console.log(data?.email)
 
-//     return () => {
-//       isMounted = false
-//     }
-//   }, [])
+  const {
+    control,
+    register,
+    formState: { errors },
+    handleSubmit: hookFormHandleSubmit,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    values: {
+      name: data?.name ?? '',
+      document: data?.document ?? '',
+      email: data?.email ?? '',
+      phone: Format.phone(data?.phone.substring(4)) ?? '',
+    },
+  })
 
-//   const schema = z.object({
-//     name: z.string(strMessage('nome')),
-//     document: z.string(strMessage('CPF')),
-//     email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
-//     phone: z.string(strMessage('telefone')),
-//   })
+  const { mutateAsync: updateProfile } = useMutation({
+    mutationFn: async (formData: FormData) => {
+      return authService.save({ id: data!.id, ...formData })
+    },
+    onSuccess(_, variables) {
+      const cached = queryClient.getQueryData(['profile', data!.id])
 
-//   type FormData = z.infer<typeof schema>
+      if (cached) {
+        queryClient.setQueryData(['profile', data!.id], {
+          ...cached,
+          name: variables.name,
+          document: variables.document.replace(/\D/g, ''),
+          email: variables.email,
+          phone: `+${variables.phone.replace(/\D/g, '')}`,
+        })
+      }
+    },
+  })
 
-//   const {
-//     control,
-//     setValue,
-//     register,
-//     formState: { errors },
-//     handleSubmit: hookFormHandleSubmit,
-//   } = useForm<FormData>({
-//     resolver: zodResolver(schema),
-//     defaultValues: {
-//       name: '',
-//       document: '',
-//       email: '',
-//       phone: '',
-//     },
-//   })
+  const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
+    await updateProfile(data)
+  })
 
-//   useEffect(() => {
-//     if (user) {
-//       const userData: any = {
-//         name: user.user.name ?? '',
-//         document: user.user.document ?? '',
-//         email: user.user.email ?? '',
-//         phone: user.user.phone ?? '',
-//         whatsapp: user.user.whatsapp ?? '',
-//       }
-
-//       Object.keys(userData).forEach((key: any) => {
-//         setValue(key, userData[key], { shouldValidate: true })
-//       })
-//     }
-//   }, [user, setValue])
-
-//   const handleSubmit = hookFormHandleSubmit(async (data) => {
-//     if (!user?.user?.id) {
-//       // errorToast({
-//       //   title: 'Erro',
-//       //   message:
-//       //     'ID do usuário não encontrado. Não é possível atualizar o perfil.',
-//       // })
-//       return
-//     }
-
-//     setIsPending(true)
-//     try {
-//       const response = await httpClient.put(`/user/${user?.user?.id}`, {
-//         ...data,
-//         document: data.document.replace(/\D/g, ''),
-//         phone: data.phone.replace(/[^\d+]/g, ''),
-//       })
-//       // successToast({
-//       //   title: 'Informações Pessoais',
-//       //   message: 'Suas informações pessoais foram atualizadas com sucesso.',
-//       // })
-
-//       const updatedUser = response.data.user
-
-//       localStorage.removeItem(localStorageKeys.KEY_USER)
-//       localStorage.setItem(
-//         localStorageKeys.KEY_USER,
-//         JSON.stringify(updatedUser),
-//       )
-
-//       setValue('name', updatedUser?.name)
-//       setValue('document', updatedUser?.document)
-//       setValue('email', updatedUser?.email)
-//       setValue('phone', updatedUser?.phone)
-//     } catch (error) {
-//       // errorToast({
-//       //   title: 'Erro ao atualizar suas informações pessoais.',
-//       //   message: parseError(error).message,
-//       // })
-//     } finally {
-//       setIsPending(false)
-//     }
-//   })
-
-//   return {
-//     errors,
-//     control,
-//     isPending,
-//     register,
-//     handleSubmit,
-//   }
-// }
+  return {
+    control,
+    errors,
+    handleSubmit,
+    register,
+  }
+}

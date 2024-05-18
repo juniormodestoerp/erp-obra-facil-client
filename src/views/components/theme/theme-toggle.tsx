@@ -3,14 +3,15 @@ import {
   MoonIcon,
   SunIcon,
 } from '@heroicons/react/24/outline'
+
 import { useTheme } from '@views/components/theme/theme-provider'
+
 import { Button } from '@views/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@views/components/ui/dropdown-menu'
 
@@ -33,7 +34,8 @@ export function ThemeToggle() {
             <span className="sr-only">Mudar de tema</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="mt-[9px] p-1">
+
+        <DropdownMenuContent align="end" className="mt-[10px] p-1">
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setTheme('light')}>
               <SunIcon className="mr-1.5 h-5 w-5" strokeWidth={1.5} />
@@ -47,7 +49,6 @@ export function ThemeToggle() {
               <ComputerDesktopIcon className="ml-0.5 mr-2 h-4 w-4" />
               Sistema
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

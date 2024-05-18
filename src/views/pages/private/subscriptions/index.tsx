@@ -54,7 +54,7 @@ export function Subscriptions() {
 
   return (
     <Fragment>
-      <Helmet title="Cadastros" />
+      <Helmet title="Categorias" />
 
       <header className="relative">
         <div className="flex w-full items-center justify-center">
@@ -129,7 +129,7 @@ export function Subscriptions() {
         </button>
       </header>
 
-      <body className="my-8 h-auto overflow-hidden rounded border border-primary shadow">
+      <body className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
         {currentTab === 'Receitas'
           ? organizedIncomeCategories.map((category: Category) => {
               const isPrimary = !category.parentId
@@ -138,7 +138,9 @@ export function Subscriptions() {
                   key={category.id}
                   className={cn(
                     'flex items-center justify-start px-3',
-                    isPrimary ? 'border-t border-gy-200' : 'pl-8',
+                    isPrimary
+                      ? 'border-collapse border-t border-gy-200 dark:border-slate-400'
+                      : 'pl-8',
                   )}
                 >
                   {isPrimary ? (

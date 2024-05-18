@@ -17,7 +17,7 @@ export function DesktopSidebar({ small, path, handleSize }: Props) {
       )}
     >
       {/* Sidebar component */}
-      <div className="flex w-full grow flex-col gap-y-5 overflow-y-auto bg-dark-blue px-4 pb-4 dark:bg-black">
+      <div className="flex w-full grow flex-col gap-y-5 overflow-y-auto border-r bg-dark-blue px-4 pb-4 dark:border-zinc-600 dark:bg-zinc-900">
         <DesktopHeader small={small} handleSize={handleSize} />
         <DesktopOptions path={path} small={small} />
       </div>

@@ -11,11 +11,22 @@ interface Props extends ComponentProps<'input'> {
   error?: string
   control?: any
   id?: string
+  labelClassName?: string
 }
 
 export const InputDocument = forwardRef<HTMLInputElement, Props>(
   (
-    { placeholder, label, control, name, id, error, className, ...props },
+    {
+      placeholder,
+      label,
+      control,
+      name,
+      id,
+      error,
+      className,
+      labelClassName,
+      ...props
+    },
     ref,
   ) => {
     const inputId = id ?? name
@@ -32,6 +43,7 @@ export const InputDocument = forwardRef<HTMLInputElement, Props>(
           className={cn(
             'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
             props.disabled && 'cursor-not-allowed select-none',
+            labelClassName,
           )}
         >
           {label}

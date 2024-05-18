@@ -19,7 +19,7 @@ export function SignUp() {
 
       <div className="p-8">
         <div className="flex w-[350px] flex-col justify-center gap-4">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-50">
             Damos as boas-vindas à Obra Fácil!
           </h1>
 
@@ -29,7 +29,7 @@ export function SignUp() {
             className="mx-auto h-24 w-24"
           />
 
-          <p className="mb-6 font-medium text-foreground">
+          <p className="mb-6 font-medium text-slate-100">
             Preencha os campos abaixo para criar a sua conta.
           </p>
         </div>
@@ -88,7 +88,7 @@ export function SignUp() {
 
           <Button type="submit" className="w-full" text="Cadastrar" />
 
-          <p className="mt-1 text-center text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-1 text-center text-sm leading-relaxed text-slate-300">
             Ao cadastrar-se, você concorda com os nossos
             <a href="#" className="mx-1 text-primary">
               Termos de Uso
@@ -103,10 +103,7 @@ export function SignUp() {
 
         <p className="mt-4 px-3 text-center">
           <span className="select-none">Já tem uma conta?</span>
-          <Link
-            to="/login"
-            className="ml-1 font-semibold text-zinc-900 hover:text-foreground"
-          >
+          <Link to="/login" className="ml-1 font-semibold text-white">
             Faça login!
           </Link>
         </p>

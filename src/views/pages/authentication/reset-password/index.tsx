@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import logoImage from '@/assets/logos/logo.png'
 
 export function ResetPassword() {
-  const { register, handleSubmit, errors } = UseResetPasswordController()
+  const { register, errors, handleSubmit } = UseResetPasswordController()
 
   return (
     <Fragment>
@@ -31,7 +31,7 @@ export function ResetPassword() {
           </p>
         </div>
 
-        <form className="w-[350px]">
+        <form onSubmit={handleSubmit} className="w-[350px]">
           <InputPassword
             label="Nova senha:"
             placeholder="Digite sua nova senha *"
@@ -54,22 +54,16 @@ export function ResetPassword() {
         <Fragment>
           <p className="mt-6 px-3 text-center">
             <span className="select-none">Já tem uma conta?</span>
-            <Link
-              to="/sign-in"
-              className="ml-1 font-semibold text-zinc-900 hover:text-foreground"
-            >
+            <Link to="/login" className="ml-1 font-semibold text-white">
               Faça login!
             </Link>
           </p>
 
-          <div className="mx-4 my-5 h-[1.5px] bg-dark-blue" />
+          <div className="mx-8 my-5 h-px bg-white dark:bg-white" />
 
           <p className="px-3 text-center">
             <span className="select-none">Ainda não tem uma conta?</span>
-            <Link
-              to="/sign-up"
-              className="ml-1 font-semibold text-zinc-900 hover:text-foreground"
-            >
+            <Link to="/sign-up" className="ml-1 font-semibold text-white">
               Cadastre-se
             </Link>
           </p>

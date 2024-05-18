@@ -6,17 +6,33 @@ interface Props extends ComponentProps<'input'> {
   name: string
   label: string
   error?: string
+  labelClassName?: string
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(
-  ({ placeholder, label, name, id, error, className, ...props }, ref) => {
+  (
+    {
+      placeholder,
+      label,
+      name,
+      id,
+      error,
+      className,
+      labelClassName,
+      ...props
+    },
+    ref,
+  ) => {
     const inputId = id ?? name
 
     return (
       <div className="flex flex-1 flex-col">
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100"
+          className={cn(
+            'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
+            labelClassName,
+          )}
         >
           {label}
         </label>

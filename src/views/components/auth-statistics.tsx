@@ -33,38 +33,56 @@ function AnimatedNumber({ target, duration }: Props) {
 
 export function Statistics() {
   return (
-    <div className="flex justify-around bg-transparent py-5 text-foreground">
-      <div className="flex flex-col items-center">
-        <div className="flex items-center justify-center pr-2.5">
-          <Plus className="mr-0.5 h-6 w-6 pb-px text-primary" strokeWidth={3} />
-          <AnimatedNumber target={46} duration={2000} />
+    <div className="flex flex-col items-center justify-around bg-transparent py-5 text-foreground">
+      <div className="mr-28 flex flex-wrap items-center space-x-32 md:flex-nowrap">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center justify-center pr-2.5">
+            <Plus
+              className="mr-0.5 h-6 w-6 pb-px text-primary"
+              strokeWidth={3}
+            />
+            <AnimatedNumber target={46} duration={2000} />
+          </div>
+          <span className="font-medium tracking-tighter">CONSTRUTORES</span>
         </div>
-        <span className="font-medium tracking-tighter">CONSTRUTORES</span>
+
+        <div className="flex flex-col items-center">
+          <div className="flex items-center justify-center pr-1.5">
+            <Plus
+              className="mr-0.5 h-6 w-6 pb-px text-primary"
+              strokeWidth={3}
+            />
+            <span className="mr-2 text-2xl font-bold">R$</span>
+            <AnimatedNumber target={200000} duration={2500} />
+          </div>
+          <span className="font-medium tracking-tighter">TRANSCIONADOS</span>
+        </div>
       </div>
 
-      <div className="flex flex-col items-center">
-        <div className="flex items-center justify-center pr-1.5">
-          <Plus className="mr-0.5 h-6 w-6 pb-px text-primary" strokeWidth={3} />
-          <span className="mr-2 text-2xl font-bold">R$</span>
-          <AnimatedNumber target={200000} duration={2500} />
+      <div className="ml-20 flex flex-wrap items-center space-x-36 md:flex-nowrap">
+        <div className="flex flex-col items-center">
+          <div className="flex items-center justify-center pr-2.5">
+            <Plus
+              className="mr-0.5 h-6 w-6 pb-px text-primary"
+              strokeWidth={3}
+            />
+            <AnimatedNumber target={186} duration={3000} />
+          </div>
+          <span className="font-medium tracking-tighter">
+            OBRAS FINALIZADAS
+          </span>
         </div>
-        <span className="font-medium tracking-tighter">TRANSCIONADOS</span>
-      </div>
 
-      <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center pr-2.5">
-          <Plus className="mr-0.5 h-6 w-6 pb-px text-primary" strokeWidth={3} />
-          <AnimatedNumber target={2} duration={750} />
+        <div className="flex flex-col items-center justify-center">
+          <div className="flex items-center justify-center pr-2.5">
+            <Plus
+              className="mr-0.5 h-6 w-6 pb-px text-primary"
+              strokeWidth={3}
+            />
+            <AnimatedNumber target={2} duration={750} />
+          </div>
+          <span className="font-medium tracking-tighter">ESTADOS</span>
         </div>
-        <span className="font-medium tracking-tighter">ESTADOS</span>
-      </div>
-
-      <div className="flex flex-col items-center">
-        <div className="flex items-center justify-center pr-2.5">
-          <Plus className="mr-0.5 h-6 w-6 pb-px text-primary" strokeWidth={3} />
-          <AnimatedNumber target={186} duration={3000} />
-        </div>
-        <span className="font-medium tracking-tighter">OBRAS FINALIZADAS</span>
       </div>
     </div>
   )

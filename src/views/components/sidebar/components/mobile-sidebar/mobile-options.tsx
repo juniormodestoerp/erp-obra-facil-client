@@ -1,4 +1,3 @@
-import { cn } from '@app/utils/cn'
 import {
   ArrowLeftStartOnRectangleIcon,
   BanknotesIcon,
@@ -61,7 +60,7 @@ export function MobileOptions({ path, open }: Props) {
             open={!open}
             Icon={<FolderPlusIcon className="h-6 w-6" />}
             linkTo="/subscriptions"
-            title="Cadastros"
+            title="Categorias"
             selected={path.startsWith('/subscriptions')}
           />
 
@@ -118,9 +117,9 @@ export function MobileOptions({ path, open }: Props) {
           <Option
             open={!open}
             Icon={<ArrowLeftStartOnRectangleIcon className="h-6 w-6" />}
-            linkTo="/log-out"
+            linkTo="/logout"
             title="Sair"
-            selected={path.startsWith('/log-out')}
+            selected={path.startsWith('/logout')}
           />
         </div>
       </ul>

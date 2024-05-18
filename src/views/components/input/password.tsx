@@ -11,10 +11,11 @@ interface Props extends ComponentProps<'input'> {
   name: string
   label: string
   error?: string
+  labelClassName?: string
 }
 
 export const InputPassword = forwardRef<HTMLInputElement, Props>(
-  ({ label, name, id, error, className, ...props }, ref) => {
+  ({ label, name, id, error, className, labelClassName, ...props }, ref) => {
     const inputId = id ?? name
 
     const [isPasswordVisible, setIsPasswordVisible] =
@@ -24,7 +25,10 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
       <div className="flex flex-col">
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100"
+          className={cn(
+            'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
+            labelClassName,
+          )}
         >
           {label}
         </label>

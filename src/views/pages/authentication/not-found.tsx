@@ -23,7 +23,7 @@ export function NotFound() {
           </p>
           <div className="mt-10 flex justify-center">
             <Link
-              to="/sign-in"
+              to="/login"
               className="text-sm font-semibold leading-7 text-white"
             >
               <span aria-hidden="true">&larr;</span> Voltar para a página

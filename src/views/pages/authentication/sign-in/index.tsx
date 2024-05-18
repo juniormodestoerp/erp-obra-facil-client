@@ -19,7 +19,7 @@ export function SignIn() {
 
       <div className="p-8">
         <div className="flex w-[350px] flex-col justify-center gap-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-50">
             Damos as boas-vindas à Obra Fácil!
           </h1>
 
@@ -29,7 +29,7 @@ export function SignIn() {
             className="mx-auto h-24 w-24"
           />
 
-          <p className="mb-8 font-medium text-foreground">
+          <p className="mb-8 font-medium text-slate-100">
             Desfrute da melhor tecnologia para o fomento da construção cívil.
           </p>
         </div>
@@ -37,8 +37,9 @@ export function SignIn() {
         <form onSubmit={handleSubmit} className="w-[350px]">
           <InputDocument
             control={control}
-            label="E-mail:"
-            placeholder="Digite seu e-mail *"
+            label="CPF:"
+            placeholder="Digite seu CPF *"
+            labelClassName="text-slate-100"
             className="mb-2"
             error={errors.document?.message}
             {...register('document')}
@@ -47,6 +48,7 @@ export function SignIn() {
           <InputPassword
             label="Senha:"
             placeholder="Digite sua senha *"
+            labelClassName="text-slate-100"
             className="mb-6"
             error={errors.password?.message}
             {...register('password')}
@@ -57,20 +59,20 @@ export function SignIn() {
 
         <Fragment>
           <Link to="/forgot-password">
-            <p className="mt-6 text-center font-semibold text-slate-900 hover:text-foreground dark:text-slate-300">
+            <p className="mt-6 text-center font-semibold text-slate-100 hover:text-slate-100 dark:text-slate-300">
               Recuperar minha senha
             </p>
           </Link>
 
-          <div className="mx-8 my-5 h-px bg-dark-blue dark:bg-white" />
+          <div className="mx-8 my-5 h-px bg-white dark:bg-white" />
 
           <p className="px-3 text-center">
-            <span className="select-none dark:text-slate-300">
+            <span className="select-none text-slate-200">
               Ainda não tem uma conta?
             </span>
             <Link
               to="/sign-up"
-              className="ml-1 font-semibold text-slate-900 hover:text-foreground dark:text-slate-50"
+              className="ml-1 font-semibold text-white dark:text-slate-50"
             >
               Cadastre-se
             </Link>

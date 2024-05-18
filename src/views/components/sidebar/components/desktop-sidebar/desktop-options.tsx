@@ -1,16 +1,17 @@
 import { cn } from '@app/utils/cn'
 import {
+  AdjustmentsHorizontalIcon,
   ArrowLeftStartOnRectangleIcon,
   BanknotesIcon,
-  ChatBubbleBottomCenterTextIcon,
   ClipboardDocumentListIcon,
-  Cog8ToothIcon,
-  CreditCardIcon,
+  // ChatBubbleBottomCenterTextIcon,
+  // Cog8ToothIcon,
+  // LinkIcon,
+  // CreditCardIcon,
+  // ScaleIcon,
   FolderPlusIcon,
   HomeIcon,
-  LinkIcon,
   PresentationChartLineIcon,
-  ScaleIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Option } from '@views/components/sidebar/components/option'
@@ -69,56 +70,56 @@ export function DesktopOptions({ path, small }: Props) {
             small={small}
             Icon={<FolderPlusIcon className="h-6 w-6" />}
             linkTo="/subscriptions"
-            title="Cadastros"
+            title="Categorias"
             selected={path.startsWith('/subscriptions')}
           />
 
           <Option
             open={!small}
             small={small}
-            Icon={<Cog8ToothIcon className="h-6 w-6" />}
+            Icon={<AdjustmentsHorizontalIcon className="h-6 w-6" />}
             linkTo="/settings"
-            title="Configurações"
+            title="Personalização"
             selected={path.startsWith('/settings')}
           />
 
-          <Option
+          {/* <Option
             open={!small}
             small={small}
             Icon={<ScaleIcon className="h-6 w-6" />}
             linkTo="/contracts"
             title="Contratos"
             selected={path.startsWith('/contracts')}
-          />
+          /> */}
 
-          <Option
+          {/* <Option
             open={!small}
             small={small}
             Icon={<LinkIcon className="h-6 w-6" />}
             linkTo="/public-link"
             title="Link público"
             selected={path.startsWith('/public-link')}
-          />
+          /> */}
         </div>
 
         <div className="mb-5 mt-auto flex flex-col">
-          <Option
+          {/* <Option
             open={!small}
             small={small}
             Icon={<ChatBubbleBottomCenterTextIcon className="h-6 w-6" />}
             linkTo="/support"
             title="Suporte"
             selected={path.startsWith('/support')}
-          />
+          /> */}
 
-          <Option
+          {/* <Option
             open={!small}
             small={small}
             Icon={<CreditCardIcon className="h-6 w-6" />}
             linkTo="/payments"
             title="Meus pagamentos"
             selected={path.startsWith('/payment')}
-          />
+          /> */}
 
           <Option
             open={!small}
@@ -133,9 +134,9 @@ export function DesktopOptions({ path, small }: Props) {
             open={!small}
             small={small}
             Icon={<ArrowLeftStartOnRectangleIcon className="h-6 w-6" />}
-            linkTo="/log-out"
+            linkTo="/logout"
             title="Sair"
-            selected={path.startsWith('/log-out')}
+            selected={path.startsWith('/logout')}
           />
         </div>
       </ul>

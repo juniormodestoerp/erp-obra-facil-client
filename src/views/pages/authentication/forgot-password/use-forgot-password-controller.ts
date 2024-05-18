@@ -1,39 +1,73 @@
+import { authService } from '@app/services/authenticate'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+export type TabProps = 'document' | 'email'
+
 export function UseForgotPasswordController() {
+  const navigate = useNavigate()
+  const [currentTab, setCurrentTab] = useState<TabProps>('email')
+
   const forgotPasswordForm = z.object({
     email: z
       .string(strMessage('e-mail'))
-      .email({ message: 'e-mail inválido' })
-      .min(1, 'O e-mail é obrigatório')
-      .optional(),
+      .optional()
+      .refine(
+        (data) => data === '' || z.string().email().safeParse(data).success,
+        {
+          message: 'O e-mail é inválido',
+        },
+      ),
     document: z
       .string(strMessage('CPF / CNPJ'))
-      .min(11, { message: 'O campo CPF deve ter 11 caracteres.' })
-      .max(14, { message: 'O campo CNPJ deve ter 14 caracteres.' })
-      .regex(/^[0-9]+$/, {
-        message: 'O campo CPF / CNPJ deve conter apenas números.',
+      .min(14, { message: 'O campo CPF deve ter 11 caracteres.' })
+      .regex(/^[0-9.-]+$/, {
+        message: 'O campo CPF deve conter apenas números.',
       })
       .optional(),
   })
 
-  type ForgotPasswordForm = z.infer<typeof forgotPasswordForm>
+  type FormData = z.infer<typeof forgotPasswordForm>
 
   const {
     register,
+    control,
     formState: { errors },
     handleSubmit: hookFormHandleSubmit,
-  } = useForm<ForgotPasswordForm>({
+  } = useForm<FormData>({
     mode: 'onSubmit',
     resolver: zodResolver(forgotPasswordForm),
   })
 
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: async (data: FormData) => {
+      return authService.forgotPassword(data)
+    },
+  })
+
+  const handleSubmit = hookFormHandleSubmit(async (params: FormData) => {
+    toast.promise(authenticate(params), {
+      loading: 'Carregando...',
+      success: () => {
+        navigate('/login', { replace: true })
+        return 'Enviamos um link de recuperação de senha para o seu e-mail.'
+      },
+      error: 'Usuário não encontrado.',
+    })
+  })
+
   return {
     errors,
+    control,
+    currentTab,
+    setCurrentTab,
     register,
-    handleSubmit: hookFormHandleSubmit,
+    handleSubmit,
   }
 }
