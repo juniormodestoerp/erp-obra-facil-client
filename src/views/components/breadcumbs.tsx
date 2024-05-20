@@ -1,5 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
 import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid'
+import { Link, useLocation } from 'react-router-dom'
 
 interface IPages {
   name: string
@@ -24,8 +24,8 @@ export function Breadcrumbs() {
     case '/profile':
       pages.push({ name: 'Perfil', href: '/profile', current: true })
       break
-    case '/subscriptions':
-      pages.push({ name: 'Categorias', href: '/subscriptions', current: true })
+    case '/categories':
+      pages.push({ name: 'Categorias', href: '/categories', current: true })
       break
     case '/fund-releases':
       pages.push({ name: 'Lançamentos', href: '/fund-releases', current: true })

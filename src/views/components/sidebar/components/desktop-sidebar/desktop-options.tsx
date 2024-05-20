@@ -64,9 +64,9 @@ export function DesktopOptions({ path, small }: Props) {
             open={!small}
             small={small}
             Icon={<TagIcon className="h-6 w-6" />}
-            linkTo="/subscriptions"
+            linkTo="/categories"
             title="Categorias"
-            selected={path.startsWith('/subscriptions')}
+            selected={path.startsWith('/categories')}
           />
 
           <Option

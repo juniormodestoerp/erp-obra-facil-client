@@ -54,7 +54,9 @@ export const Input = forwardRef<HTMLInputElement, Props>(
 
         {error && (
           <div className="mt-2 flex items-center gap-1.5 text-red-600">
-            <XCircleIcon className="h-5" />
+            <div>
+              <XCircleIcon className="h-5" />
+            </div>
             <span className="text-xs">{error}</span>
           </div>
         )}

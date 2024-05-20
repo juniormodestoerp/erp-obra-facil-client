@@ -59,9 +59,9 @@ export function MobileOptions({ path, open }: Props) {
           <Option
             open={!open}
             Icon={<FolderPlusIcon className="h-6 w-6" />}
-            linkTo="/subscriptions"
+            linkTo="/categories"
             title="Categorias"
-            selected={path.startsWith('/subscriptions')}
+            selected={path.startsWith('/categories')}
           />
 
           <Option

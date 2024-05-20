@@ -22,7 +22,7 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
       useState<PwdProps>('password')
 
     return (
-      <div className="flex flex-col">
+      <div className="relative flex flex-col">
         <label
           htmlFor={inputId}
           className={cn(
@@ -75,8 +75,10 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
         </div>
 
         {error && (
-          <div className="mt-2 flex items-center gap-1.5 text-red-600">
-            <XCircleIcon className="h-5" />
+          <div className="mb-2 mt-2 flex items-center gap-1.5 text-red-600">
+            <div>
+              <XCircleIcon className="h-5" />
+            </div>
             <span className="text-xs">{error}</span>
           </div>
         )}

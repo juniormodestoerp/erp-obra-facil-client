@@ -22,7 +22,7 @@ export function Profile() {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-400 dark:bg-slate-800"
+        className="flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-600 dark:bg-slate-950"
       >
         <Input
           id="input-name"
