@@ -9,13 +9,13 @@ import { DesktopSidebar } from '@views/components/sidebar/components/desktop-sid
 import { MobileSidebar } from '@views/components/sidebar/components/mobile-sidebar'
 import { ThemeToggle } from '@views/components/theme/theme-toggle'
 import { ComboboxDropdownMenu } from '@views/components/user-widget'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 export function PrivateLayout() {
   const route = useLocation()
-  const [open, setOpen] = useState(true)
-  const [small, setSmall] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [small, setSmall] = useState(true)
 
   const pagePaths = route.pathname.split('/')
   pagePaths.shift()
@@ -32,6 +32,10 @@ export function PrivateLayout() {
     queryKey: ['users'],
     queryFn,
   })
+
+  useEffect(() => {
+    setSmall(true)
+  }, [])
 
   return (
     <div className="flex h-full min-h-screen flex-1 bg-zinc-50 dark:bg-zinc-950">
@@ -52,7 +56,7 @@ export function PrivateLayout() {
       />
 
       <div
-        className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-64')}
+        className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-56')}
       >
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:border-zinc-600 dark:bg-zinc-900 sm:gap-x-6 sm:px-6">
           <div className="flex flex-1 items-center gap-x-2">

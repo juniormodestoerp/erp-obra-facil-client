@@ -15,7 +15,7 @@ export function DesktopHeader({ small, handleSize }: Props) {
       <button
         onClick={handleSize}
         className={cn(
-          'flex h-16 items-center justify-between',
+          'flex h-16 items-center justify-start gap-2',
           small && 'gap-0',
         )}
       >
@@ -33,11 +33,12 @@ export function DesktopHeader({ small, handleSize }: Props) {
         >
           Obra Fácil
         </h1>
-
-        <Bars3Icon
-          className={cn('h-8 w-8 pt-1 text-white', small && 'mx-auto')}
-          aria-hidden="true"
-        />
+        {small && (
+          <Bars3Icon
+            className={cn('h-8 w-8 pt-1 text-white', small && 'mx-auto')}
+            aria-hidden="true"
+          />
+        )}
       </button>
     </Tooltip>
   )

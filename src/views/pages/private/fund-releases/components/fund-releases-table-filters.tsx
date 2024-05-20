@@ -1,3 +1,4 @@
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { Button } from '@views/components/ui/button'
 import { Input } from '@views/components/ui/input'
 import {
@@ -8,20 +9,28 @@ import {
   SelectValue,
 } from '@views/components/ui/select'
 import { SearchCheck, X } from 'lucide-react'
+import { NewFundRealeaseContent } from './new-fund-realease-content'
+import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
+import { useFundReleasesController } from '../use-fund-releases-controller'
 
 export function FundReleasesTableFilters() {
+  const { setIsModalOpen } = useFundReleasesController()
+
   return (
     <form className="flex items-center gap-2">
       <span className="text-sm font-semibold">Filtros:</span>
 
-      <Input placeholder="ID do lançamento" className="h-8 w-auto" />
-
-      <Input placeholder="Nome do estabelecimento" className="h-8 w-[320px]" />
+      <Input
+        placeholder="Informações do lançamento..."
+        className="h-8 w-full"
+      />
 
       <Select defaultValue="all">
-        <SelectTrigger className="h-8 w-[180px]">
-          <SelectValue />
-        </SelectTrigger>
+        <div className="">
+          <SelectTrigger className="h-8 w-44">
+            <SelectValue />
+          </SelectTrigger>
+        </div>
 
         <SelectContent>
           <SelectItem value="all">Todos status</SelectItem>
@@ -41,6 +50,21 @@ export function FundReleasesTableFilters() {
         <X className="mr-1.5 h-4 w-4" />
         Remover filtros
       </Button>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            size="xs"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <PlusIcon className="mr-1.5 h-4 w-4" strokeWidth={2.2} />
+            Cadastrar
+          </Button>
+        </DialogTrigger>
+        <NewFundRealeaseContent />
+      </Dialog>
     </form>
   )
 }

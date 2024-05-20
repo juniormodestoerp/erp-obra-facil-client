@@ -21,12 +21,12 @@ const schema = z.object({
   createdAt: z.string(dateMessage('data de criação')),
 })
 
-export type FormData = z.infer<typeof schema>
+export type SettingsData = z.infer<typeof schema>
 
 export function UseSettingsController() {
-  const [settings, setSettings] = useState<FormData[]>([])
+  const [settings, setSettings] = useState<SettingsData[]>([])
 
-  const methods = useForm<FormData>({
+  const methods = useForm<SettingsData>({
     resolver: zodResolver(schema),
   })
 
@@ -36,7 +36,7 @@ export function UseSettingsController() {
   })
 
   const { mutateAsync: saveSetting } = useMutation({
-    mutationFn: async (data: FormData) => {
+    mutationFn: async (data: SettingsData) => {
       return settingsService.save(data)
     },
   })

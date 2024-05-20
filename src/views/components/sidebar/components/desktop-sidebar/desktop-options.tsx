@@ -4,14 +4,9 @@ import {
   ArrowLeftStartOnRectangleIcon,
   BanknotesIcon,
   ClipboardDocumentListIcon,
-  // ChatBubbleBottomCenterTextIcon,
-  // Cog8ToothIcon,
-  // LinkIcon,
-  // CreditCardIcon,
-  // ScaleIcon,
-  FolderPlusIcon,
   HomeIcon,
   PresentationChartLineIcon,
+  TagIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Option } from '@views/components/sidebar/components/option'
@@ -68,7 +63,7 @@ export function DesktopOptions({ path, small }: Props) {
           <Option
             open={!small}
             small={small}
-            Icon={<FolderPlusIcon className="h-6 w-6" />}
+            Icon={<TagIcon className="h-6 w-6" />}
             linkTo="/subscriptions"
             title="Categorias"
             selected={path.startsWith('/subscriptions')}

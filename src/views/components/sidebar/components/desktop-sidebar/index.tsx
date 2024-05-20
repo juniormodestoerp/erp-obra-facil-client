@@ -13,7 +13,7 @@ export function DesktopSidebar({ small, path, handleSize }: Props) {
     <div
       className={cn(
         'hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col',
-        small ? 'lg:w-20' : 'lg:w-64',
+        small ? 'lg:w-20' : 'lg:w-56',
       )}
     >
       {/* Sidebar component */}

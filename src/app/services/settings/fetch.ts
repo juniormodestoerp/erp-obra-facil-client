@@ -1,6 +1,6 @@
 import { httpClient } from '@app/services/http-client'
 
-interface Setting {
+export interface ISetting {
   id: string
   userId: string
   fieldName: string
@@ -16,7 +16,7 @@ export interface Params {
 }
 
 export interface Response {
-  settings: Setting[]
+  settings: ISetting[]
   meta: {
     pageIndex: number
     perPage: number

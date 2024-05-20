@@ -31,11 +31,11 @@ export function useProfileController() {
 
   type FormData = z.infer<typeof schema>
 
-  console.log(data?.email)
 
   const {
     control,
     register,
+    setValue,
     formState: { errors },
     handleSubmit: hookFormHandleSubmit,
   } = useForm<FormData>({
@@ -47,6 +47,8 @@ export function useProfileController() {
       phone: Format.phone(data?.phone.substring(4)) ?? '',
     },
   })
+
+  setValue('phone', data?.phone ?? '')
 
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (formData: FormData) => {
