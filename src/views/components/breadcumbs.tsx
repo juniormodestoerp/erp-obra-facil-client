@@ -10,8 +10,6 @@ interface IPages {
 export function Breadcrumbs() {
   const location = useLocation().pathname
 
-  console.log(location)
-
   const pages: IPages[] = []
 
   switch (location) {
@@ -27,8 +25,8 @@ export function Breadcrumbs() {
     case '/categories':
       pages.push({ name: 'Categorias', href: '/categories', current: true })
       break
-    case '/fund-releases':
-      pages.push({ name: 'Lançamentos', href: '/fund-releases', current: true })
+    case '/transactions':
+      pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
       break
 
     default:

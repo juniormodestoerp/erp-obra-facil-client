@@ -11,7 +11,6 @@ import { PrivateLayout } from '@views/layouts/private'
 import { Categories } from '@views/pages/private/categories'
 import { Contracts } from '@views/pages/private/contracts'
 import { Dashboards } from '@views/pages/private/dashboards'
-import { FundReleases } from '@views/pages/private/fund-releases'
 import { InitialPage } from '@views/pages/private/initial-page'
 import { Logout } from '@views/pages/private/logout'
 import { Profile } from '@views/pages/private/profile'
@@ -19,6 +18,7 @@ import { PublicLink } from '@views/pages/private/public-link'
 import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
 import { Support } from '@views/pages/private/support'
+import { Transactions } from '@views/pages/private/transactions'
 
 /* Public Routes */
 import { ForgotPassword } from '@views/pages/authentication/forgot-password'
@@ -35,7 +35,7 @@ export function AppRoutes() {
         {/* <Route element={<AuthGuard />}> */}
         <Route element={<PrivateLayout />}>
           <Route path="/" element={<InitialPage />} />
-          <Route path="/fund-releases" element={<FundReleases />} />
+          <Route path="/transactions" element={<Transactions />} />
           <Route path="/dashboards" element={<Dashboards />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/categories" element={<Categories />} />

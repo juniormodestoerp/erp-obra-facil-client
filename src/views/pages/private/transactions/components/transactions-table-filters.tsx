@@ -1,5 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { Button } from '@views/components/ui/button'
+import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
 import { Input } from '@views/components/ui/input'
 import {
   Select,
@@ -9,12 +10,11 @@ import {
   SelectValue,
 } from '@views/components/ui/select'
 import { SearchCheck, X } from 'lucide-react'
-import { NewFundRealeaseContent } from './new-fund-realease-content'
-import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
-import { useFundReleasesController } from '../use-fund-releases-controller'
+import { useTransactionsController } from '../use-transactions-controller'
+import { NewFundRealeaseContent } from './new-transaction-content'
 
-export function FundReleasesTableFilters() {
-  const { setIsModalOpen } = useFundReleasesController()
+export function TransactionsTableFilters() {
+  const { setIsModalOpen } = useTransactionsController()
 
   return (
     <form className="flex items-center gap-2">

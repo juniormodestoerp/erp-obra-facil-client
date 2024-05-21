@@ -37,9 +37,9 @@ export function DesktopOptions({ path, small }: Props) {
             open={!small}
             small={small}
             Icon={<BanknotesIcon className="h-6 w-6" />}
-            linkTo="/fund-releases"
+            linkTo="/transactions"
             title="Lançamentos"
-            selected={path.startsWith('/fund-releases')}
+            selected={path.startsWith('/transactions')}
           />
 
           <Option

@@ -7,6 +7,7 @@ interface Props extends ComponentProps<'input'> {
   label: string
   error?: string
   labelClassName?: string
+  optional?: boolean
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(
@@ -19,6 +20,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
       error,
       className,
       labelClassName,
+      optional,
       ...props
     },
     ref,
@@ -34,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
             labelClassName,
           )}
         >
-          {label}
+          {label} {!optional && <span className="text-red-600">*</span>}
         </label>
 
         <input

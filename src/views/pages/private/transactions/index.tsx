@@ -9,13 +9,13 @@ import {
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 
-import { FundReleasesTableFilters } from './components/fund-releases-table-filters'
-import { FundReleasesTableRow } from './components/fund-releases-table-row'
-import { useFundReleasesController } from './use-fund-releases-controller'
 import { FormProvider } from 'react-hook-form'
+import { TransactionsTableFilters } from './components/transactions-table-filters'
+import { TransactionsTableRow } from './components/transactions-table-row'
+import { useTransactionsController } from './use-transactions-controller'
 
-export function FundReleases() {
-  const { methods } = useFundReleasesController()
+export function Transactions() {
+  const { methods } = useTransactionsController()
 
   return (
     <Fragment>
@@ -26,7 +26,7 @@ export function FundReleases() {
 
         <FormProvider {...methods}>
           <div className="space-y-2.5">
-            <FundReleasesTableFilters />
+            <TransactionsTableFilters />
             <div className="rounded-md border">
               <Table>
                 <TableHeader>
@@ -54,7 +54,7 @@ export function FundReleases() {
                 </TableHeader>
                 <TableBody>
                   {Array.from({ length: 10 }).map((_, i) => {
-                    return <FundReleasesTableRow key={i} />
+                    return <TransactionsTableRow key={i} />
                   })}
                 </TableBody>
               </Table>

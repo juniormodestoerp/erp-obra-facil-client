@@ -5,12 +5,10 @@ import {
 import { Button } from '@views/components/ui/button'
 import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
 import { TableCell, TableRow } from '@views/components/ui/table'
-import { FundReleasesDetails } from '@views/pages/private/fund-releases/components/fund-releases-details'
+import { TransactionsDetails } from '@views/pages/private/transactions/components/transactions-details'
 import { X } from 'lucide-react'
 
-// interface Props {}
-
-export function FundReleasesTableRow() {
+export function TransactionsTableRow() {
   return (
     <TableRow>
       <TableCell>
@@ -21,7 +19,7 @@ export function FundReleasesTableRow() {
               <span className="sr-only">Detalhes da compra</span>
             </Button>
           </DialogTrigger>
-          <FundReleasesDetails />
+          <TransactionsDetails />
         </Dialog>
       </TableCell>
       <TableCell className="font-mono text-xs font-medium text-muted-foreground">

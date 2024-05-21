@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@views/components/ui/table'
 
-export function FundReleasesDetails() {
+export function TransactionsDetails() {
   return (
     <DialogContent>
       <DialogHeader>

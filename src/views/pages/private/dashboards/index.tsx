@@ -1,5 +1,5 @@
-import { DayFundReleasesAmountCard } from '@views/pages/private/dashboards/components/day-fund-releases-amount-card'
-import { MonthFundReleasesAmountCard } from '@views/pages/private/dashboards/components/month-fund-releases-amount-card'
+import { DayTransactionsAmountCard } from '@views/pages/private/dashboards/components/day-transactions-amount-card'
+import { MonthTransactionsAmountCard } from '@views/pages/private/dashboards/components/month-transactions-amount-card'
 import { MonthReconciledAmountCard } from '@views/pages/private/dashboards/components/month-reconciled-amount-card'
 import { MonthRevenueCard } from '@views/pages/private/dashboards/components/month-revenue-card'
 import { Fragment } from 'react'
@@ -18,8 +18,8 @@ export function Dashboards() {
 
         <div className="grid grid-cols-4 gap-4">
           <MonthRevenueCard />
-          <MonthFundReleasesAmountCard />
-          <DayFundReleasesAmountCard />
+          <MonthTransactionsAmountCard />
+          <DayTransactionsAmountCard />
           <MonthReconciledAmountCard />
         </div>
 
