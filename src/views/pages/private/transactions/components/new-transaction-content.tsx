@@ -1,34 +1,35 @@
+import { Controller } from 'react-hook-form'
+
+import { Select } from '@views/components/select'
 import { Input } from '@views/components/input'
 import { InputCurrency } from '@views/components/input/currency'
-import { Select } from '@views/components/select'
+
 import { Button } from '@views/components/ui/button'
 import { DatePicker } from '@views/components/ui/date-picker'
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@views/components/ui/dialog'
-import {
-  FormData,
-  useTransactionsController,
-} from '@views/pages/private/transactions/use-transactions-controller'
-import { Controller, useFormContext } from 'react-hook-form'
+
+import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 
 export function NewFundRealeaseContent() {
   const {
+    getFieldInfo,
+    methods,
+    setOpenCreateDialog,
+    handleSubmit,
+    categories,
+  } = useTransactionsController()
+
+  const {
     register,
     control,
-    handleSubmit,
     formState: { errors },
-  } = useFormContext<FormData>()
-  const { getFieldInfo } = useTransactionsController()
-
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-  }
-
-  console.log(errors)
+  } = methods
 
   return (
     <DialogContent className="sm:max-w-5xl">
@@ -39,7 +40,7 @@ export function NewFundRealeaseContent() {
         </DialogDescription>
       </DialogHeader>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit}
         className="flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-400 dark:bg-slate-800"
       >
         <div className="grid grid-cols-3 gap-4 pb-6">
@@ -61,11 +62,7 @@ export function NewFundRealeaseContent() {
           <Select
             label="Categoria"
             placeholder="Selecione uma categoria *"
-            data={[
-              { field: 'active', value: 'Ativo' },
-              { field: 'inactive', value: 'Inativo' },
-              { field: 'teste', value: 'Teste' },
-            ]}
+            data={categories ?? []}
             control={control}
             error={errors.categoryId?.message}
             {...register('categoryId')}
@@ -214,12 +211,15 @@ export function NewFundRealeaseContent() {
           )}
         </div>
 
-        <Button
-          type="submit"
-          className="w-full bg-dark-blue px-3 dark:text-slate-100"
-        >
-          Salvar
-        </Button>
+        <DialogClose asChild>
+          <Button
+            type="submit"
+            onClick={() => setOpenCreateDialog(false)}
+            className="w-full bg-dark-blue px-3 dark:text-slate-100"
+          >
+            Salvar
+          </Button>
+        </DialogClose>
       </form>
     </DialogContent>
   )

@@ -1,33 +1,35 @@
 import { httpClient } from '@app/services/http-client'
 
-export interface ISetting {
-  id: string
-  userId: string
-  fieldName: string
-  isFieldEnable: boolean
-  isFieldRequired: boolean
-  title: string
-  description: string
-  createdAt: string
-}
-
-export interface Params {
+export interface ITransactionSearchOptions {
   pageIndex: number
+  searchTerm?: string
 }
 
-export interface ICategory {
+export interface ITransaction {
   id: string
-  userId: string
-  categoryId: string | null
+  name: string
+  description: string
+  categoryId: string
   categoryName: string
-  subcategoryName: string | null
-  model: string
-  type: string
+  establishmentName: string
+  bankName: string
+  transactionDate: Date
+  previousBalance: number
+  totalAmount: number
+  currentBalance: number
+  paymentMethod: string
+  competencyDate: Date | null
+  costAndProfitCenters: string | null
+  tags: string | null
+  documentNumber: string | null
+  associatedContracts: string | null
+  associatedProjects: string | null
+  additionalComments: string | null
   createdAt: Date
 }
 
-export interface Response {
-  categories: ICategory[]
+export interface ITransactionSearchResponse {
+  transactions: ITransaction[]
   meta: {
     pageIndex: number
     perPage: number
@@ -35,21 +37,48 @@ export interface Response {
   }
 }
 
-export async function fetch({ pageIndex }: Params): Promise<Response> {
-  const { data } = await httpClient.get<Response>(
-    `/categories?pageIndex=${pageIndex}`,
+export async function fetch({
+  pageIndex,
+  searchTerm,
+}: ITransactionSearchOptions): Promise<ITransactionSearchResponse> {
+  const params = new URLSearchParams()
+
+  params.append('pageIndex', pageIndex.toString())
+
+  if (searchTerm) {
+    params.append('searchTerm', searchTerm)
+  }
+
+  const queryString = params.toString()
+
+  const { data } = await httpClient.get<ITransactionSearchResponse>(
+    `/transactions?${queryString}`,
   )
 
   return {
-    categories: data.categories.map((category) => ({
-      id: category.id,
-      userId: category.userId,
-      categoryId: category.categoryId,
-      categoryName: category.categoryName,
-      subcategoryName: category.subcategoryName,
-      model: category.model,
-      type: category.type,
-      createdAt: new Date(category.createdAt),
+    transactions: data.transactions.map((transaction) => ({
+      id: transaction.id,
+      name: transaction.name,
+      description: transaction.description,
+      categoryId: transaction.categoryId,
+      categoryName: transaction.categoryName,
+      establishmentName: transaction.establishmentName,
+      bankName: transaction.bankName,
+      transactionDate: new Date(transaction.transactionDate),
+      previousBalance: transaction.previousBalance,
+      totalAmount: transaction.totalAmount,
+      currentBalance: transaction.currentBalance,
+      paymentMethod: transaction.paymentMethod,
+      competencyDate: transaction.competencyDate
+        ? new Date(transaction.competencyDate)
+        : null,
+      costAndProfitCenters: transaction.costAndProfitCenters,
+      tags: transaction.tags,
+      documentNumber: transaction.documentNumber,
+      associatedContracts: transaction.associatedContracts,
+      associatedProjects: transaction.associatedProjects,
+      additionalComments: transaction.additionalComments,
+      createdAt: new Date(transaction.createdAt),
     })),
     meta: {
       pageIndex: data.meta.pageIndex,

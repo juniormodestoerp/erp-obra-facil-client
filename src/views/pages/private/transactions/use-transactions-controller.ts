@@ -1,16 +1,49 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import {
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import {
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 
-import { settingsService } from '@app/services/settings'
-import { ISetting } from '@app/services/settings/fetch'
 import {
   dateMessage,
   numbMessage,
   strMessage,
 } from '@app/utils/custom-zod-error'
+import { transactionsService } from '@app/services/transactions'
+import { ISetting } from '@app/services/settings/fetch'
+import { settingsService } from '@app/services/settings'
+import { useState } from 'react'
+import {
+  ITransaction,
+  ITransactionSearchOptions,
+  ITransactionSearchResponse,
+} from '@app/services/transactions/fetch'
+import { useSearchParams } from 'react-router-dom'
+import { columns } from './components/columns'
+import { categoriesService } from '@app/services/categories'
+
+interface RowSelectionState {
+  [key: string]: boolean
+}
+
+export interface SearchParams {
+  pageIndex: number
+  searchTerm?: string
+}
 
 const schema = z.object({
   name: z
@@ -55,18 +88,14 @@ const schema = z.object({
 export type FormData = z.infer<typeof schema>
 
 export function useTransactionsController() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const { data: settings, refetch } = useQuery<{ settings: ISetting[] }>({
-    queryKey: ['settings'],
-    queryFn: () => settingsService.fetch({ pageIndex: 1 }),
-  })
-
-  useEffect(() => {
-    if (isModalOpen) {
-      refetch()
-    }
-  }, [isModalOpen, refetch])
+  const [selectedTransaction, setSelectedTransaction] = useState<ITransaction>(
+    {} as ITransaction,
+  )
+  const [openCreateDialog, setOpenCreateDialog] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const methods = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -74,6 +103,29 @@ export function useTransactionsController() {
       transactionDate: new Date(),
       competencyDate: new Date(),
     },
+  })
+
+  const { mutateAsync: createTransaction } = useMutation({
+    mutationFn: async (formData: FormData) => {
+      return transactionsService.create(formData)
+    },
+    onSuccess(newCategory) {
+      queryClient.setQueryData(['transactions'], (oldData: any) => {
+        return {
+          ...oldData,
+          categories: [...(oldData?.categories || []), newCategory],
+        }
+      })
+    },
+  })
+
+  const handleSubmit = methods.handleSubmit(async (data: FormData) => {
+    await createTransaction(data)
+  })
+
+  const { data: settings } = useQuery<{ settings: ISetting[] }>({
+    queryKey: ['settings'],
+    queryFn: () => settingsService.fetch({ pageIndex: 1 }),
   })
 
   function getFieldInfo(
@@ -89,10 +141,139 @@ export function useTransactionsController() {
     return null
   }
 
+  /* ====================== TABLE ====================== */
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    previousBalance: false,
+    description: false,
+  })
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [globalFilter, setGlobalFilter] = useState('')
+
+  const useFetchTransactions = ({
+    pageIndex,
+    searchTerm,
+  }: ITransactionSearchOptions) => {
+    const params = new URLSearchParams()
+
+    params.append('pageIndex', pageIndex.toString())
+
+    if (searchTerm) {
+      params.append('searchTerm', searchTerm)
+    }
+
+    const queryString = params.toString()
+
+    const queryKey: QueryKey = ['transactions', queryString]
+
+    return useQuery<ITransactionSearchResponse>({
+      queryKey,
+      queryFn: () => transactionsService.fetch({ pageIndex, searchTerm }),
+    })
+  }
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories/select-input'],
+    queryFn: () => categoriesService.selectInput(),
+  })
+
+  console.log('categories', categories)
+
+  const queryPageIndex = z.coerce
+    .number(numbMessage('index da página'))
+    .transform((page) => page - 1)
+    .parse(searchParams.get('page') ?? '1')
+
+  const querySearchTerm = searchParams.get('searchTerm') ?? ''
+
+  const {
+    data: result,
+    isPending,
+    isError,
+  } = useFetchTransactions({
+    pageIndex: queryPageIndex,
+    searchTerm: querySearchTerm,
+  })
+
+  const { perPage, totalCount } = result?.meta ?? {}
+
+  const totalPages = Math.ceil((totalCount ?? 0) / (perPage ?? 12))
+
+  const table = useReactTable({
+    data: result?.transactions ?? [],
+    columns,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    manualFiltering: true,
+    manualPagination: true,
+    autoResetPageIndex: true,
+    pageCount: totalPages ?? -1,
+    rowCount: totalCount ?? 0,
+  })
+
+  function handlePaginate(newPageIndex: number) {
+    setSearchParams({
+      page: (newPageIndex + 1).toString(),
+      searchTerm: globalFilter,
+    })
+  }
+
+  function fetchData({ pageIndex, searchTerm }: SearchParams) {
+    const params = new URLSearchParams()
+
+    params.set('pageIndex', (pageIndex + 1).toString())
+
+    if (searchTerm) {
+      params.set('searchTerm', searchTerm)
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['transactions'] })
+    setSearchParams(params)
+  }
+  /* ====================== END OF TABLE ====================== */
+
+  function handleRemoveTransaction(id: string) {
+    transactionsService.remove({ id }).then(() => {
+      queryClient.invalidateQueries({
+        queryKey: ['transactions'],
+      })
+    })
+  }
+
   return {
-    settings,
+    table,
+    result,
+    isError,
+    isPending,
     methods,
+    openCreateDialog,
+    isDeleteModalOpen,
+    selectedTransaction,
+    globalFilter,
+    categories,
+    setGlobalFilter,
+    setSelectedTransaction,
+    setIsDeleteModalOpen,
+    setOpenCreateDialog,
     getFieldInfo,
-    setIsModalOpen,
+    handleSubmit,
+    handleRemoveTransaction,
+    fetchData,
+    handlePaginate,
   }
 }

@@ -25,6 +25,7 @@ export interface Response {
   name: string
   description: string
   categoryId: string
+  categoryName: string
   establishmentName: string
   bankName: string
   transactionDate: Date
@@ -86,6 +87,7 @@ export async function create({
     name: data.name,
     description: data.description,
     categoryId: data.categoryId,
+    categoryName: data.categoryName,
     establishmentName: data.establishmentName,
     bankName: data.bankName,
     transactionDate: new Date(data.transactionDate),

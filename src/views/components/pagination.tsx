@@ -1,56 +1,117 @@
 import {
-  DocumentDuplicateIcon,
-  DocumentIcon,
-} from '@heroicons/react/24/outline'
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from 'lucide-react'
 
-export function Pagination() {
-  const currentPage = 1
-  const setCurrentPage = (value: number) => value
-  const itemsLength = 0
+import { useEffect, useState } from 'react'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
 
-  const totalPages = Math.ceil(itemsLength / 10) ?? 1
+interface Props {
+  pageIndex: number
+  pageSize: number
+  totalCount: number
+  onPageChange: (newPageIndex: number) => void
+}
 
-  function handlePrevious() {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1)
+export function Pagination({
+  pageIndex,
+  pageSize,
+  totalCount,
+  onPageChange,
+}: Props) {
+  const [goToPage, setGoToPage] = useState<string>((pageIndex + 1).toString())
+  const totalPages = Math.ceil(totalCount / pageSize)
+
+  const handleGoToPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPage = event.target.value
+    if (
+      newPage === '' ||
+      (parseInt(newPage, 10) >= 1 && parseInt(newPage, 10) <= totalPages)
+    ) {
+      setGoToPage(newPage)
     }
   }
 
-  function handleNext() {
-    if (itemsLength > 0 && currentPage <= totalPages) {
-      setCurrentPage(currentPage + 1)
+  const handleBlur = () => {
+    const pageAsNumber = parseInt(goToPage, 10)
+    if (goToPage === '' || pageAsNumber < 1 || pageAsNumber > totalPages) {
+      setGoToPage((pageIndex + 1).toString())
     }
   }
+
+  const goToPageDirectly = () => {
+    const pageAsNumber = parseInt(goToPage, 10)
+    if (pageAsNumber >= 1 && pageAsNumber <= totalPages) {
+      onPageChange(pageAsNumber - 1)
+    }
+  }
+
+  useEffect(() => {
+    setGoToPage((pageIndex + 1).toString())
+  }, [pageIndex, pageSize, totalCount])
 
   return (
-    <div className="flex justify-between">
-      <p className="hidden w-full min-w-24 items-center gap-1 pt-7 sm:flex">
-        {currentPage} de {totalPages !== 0 ? totalPages : totalPages + 1}{' '}
-        {currentPage === 1 ? 'página' : 'páginas'}
-        {currentPage === 1 ? (
-          <DocumentIcon className="h-4 text-cyan" strokeWidth={2} />
-        ) : (
-          <DocumentDuplicateIcon className="h-5 text-cyan" strokeWidth={2} />
-        )}
-      </p>
-      <nav className="flex w-full items-center justify-between pt-2 sm:justify-end sm:px-0">
-        <button
-          type="button"
-          disabled={currentPage <= 1}
-          className="relative mt-4 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 disabled:pointer-events-none"
-          onClick={handlePrevious}
-        >
-          Anterior
-        </button>
-        <button
-          type="button"
-          disabled={currentPage === totalPages}
-          className="relative ml-3 mt-4 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 disabled:pointer-events-none"
-          onClick={handleNext}
-        >
-          Próximo
-        </button>
-      </nav>
+    <div className="mt-8 flex items-center justify-between">
+      <span className="text-sm text-zinc-800">
+        Total de {totalCount} item(s)
+      </span>
+      <div className="flex items-center gap-6 lg:gap-8">
+        <div className="flex items-center text-sm font-medium">
+          Página
+          <Input
+            type="text"
+            value={goToPage}
+            onChange={handleGoToPageChange}
+            onBlur={handleBlur}
+            onKeyPress={(event) => event.key === 'Enter' && goToPageDirectly()}
+            className="mx-1.5 h-8 w-8 border border-input bg-background p-0 text-center !text-sm !font-medium shadow-sm ring-0 hover:bg-accent hover:text-accent-foreground focus:border-zinc-300 focus:outline-none focus:ring-0 focus-visible:ring-0"
+          />
+          de <span className="ml-1.5">{totalPages}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => onPageChange(0)}
+            disabled={pageIndex === 0}
+            variant="outline"
+            className="h-8 w-8 p-0"
+          >
+            <ChevronsLeft className="h-4 w-4" />
+            <span className="sr-only">Primeira página</span>
+          </Button>
+          <Button
+            onClick={() => onPageChange(Math.max(0, pageIndex - 1))}
+            disabled={pageIndex === 0}
+            variant="outline"
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="sr-only">Página anterior</span>
+          </Button>
+          <Button
+            onClick={() =>
+              onPageChange(Math.min(totalPages - 1, pageIndex + 1))
+            }
+            disabled={pageIndex >= totalPages - 1}
+            variant="outline"
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+            <span className="sr-only">Próxima página</span>
+          </Button>
+          <Button
+            onClick={() => onPageChange(totalPages - 1)}
+            disabled={pageIndex >= totalPages - 1}
+            variant="outline"
+            className="h-8 w-8 p-0"
+          >
+            <ChevronsRight className="h-4 w-4" />
+            <span className="sr-only">Última página</span>
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
