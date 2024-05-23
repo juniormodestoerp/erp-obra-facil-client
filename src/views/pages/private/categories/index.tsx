@@ -11,6 +11,7 @@ import { Header } from '@views/pages/private/categories/components/header'
 import { RemoveCategoryDialog } from './components/remove-category-dialog'
 import { EditCategoryDialog } from './components/edit-category-dialog'
 import { ICategory } from '@app/services/categories/fetch'
+import { PageTitle } from '@views/components/page-title'
 
 export function Categories() {
   const { currentTab, setCurrentTab, categories } = useCategoriesController()
@@ -81,6 +82,11 @@ export function Categories() {
   return (
     <Fragment>
       <Helmet title="Categorias" />
+
+      <PageTitle
+        title="Categorias"
+        description="Crie e gerencie suas categorias de receitas e despesas."
+      />
 
       <Header currentTab={currentTab} setCurrentTab={setCurrentTab} />
 

@@ -217,7 +217,7 @@ export function NewFundRealeaseContent() {
             onClick={() => setOpenCreateDialog(false)}
             className="w-full bg-dark-blue px-3 dark:text-slate-100"
           >
-            Salvar
+            Cadastrar
           </Button>
         </DialogClose>
       </form>

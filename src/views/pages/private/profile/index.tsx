@@ -1,12 +1,22 @@
+import { states } from '@/assets/data'
 import { PhotoIcon } from '@heroicons/react/24/outline'
 import { Input } from '@views/components/input'
 import { InputDocument } from '@views/components/input/document'
 import { InputMask } from '@views/components/input/mask'
 import { PageTitle } from '@views/components/page-title'
+import { Select } from '@views/components/select'
 import { Button } from '@views/components/ui/button'
 import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@views/components/ui/card'
 
 export function Profile() {
   const { control, errors, handleSubmit, register } = useProfileController()
@@ -24,36 +34,48 @@ export function Profile() {
         onSubmit={handleSubmit}
         className="flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-600 dark:bg-slate-950"
       >
-        <Input
-          id="input-name"
-          label="Nome"
-          placeholder="Digite o nome"
-          error={errors.name?.message}
-          {...register('name')}
-        />
-        <InputDocument
-          label="CPF"
-          name="document"
-          disabled
-          id="input-document"
-          placeholder="Digite o CPF"
-          control={control}
-          error={errors.document?.message}
-        />
-        <Input
-          id="input-email"
-          label="E-mail"
-          placeholder="Digite o e-mail"
-          error={errors.email?.message}
-          {...register('email')}
-        />
-        <InputMask
-          label="Telefone"
-          placeholder="Digite o telefone"
-          mask="+55 (99) 99999-9999"
-          error={errors.phone?.message}
-          {...register('phone')}
-        />
+        <CardHeader className="px-0 pt-0">
+          <CardTitle>Conta</CardTitle>
+          <CardDescription>
+            Verifique os dados da conta e sua informações pessoais.
+          </CardDescription>
+        </CardHeader>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+          <Input
+            id="input-name"
+            label="Nome"
+            placeholder="Digite o nome"
+            className="max-w-xl"
+            error={errors.name?.message}
+            {...register('name')}
+          />
+          <InputDocument
+            label="CPF"
+            name="document"
+            disabled
+            id="input-document"
+            placeholder="Digite o CPF"
+            className="max-w-xl"
+            control={control}
+            error={errors.document?.message}
+          />
+          <Input
+            id="input-email"
+            label="E-mail"
+            placeholder="Digite o e-mail"
+            className="max-w-xl"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <InputMask
+            label="Telefone"
+            placeholder="Digite o telefone"
+            mask="+55 (99) 99999-9999"
+            className="max-w-xl"
+            error={errors.phone?.message}
+            {...register('phone')}
+          />
+        </div>
 
         <label
           htmlFor="file-upload"
@@ -91,6 +113,72 @@ export function Profile() {
             </p>
           </div>
         </label>
+
+        <CardHeader className="px-0">
+          <CardTitle>Endereço</CardTitle>
+          <CardDescription>Verifique o seu endereço.</CardDescription>
+        </CardHeader>
+
+        <div className="grid w-full grid-cols-2 gap-x-4 gap-y-2">
+          <Input
+            label="CEP"
+            maxLength={9}
+            placeholder="Digite o CEP *"
+            className="max-w-xl"
+            error={errors.zipCode?.message}
+            {...register('zipCode')}
+          />
+
+          <Select
+            label="Estado"
+            placeholder="Selecione um estado *"
+            data={states}
+            control={control}
+            error={errors.state?.message}
+            {...register('state')}
+          />
+
+          <Input
+            label="Cidade"
+            placeholder="Digite a cidade *"
+            className="max-w-xl"
+            error={errors.city?.message}
+            {...register('city')}
+          />
+          <Input
+            label="Bairro"
+            placeholder="Digite o bairro *"
+            className="max-w-xl"
+            error={errors.neighborhood?.message}
+            {...register('neighborhood')}
+          />
+
+          <Input
+            label="Logradouro"
+            placeholder="Digite o logradouro *"
+            className="max-w-xl"
+            error={errors.street?.message}
+            {...register('street')}
+          />
+          <Input
+            label="Número"
+            placeholder="Digite o número *"
+            className="max-w-xl"
+            error={errors.number?.message}
+            {...register('number')}
+          />
+        </div>
+
+        <div>
+          <Input
+            label="Complemento"
+            placeholder="Digite o complemento"
+            optional
+            className="max-w-7xl"
+            error={errors.complement?.message}
+            {...register('complement')}
+          />
+        </div>
 
         <div className="py-3" />
 

@@ -242,3 +242,114 @@ export const cashFlowCards: Card[] = [
   { id: 'e52a2037-eaf2-405a-9001-19fc59a04f10', label: 'Contas pagas' },
   { id: '43c5c7f2-7874-40f2-a2d6-0c891587a323', label: 'Contas recebidas' },
 ]
+
+export const states = [
+  {
+    field: 'Acre',
+    value: '1b1ae2b9-f6cc-4e4a-9e4d-55f9a5dfbf81',
+  },
+  {
+    field: 'Alagoas',
+    value: '3fca1ea8-3c87-4d6b-93a1-098c5e17f5e4',
+  },
+  {
+    field: 'Amapá',
+    value: '6379f5e9-b74e-4e55-8f9e-5c3d58c5ad78',
+  },
+  {
+    field: 'Amazonas',
+    value: 'cae1dc24-1a78-4483-a25b-2a90f7e8fd19',
+  },
+  {
+    field: 'Bahia',
+    value: 'cdbed257-f8f7-43e9-a67d-5980f3b738c3',
+  },
+  {
+    field: 'Ceará',
+    value: '782c47e5-2cfc-40e7-8ad6-75f6380d46d0',
+  },
+  {
+    field: 'Distrito Federal',
+    value: 'a4e62e96-91cb-468b-b16a-b9df8338e0aa',
+  },
+  {
+    field: 'Espírito Santo',
+    value: 'fd3f25ef-d6d5-4489-b8f7-b86c9739e405',
+  },
+  {
+    field: 'Goiás',
+    value: 'd3ccf364-45a3-41c9-8fcb-5cf5aa75ab20',
+  },
+  {
+    field: 'Maranhão',
+    value: 'a7b31c47-52a0-4aa3-8c9d-0cc8c7cd0a39',
+  },
+  {
+    field: 'Mato Grosso',
+    value: 'fbe1f28a-c46c-4719-bf0d-c9f3f0b3cc17',
+  },
+  {
+    field: 'Mato Grosso do Sul',
+    value: '23b575be-bc2d-4ea6-8e8b-16e72e9da6ff',
+  },
+  {
+    field: 'Minas Gerais',
+    value: 'ec13a06f-c0ff-4b7f-b5ea-c0a9358b6d9e',
+  },
+  {
+    field: 'Pará',
+    value: '37ec3021-d00a-4e44-b28f-51f4324e9e57',
+  },
+  {
+    field: 'Paraíba',
+    value: 'ac88cf4d-2073-40d8-aed1-fc2733e7e9b6',
+  },
+  {
+    field: 'Paraná',
+    value: 'c0cb1edb-cd96-4a88-8c66-567f2043a6d8',
+  },
+  {
+    field: 'Pernambuco',
+    value: 'fa42f42b-7c7e-4ef8-8f4e-7e50e04e77da',
+  },
+  {
+    field: 'Piauí',
+    value: '8ef12a37-89e4-4e1b-a2fc-24e0dbcb2d4b',
+  },
+  {
+    field: 'Rio de Janeiro',
+    value: 'cd8ea9b3-5c99-4d1a-b63f-552d4f2e9c4b',
+  },
+  {
+    field: 'Rio Grande do Norte',
+    value: '95cfaec0-56e2-4c6c-9b02-3e5bd6fdb870',
+  },
+  {
+    field: 'Rio Grande do Sul',
+    value: 'fbdbfe05-387e-4e38-91a3-ffcb4adcb961',
+  },
+  {
+    field: 'Rondônia',
+    value: 'a7b9ed35-618e-4e30-9413-f98e7af89ad4',
+  },
+  {
+    field: 'Roraima',
+    value: 'f7a72995-f4fd-4b0e-99a9-ec49e8da2899',
+  },
+  {
+    field: 'Santa Catarina',
+    value: '84cb81c4-3a9a-4a35-8de9-9ebd79f02d50',
+  },
+  {
+    field: 'São Paulo',
+    value: 'ed0c6df3-2462-4112-9df3-4e6fbde7cd18',
+  },
+  {
+    field: 'Sergipe',
+    value: 'c12c3fbf-bda4-4791-8b60-b172d8b9f981',
+  },
+  {
+    field: 'Tocantins',
+    value: 'bfd3997c-3c19-4e1a-a6a4-285b57b1ef3f',
+  },
+]

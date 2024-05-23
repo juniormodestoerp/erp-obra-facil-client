@@ -69,7 +69,7 @@ export function CreateCategoryDialog() {
       <DialogTrigger asChild>
         <button
           onClick={handleOpen}
-          className="absolute bottom-0 right-0 hidden h-full items-center justify-center gap-1 border-b-2 border-primary pr-1 text-sm font-medium text-primary sm:flex"
+          className="absolute bottom-0 right-0 flex h-full items-center justify-center gap-1 border-b-2 border-primary pr-1 text-sm font-medium text-primary"
         >
           <Plus className="h-5 w-5" strokeWidth={2.5} />
           <span>Cadastrar</span>

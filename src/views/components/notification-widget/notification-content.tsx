@@ -32,7 +32,7 @@ export function NotificationContent() {
               <Notification.Action icon={CheckIcon} />
               <Notification.Action
                 icon={XMarkIcon}
-                className="dark:bg-danger dark:hover:bg-danger/90 bg-destructive hover:bg-destructive/90"
+                className="bg-destructive hover:bg-destructive/90 dark:bg-danger dark:hover:bg-danger/90"
               />
             </Notification.Actions>
           </Notification.Root>

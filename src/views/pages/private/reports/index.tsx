@@ -91,7 +91,7 @@ export function Reports() {
                 return (
                   <button
                     key={card.id}
-                    className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary"
+                    className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary dark:border-slate-400 dark:bg-slate-800"
                   >
                     <span className="text-base font-medium text-foreground group-hover:text-white">
                       {card.label}
@@ -103,7 +103,7 @@ export function Reports() {
                 return (
                   <button
                     key={card.id}
-                    className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary"
+                    className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary dark:border-slate-400 dark:bg-slate-800"
                   >
                     <span className="text-base font-medium text-foreground group-hover:text-white">
                       {card.label}

@@ -67,7 +67,7 @@ export function Toggle({
             aria-hidden="true"
           >
             <svg
-              className="h-4 w-4 text-green-600"
+              className="h-4 w-4 text-dark-blue"
               fill="currentColor"
               viewBox="0 0 12 12"
             >

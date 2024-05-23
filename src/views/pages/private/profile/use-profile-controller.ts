@@ -14,23 +14,36 @@ export function useProfileController() {
     queryFn: authService.profile,
   })
 
-  const schema = z.object({
-    name: z.string(strMessage('nome')),
-    document: z
-      .string(strMessage('CPF'))
-      .transform((value) => value.replace(/[^\d]/g, ''))
-      .refine((value) => value.length === 11, {
-        message: 'O campo CPF deve conter 11 caracteres.',
-      })
-      .refine((value) => /^[0-9]+$/.test(value), {
-        message: 'O campo CPF deve conter apenas números.',
-      }),
-    email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
-    phone: z.string(strMessage('telefone')),
+  const addressSchema = z.object({
+    zipCode: z.string(strMessage('CEP')).optional(),
+    state: z.string(strMessage('estado')).optional(),
+    city: z.string(strMessage('cidade')).optional(),
+    neighborhood: z.string(strMessage('bairro')).optional(),
+    street: z.string(strMessage('logradouro')).optional(),
+    number: z.string(strMessage('número')).optional(),
+    complement: z.string(strMessage('complemento')).optional(),
   })
 
-  type FormData = z.infer<typeof schema>
+  const schema = z
+    .object({
+      name: z.string(strMessage('nome')),
+      document: z
+        .string(strMessage('CPF'))
+        .transform((value) => value.replace(/[^\d]/g, ''))
+        .refine((value) => value.length === 11, {
+          message: 'O campo CPF deve conter 11 caracteres.',
+        })
+        .refine((value) => /^[0-9]+$/.test(value), {
+          message: 'O campo CPF deve conter apenas números.',
+        }),
+      email: z
+        .string(strMessage('e-mail'))
+        .email({ message: 'E-mail inválido' }),
+      phone: z.string(strMessage('telefone')),
+    })
+    .merge(addressSchema)
 
+  type FormData = z.infer<typeof schema>
 
   const {
     control,

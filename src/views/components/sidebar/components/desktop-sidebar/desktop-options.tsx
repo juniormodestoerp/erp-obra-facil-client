@@ -2,6 +2,7 @@ import { cn } from '@app/utils/cn'
 import {
   AdjustmentsHorizontalIcon,
   ArrowLeftStartOnRectangleIcon,
+  ArrowPathRoundedSquareIcon,
   BanknotesIcon,
   ClipboardDocumentListIcon,
   HomeIcon,
@@ -40,6 +41,15 @@ export function DesktopOptions({ path, small }: Props) {
             linkTo="/transactions"
             title="Lançamentos"
             selected={path.startsWith('/transactions')}
+          />
+
+          <Option
+            open={!small}
+            small={small}
+            Icon={<ArrowPathRoundedSquareIcon className="h-6 w-6" />}
+            linkTo="/conciliations"
+            title="Conciliações"
+            selected={path.startsWith('/conciliations')}
           />
 
           <Option

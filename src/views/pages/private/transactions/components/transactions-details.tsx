@@ -97,7 +97,7 @@ export function TransactionsDetails() {
               <TableCell className="font-medium text-muted-foreground">
                 Total:
               </TableCell>
-              <TableCell className="flex justify-end text-xs text-green-600">
+              <TableCell className="flex justify-end text-xs text-dark-blue">
                 R$ 18.400,00
               </TableCell>
             </TableRow>
@@ -106,7 +106,7 @@ export function TransactionsDetails() {
               <TableCell className="font-medium text-muted-foreground">
                 Saldo atual:
               </TableCell>
-              <TableCell className="flex justify-end text-xs text-green-600">
+              <TableCell className="flex justify-end text-xs text-dark-blue">
                 R$ 18.400,00
               </TableCell>
             </TableRow>

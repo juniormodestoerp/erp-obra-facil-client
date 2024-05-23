@@ -65,13 +65,12 @@ export function Transactions() {
                           className={cn(
                             'py-3',
                             idx === 0 ? 'pl-4 pr-4' : '',
-                            header.column.id === 'actions' ? 'w-12' : '',
-                            header.column.id === 'establishmentName'
-                              ? 'w-36'
-                              : '',
-                            header.column.id === 'transactionDate'
-                              ? 'w-[85px]'
-                              : '',
+                            header.column.id === 'actions' && 'w-12',
+                            header.column.id === 'establishmentName' && 'w-36',
+                            header.column.id === 'transactionDate' &&
+                              'w-[85px]',
+                            header.column.id === 'totalAmount' && 'w-28',
+                            header.column.id === 'currentBalance' && 'w-28',
                           )}
                         >
                           {header.isPlaceholder

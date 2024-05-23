@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@views/components/ui/dropdown-menu'
 
+import { Format } from '@app/utils/format'
 import {
   Dialog,
   DialogClose,
@@ -31,7 +32,6 @@ import {
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Format } from '@app/utils/format'
 interface PropsActionMenu {
   row: Row<ITransaction>
 }
@@ -74,8 +74,8 @@ function ActionMenu({ row }: PropsActionMenu) {
           </DropdownMenuItem>
 
           <DropdownMenuItem className="group gap-1.5" onClick={handleEditClick}>
-            <PencilSquareIcon className="h-5 w-5 text-green-600" />
-            <p className="group-hover:text-green-600">Editar</p>
+            <PencilSquareIcon className="h-5 w-5 text-dark-blue" />
+            <p className="group-hover:text-dark-blue">Editar</p>
           </DropdownMenuItem>
 
           <Dialog>
@@ -173,7 +173,9 @@ export const columns: ColumnDef<ITransaction>[] = [
     },
     cell: ({ row }) => (
       <div className="text-[13px] tracking-tight">
-        {row.getValue('categoryName')}
+        {row.getValue('categoryName') === 'padrão'
+          ? 'Nenhuma categoria cadastrada'
+          : row.getValue('categoryName')}
       </div>
     ),
   },
@@ -225,7 +227,7 @@ export const columns: ColumnDef<ITransaction>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Data
-          <ArrowsUpDownIcon className="ml-1.5 h-4 w-4 text-green-600" />
+          <ArrowsUpDownIcon className="ml-1.5 h-4 w-4 text-dark-blue" />
         </Button>
       )
     },
@@ -250,7 +252,7 @@ export const columns: ColumnDef<ITransaction>[] = [
     },
     cell: ({ row }) => (
       <div className="text-[13px]  tracking-tight">
-        {Format.currency(Number(row.getValue('previousBalance')) * 10)}
+        {Format.currency(Number(row.getValue('previousBalance')))}
       </div>
     ),
   },
@@ -269,7 +271,7 @@ export const columns: ColumnDef<ITransaction>[] = [
     },
     cell: ({ row }) => (
       <div className="text-[13px] tracking-tight">
-        {Format.currency(Number(row.getValue('totalAmount')) * 10)}
+        {Format.currency(Number(row.getValue('totalAmount')))}
       </div>
     ),
   },
@@ -288,7 +290,7 @@ export const columns: ColumnDef<ITransaction>[] = [
     },
     cell: ({ row }) => (
       <div className="text-[13px] tracking-tight">
-        {Format.currency(Number(row.getValue('currentBalance')) * 10)}
+        {Format.currency(Number(row.getValue('currentBalance')))}
       </div>
     ),
   },
@@ -308,7 +310,11 @@ export const columns: ColumnDef<ITransaction>[] = [
     },
     cell: ({ row }) => (
       <div className="text-[13px] tracking-tight">
-        {row.getValue('paymentMethod')}
+        {row.getValue('paymentMethod') === 'credit' ? (
+          <span className="text-dark-blue">Crédito</span>
+        ) : (
+          <span className="text-red-600">Débito</span>
+        )}
       </div>
     ),
   },

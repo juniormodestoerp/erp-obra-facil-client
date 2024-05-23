@@ -26,7 +26,7 @@ import {
 import { transactionsService } from '@app/services/transactions'
 import { ISetting } from '@app/services/settings/fetch'
 import { settingsService } from '@app/services/settings'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ITransaction,
   ITransactionSearchOptions,
@@ -123,7 +123,7 @@ export function useTransactionsController() {
     await createTransaction(data)
   })
 
-  const { data: settings } = useQuery<{ settings: ISetting[] }>({
+  const { data: settings, refetch } = useQuery<{ settings: ISetting[] }>({
     queryKey: ['settings'],
     queryFn: () => settingsService.fetch({ pageIndex: 1 }),
   })
@@ -140,6 +140,10 @@ export function useTransactionsController() {
     }
     return null
   }
+
+  useEffect(() => {
+    refetch()
+  }, [settings])
 
   /* ====================== TABLE ====================== */
   const [sorting, setSorting] = useState<SortingState>([])

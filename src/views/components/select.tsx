@@ -29,7 +29,7 @@ interface Props {
   placeholder?: string
   name: string
   error?: string
-  data: IData[]
+  data: IData[] | any
   control: any
   optional?: boolean
 }
@@ -99,7 +99,7 @@ export function Select({
               <CommandList>
                 <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
                 <CommandGroup heading="Sugestões">
-                  {data.map((item) => (
+                  {data.map((item: IData) => (
                     <CommandItem
                       key={item.value}
                       onSelect={() => handleSelect({ item, onChange })}

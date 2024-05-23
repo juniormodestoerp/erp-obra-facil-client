@@ -14,10 +14,8 @@ import { Dashboards } from '@views/pages/private/dashboards'
 import { InitialPage } from '@views/pages/private/initial-page'
 import { Logout } from '@views/pages/private/logout'
 import { Profile } from '@views/pages/private/profile'
-import { PublicLink } from '@views/pages/private/public-link'
 import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
-import { Support } from '@views/pages/private/support'
 import { Transactions } from '@views/pages/private/transactions'
 
 /* Public Routes */
@@ -26,6 +24,7 @@ import { NotFound } from '@views/pages/authentication/not-found'
 import { ResetPassword } from '@views/pages/authentication/reset-password'
 import { SignIn } from '@views/pages/authentication/sign-in'
 import { SignUp } from '@views/pages/authentication/sign-up'
+import { Conciliations } from '@views/pages/private/conciliations'
 
 export function AppRoutes() {
   return (
@@ -36,13 +35,12 @@ export function AppRoutes() {
         <Route element={<PrivateLayout />}>
           <Route path="/" element={<InitialPage />} />
           <Route path="/transactions" element={<Transactions />} />
+          <Route path="/conciliations" element={<Conciliations />} />
           <Route path="/dashboards" element={<Dashboards />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/contracts" element={<Contracts />} />
-          <Route path="/public-link" element={<PublicLink />} />
-          <Route path="/support" element={<Support />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
