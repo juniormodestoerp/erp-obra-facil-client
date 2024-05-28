@@ -5,9 +5,9 @@ import { Icon } from '@views/components/notification-widget/components/notificat
 import { Root } from '@views/components/notification-widget/components/notification/root'
 
 export const Notification = {
-  Action,
-  Actions,
-  Content,
-  Icon,
-  Root,
+	Action,
+	Actions,
+	Content,
+	Icon,
+	Root,
 }

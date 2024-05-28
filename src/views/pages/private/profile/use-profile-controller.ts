@@ -7,89 +7,89 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export function useProfileController() {
-  const queryClient = useQueryClient()
+	const queryClient = useQueryClient()
 
-  const { data } = useQuery({
-    queryKey: ['profile'],
-    queryFn: authService.profile,
-  })
+	const { data } = useQuery({
+		queryKey: ['profile'],
+		queryFn: authService.profile,
+	})
 
-  const addressSchema = z.object({
-    zipCode: z.string(strMessage('CEP')).optional(),
-    state: z.string(strMessage('estado')).optional(),
-    city: z.string(strMessage('cidade')).optional(),
-    neighborhood: z.string(strMessage('bairro')).optional(),
-    street: z.string(strMessage('logradouro')).optional(),
-    number: z.string(strMessage('número')).optional(),
-    complement: z.string(strMessage('complemento')).optional(),
-  })
+	const addressSchema = z.object({
+		zipCode: z.string(strMessage('CEP')).optional(),
+		state: z.string(strMessage('estado')).optional(),
+		city: z.string(strMessage('cidade')).optional(),
+		neighborhood: z.string(strMessage('bairro')).optional(),
+		street: z.string(strMessage('logradouro')).optional(),
+		number: z.string(strMessage('número')).optional(),
+		complement: z.string(strMessage('complemento')).optional(),
+	})
 
-  const schema = z
-    .object({
-      name: z.string(strMessage('nome')),
-      document: z
-        .string(strMessage('CPF'))
-        .transform((value) => value.replace(/[^\d]/g, ''))
-        .refine((value) => value.length === 11, {
-          message: 'O campo CPF deve conter 11 caracteres.',
-        })
-        .refine((value) => /^[0-9]+$/.test(value), {
-          message: 'O campo CPF deve conter apenas números.',
-        }),
-      email: z
-        .string(strMessage('e-mail'))
-        .email({ message: 'E-mail inválido' }),
-      phone: z.string(strMessage('telefone')),
-    })
-    .merge(addressSchema)
+	const schema = z
+		.object({
+			name: z.string(strMessage('nome')),
+			document: z
+				.string(strMessage('CPF'))
+				.transform((value) => value.replace(/[^\d]/g, ''))
+				.refine((value) => value.length === 11, {
+					message: 'O campo CPF deve conter 11 caracteres.',
+				})
+				.refine((value) => /^[0-9]+$/.test(value), {
+					message: 'O campo CPF deve conter apenas números.',
+				}),
+			email: z
+				.string(strMessage('e-mail'))
+				.email({ message: 'E-mail inválido' }),
+			phone: z.string(strMessage('telefone')),
+		})
+		.merge(addressSchema)
 
-  type FormData = z.infer<typeof schema>
+	type FormData = z.infer<typeof schema>
 
-  const {
-    control,
-    register,
-    setValue,
-    formState: { errors },
-    handleSubmit: hookFormHandleSubmit,
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    values: {
-      name: data?.name ?? '',
-      document: data?.document ?? '',
-      email: data?.email ?? '',
-      phone: Format.phone(data?.phone.substring(4)) ?? '',
-    },
-  })
+	const {
+		control,
+		register,
+		setValue,
+		formState: { errors },
+		handleSubmit: hookFormHandleSubmit,
+	} = useForm<FormData>({
+		resolver: zodResolver(schema),
+		values: {
+			name: data?.name ?? '',
+			document: data?.document ?? '',
+			email: data?.email ?? '',
+			phone: Format.phone(data?.phone.substring(4)) ?? '',
+		},
+	})
 
-  setValue('phone', data?.phone ?? '')
+	setValue('phone', data?.phone ?? '')
 
-  const { mutateAsync: updateProfile } = useMutation({
-    mutationFn: async (formData: FormData) => {
-      return authService.save({ id: data!.id, ...formData })
-    },
-    onSuccess(_, variables) {
-      const cached = queryClient.getQueryData(['profile', data!.id])
+	const { mutateAsync: updateProfile } = useMutation({
+		mutationFn: async (formData: FormData) => {
+			return authService.save({ id: data?.id, ...formData })
+		},
+		onSuccess(_, variables) {
+			const cached = queryClient.getQueryData(['profile', data?.id])
 
-      if (cached) {
-        queryClient.setQueryData(['profile', data!.id], {
-          ...cached,
-          name: variables.name,
-          document: variables.document.replace(/\D/g, ''),
-          email: variables.email,
-          phone: `+${variables.phone.replace(/\D/g, '')}`,
-        })
-      }
-    },
-  })
+			if (cached) {
+				queryClient.setQueryData(['profile', data?.id], {
+					...cached,
+					name: variables.name,
+					document: variables.document.replace(/\D/g, ''),
+					email: variables.email,
+					phone: `+${variables.phone.replace(/\D/g, '')}`,
+				})
+			}
+		},
+	})
 
-  const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
-    await updateProfile(data)
-  })
+	const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
+		await updateProfile(data)
+	})
 
-  return {
-    control,
-    errors,
-    handleSubmit,
-    register,
-  }
+	return {
+		control,
+		errors,
+		handleSubmit,
+		register,
+	}
 }

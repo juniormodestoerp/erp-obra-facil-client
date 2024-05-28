@@ -1,3 +1,3 @@
 export function UseInitialPageController() {
-  return {}
+	return {}
 }

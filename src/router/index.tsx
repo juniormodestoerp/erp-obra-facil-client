@@ -27,36 +27,36 @@ import { SignUp } from '@views/pages/authentication/sign-up'
 import { Conciliations } from '@views/pages/private/conciliations'
 
 export function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Private Routes */}
-        {/* <Route element={<AuthGuard />}> */}
-        <Route element={<PrivateLayout />}>
-          <Route path="/" element={<InitialPage />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/conciliations" element={<Conciliations />} />
-          <Route path="/dashboards" element={<Dashboards />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/contracts" element={<Contracts />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/logout" element={<Logout />} />
-        </Route>
-        {/* </Route> */}
+	return (
+		<BrowserRouter>
+			<Routes>
+				{/* Private Routes */}
+				{/* <Route element={<AuthGuard />}> */}
+				<Route element={<PrivateLayout />}>
+					<Route path="/" element={<InitialPage />} />
+					<Route path="/transactions" element={<Transactions />} />
+					<Route path="/conciliations" element={<Conciliations />} />
+					<Route path="/dashboards" element={<Dashboards />} />
+					<Route path="/reports" element={<Reports />} />
+					<Route path="/categories" element={<Categories />} />
+					<Route path="/settings" element={<Settings />} />
+					<Route path="/contracts" element={<Contracts />} />
+					<Route path="/profile" element={<Profile />} />
+					<Route path="/logout" element={<Logout />} />
+				</Route>
+				{/* </Route> */}
 
-        {/* Public Routes */}
-        <Route element={<AuthLayout />}>
-          <Route index path="/login" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-        </Route>
+				{/* Public Routes */}
+				<Route element={<AuthLayout />}>
+					<Route index path="/login" element={<SignIn />} />
+					<Route path="/sign-up" element={<SignUp />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/forgot-password" element={<ForgotPassword />} />
+				</Route>
 
-        {/* Not Found */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  )
+				{/* Not Found */}
+				<Route path="*" element={<NotFound />} />
+			</Routes>
+		</BrowserRouter>
+	)
 }

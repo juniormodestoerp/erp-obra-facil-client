@@ -1,94 +1,94 @@
 import { cn } from '@app/utils/cn'
 import {
-  AdjustmentsHorizontalIcon,
-  ArrowLeftStartOnRectangleIcon,
-  ArrowPathRoundedSquareIcon,
-  BanknotesIcon,
-  ClipboardDocumentListIcon,
-  HomeIcon,
-  PresentationChartLineIcon,
-  TagIcon,
-  UserCircleIcon,
+	AdjustmentsHorizontalIcon,
+	ArrowLeftStartOnRectangleIcon,
+	ArrowPathRoundedSquareIcon,
+	BanknotesIcon,
+	ClipboardDocumentListIcon,
+	HomeIcon,
+	PresentationChartLineIcon,
+	TagIcon,
+	UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Option } from '@views/components/sidebar/components/option'
 
 interface Props {
-  path: string
-  small: boolean
+	path: string
+	small: boolean
 }
 
 export function DesktopOptions({ path, small }: Props) {
-  return (
-    <nav className={cn('ml-2 flex flex-1 flex-col', small && 'mx-auto')}>
-      <ul
-        role="list"
-        className={cn('-mx-2 flex flex-1 flex-col gap-y-7', small && '-mx-0')}
-      >
-        <div role="list" className="space-y-1">
-          <Option
-            open={!small}
-            small={small}
-            Icon={<HomeIcon className="h-6 w-6" />}
-            linkTo="/"
-            title="Página inicial"
-            selected={path === '/'}
-          />
+	return (
+		<nav className={cn('ml-2 flex flex-1 flex-col', small && 'mx-auto')}>
+			<ul
+				role="list"
+				className={cn('-mx-2 flex flex-1 flex-col gap-y-7', small && '-mx-0')}
+			>
+				<div role="list" className="space-y-1">
+					<Option
+						open={!small}
+						small={small}
+						Icon={<HomeIcon className="h-6 w-6" />}
+						linkTo="/"
+						title="Página inicial"
+						selected={path === '/'}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<BanknotesIcon className="h-6 w-6" />}
-            linkTo="/transactions"
-            title="Lançamentos"
-            selected={path.startsWith('/transactions')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<BanknotesIcon className="h-6 w-6" />}
+						linkTo="/transactions"
+						title="Lançamentos"
+						selected={path.startsWith('/transactions')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<ArrowPathRoundedSquareIcon className="h-6 w-6" />}
-            linkTo="/conciliations"
-            title="Conciliações"
-            selected={path.startsWith('/conciliations')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<ArrowPathRoundedSquareIcon className="h-6 w-6" />}
+						linkTo="/conciliations"
+						title="Conciliações"
+						selected={path.startsWith('/conciliations')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<PresentationChartLineIcon className="h-6 w-6" />}
-            linkTo="/dashboards"
-            title="Dashboards"
-            selected={path.startsWith('/dashboards')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<PresentationChartLineIcon className="h-6 w-6" />}
+						linkTo="/dashboards"
+						title="Dashboards"
+						selected={path.startsWith('/dashboards')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<ClipboardDocumentListIcon className="h-6 w-6" />}
-            linkTo="/reports"
-            title="Relatórios"
-            selected={path.startsWith('/reports')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<ClipboardDocumentListIcon className="h-6 w-6" />}
+						linkTo="/reports"
+						title="Relatórios"
+						selected={path.startsWith('/reports')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<TagIcon className="h-6 w-6" />}
-            linkTo="/categories"
-            title="Categorias"
-            selected={path.startsWith('/categories')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/categories"
+						title="Categorias"
+						selected={path.startsWith('/categories')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<AdjustmentsHorizontalIcon className="h-6 w-6" />}
-            linkTo="/settings"
-            title="Personalização"
-            selected={path.startsWith('/settings')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<AdjustmentsHorizontalIcon className="h-6 w-6" />}
+						linkTo="/settings"
+						title="Personalização"
+						selected={path.startsWith('/settings')}
+					/>
 
-          {/* <Option
+					{/* <Option
             open={!small}
             small={small}
             Icon={<ScaleIcon className="h-6 w-6" />}
@@ -97,7 +97,7 @@ export function DesktopOptions({ path, small }: Props) {
             selected={path.startsWith('/contracts')}
           /> */}
 
-          {/* <Option
+					{/* <Option
             open={!small}
             small={small}
             Icon={<LinkIcon className="h-6 w-6" />}
@@ -105,10 +105,10 @@ export function DesktopOptions({ path, small }: Props) {
             title="Link público"
             selected={path.startsWith('/public-link')}
           /> */}
-        </div>
+				</div>
 
-        <div className="mb-5 mt-auto flex flex-col">
-          {/* <Option
+				<div className="mb-5 mt-auto flex flex-col">
+					{/* <Option
             open={!small}
             small={small}
             Icon={<ChatBubbleBottomCenterTextIcon className="h-6 w-6" />}
@@ -117,7 +117,7 @@ export function DesktopOptions({ path, small }: Props) {
             selected={path.startsWith('/support')}
           /> */}
 
-          {/* <Option
+					{/* <Option
             open={!small}
             small={small}
             Icon={<CreditCardIcon className="h-6 w-6" />}
@@ -126,25 +126,25 @@ export function DesktopOptions({ path, small }: Props) {
             selected={path.startsWith('/payment')}
           /> */}
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<UserCircleIcon className="h-6 w-6" strokeWidth={1.5} />}
-            linkTo="/profile"
-            title="Perfil"
-            selected={path.startsWith('/profile')}
-          />
+					<Option
+						open={!small}
+						small={small}
+						Icon={<UserCircleIcon className="h-6 w-6" strokeWidth={1.5} />}
+						linkTo="/profile"
+						title="Perfil"
+						selected={path.startsWith('/profile')}
+					/>
 
-          <Option
-            open={!small}
-            small={small}
-            Icon={<ArrowLeftStartOnRectangleIcon className="h-6 w-6" />}
-            linkTo="/logout"
-            title="Sair"
-            selected={path.startsWith('/logout')}
-          />
-        </div>
-      </ul>
-    </nav>
-  )
+					<Option
+						open={!small}
+						small={small}
+						Icon={<ArrowLeftStartOnRectangleIcon className="h-6 w-6" />}
+						linkTo="/logout"
+						title="Sair"
+						selected={path.startsWith('/logout')}
+					/>
+				</div>
+			</ul>
+		</nav>
+	)
 }

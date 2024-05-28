@@ -1,9 +1,9 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface Props {
-  children: ReactNode
+	children: ReactNode
 }
 
 export function Actions({ children }: Props) {
-  return <div className="flex gap-2 self-center">{children}</div>
+	return <div className="flex gap-2 self-center">{children}</div>
 }

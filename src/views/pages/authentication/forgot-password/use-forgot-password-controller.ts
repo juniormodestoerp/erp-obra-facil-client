@@ -11,63 +11,63 @@ import { z } from 'zod'
 export type TabProps = 'document' | 'email'
 
 export function UseForgotPasswordController() {
-  const navigate = useNavigate()
-  const [currentTab, setCurrentTab] = useState<TabProps>('email')
+	const navigate = useNavigate()
+	const [currentTab, setCurrentTab] = useState<TabProps>('email')
 
-  const forgotPasswordForm = z.object({
-    email: z
-      .string(strMessage('e-mail'))
-      .optional()
-      .refine(
-        (data) => data === '' || z.string().email().safeParse(data).success,
-        {
-          message: 'O e-mail é inválido',
-        },
-      ),
-    document: z
-      .string(strMessage('CPF / CNPJ'))
-      .min(14, { message: 'O campo CPF deve ter 11 caracteres.' })
-      .regex(/^[0-9.-]+$/, {
-        message: 'O campo CPF deve conter apenas números.',
-      })
-      .optional(),
-  })
+	const forgotPasswordForm = z.object({
+		email: z
+			.string(strMessage('e-mail'))
+			.optional()
+			.refine(
+				(data) => data === '' || z.string().email().safeParse(data).success,
+				{
+					message: 'O e-mail é inválido',
+				},
+			),
+		document: z
+			.string(strMessage('CPF / CNPJ'))
+			.min(14, { message: 'O campo CPF deve ter 11 caracteres.' })
+			.regex(/^[0-9.-]+$/, {
+				message: 'O campo CPF deve conter apenas números.',
+			})
+			.optional(),
+	})
 
-  type FormData = z.infer<typeof forgotPasswordForm>
+	type FormData = z.infer<typeof forgotPasswordForm>
 
-  const {
-    register,
-    control,
-    formState: { errors },
-    handleSubmit: hookFormHandleSubmit,
-  } = useForm<FormData>({
-    mode: 'onSubmit',
-    resolver: zodResolver(forgotPasswordForm),
-  })
+	const {
+		register,
+		control,
+		formState: { errors },
+		handleSubmit: hookFormHandleSubmit,
+	} = useForm<FormData>({
+		mode: 'onSubmit',
+		resolver: zodResolver(forgotPasswordForm),
+	})
 
-  const { mutateAsync: authenticate } = useMutation({
-    mutationFn: async (data: FormData) => {
-      return authService.forgotPassword(data)
-    },
-  })
+	const { mutateAsync: authenticate } = useMutation({
+		mutationFn: async (data: FormData) => {
+			return authService.forgotPassword(data)
+		},
+	})
 
-  const handleSubmit = hookFormHandleSubmit(async (params: FormData) => {
-    toast.promise(authenticate(params), {
-      loading: 'Carregando...',
-      success: () => {
-        navigate('/login', { replace: true })
-        return 'Enviamos um link de recuperação de senha para o seu e-mail.'
-      },
-      error: 'Usuário não encontrado.',
-    })
-  })
+	const handleSubmit = hookFormHandleSubmit(async (params: FormData) => {
+		toast.promise(authenticate(params), {
+			loading: 'Carregando...',
+			success: () => {
+				navigate('/login', { replace: true })
+				return 'Enviamos um link de recuperação de senha para o seu e-mail.'
+			},
+			error: 'Usuário não encontrado.',
+		})
+	})
 
-  return {
-    errors,
-    control,
-    currentTab,
-    setCurrentTab,
-    register,
-    handleSubmit,
-  }
+	return {
+		errors,
+		control,
+		currentTab,
+		setCurrentTab,
+		register,
+		handleSubmit,
+	}
 }
