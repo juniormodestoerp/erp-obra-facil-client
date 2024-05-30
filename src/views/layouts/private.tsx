@@ -1,14 +1,15 @@
-import { authService } from '@app/services/authenticate'
-import { cn } from '@app/utils/cn'
-import { useQuery } from '@tanstack/react-query'
-import { Breadcrumbs } from '@views/components/breadcumbs'
-// import { NotificationWidget } from '@views/components/notification-widget'
-// import { SearchCheck } from 'lucide-react'
-import { DesktopSidebar } from '@views/components/sidebar/components/desktop-sidebar'
-import { ThemeToggle } from '@views/components/theme/theme-toggle'
-import { ComboboxDropdownMenu } from '@views/components/user-widget'
 import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+
+import { authService } from '@app/services/authenticate'
+import { cn } from '@app/utils/cn'
+
+import { Breadcrumbs } from '@views/components/breadcumbs'
+import { ComboboxDropdownMenu } from '@views/components/user-widget'
+import { DesktopSidebar } from '@views/components/sidebar/desktop-sidebar'
+import { MobileSidebar } from '@views/components/sidebar/mobile-sidebar'
+import { ThemeToggle } from '@views/components/theme/theme-toggle'
 
 export function PrivateLayout() {
 	const route = useLocation()
@@ -47,8 +48,10 @@ export function PrivateLayout() {
 				className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-56')}
 			>
 				<div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:border-zinc-600 dark:bg-zinc-900 sm:gap-x-6 sm:px-6">
-					<div className="flex flex-1 items-center gap-x-2">
+					<div className="flex w-full flex-1 items-center gap-x-2">
 						<Breadcrumbs />
+
+						<MobileSidebar />
 
 						<ThemeToggle />
 

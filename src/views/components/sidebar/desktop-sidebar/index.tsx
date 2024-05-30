@@ -1,6 +1,6 @@
 import { cn } from '@app/utils/cn'
-import { DesktopHeader } from '@views/components/sidebar/components/desktop-sidebar/desktop-header'
-import { DesktopOptions } from '@views/components/sidebar/components/desktop-sidebar/desktop-options'
+import { DesktopHeader } from '@views/components/sidebar/desktop-sidebar/desktop-header'
+import { DesktopOptions } from '@views/components/sidebar/desktop-sidebar/desktop-options'
 
 interface Props {
 	small: boolean

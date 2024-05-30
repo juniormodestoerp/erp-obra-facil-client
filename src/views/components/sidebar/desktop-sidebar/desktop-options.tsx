@@ -1,4 +1,3 @@
-import { cn } from '@app/utils/cn'
 import {
 	AdjustmentsHorizontalIcon,
 	ArrowLeftStartOnRectangleIcon,
@@ -10,7 +9,10 @@ import {
 	TagIcon,
 	UserCircleIcon,
 } from '@heroicons/react/24/outline'
-import { Option } from '@views/components/sidebar/components/option'
+
+import { cn } from '@app/utils/cn'
+
+import { Option } from '@views/components/sidebar/option'
 
 interface Props {
 	path: string
