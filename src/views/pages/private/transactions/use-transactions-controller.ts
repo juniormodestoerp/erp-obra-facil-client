@@ -182,7 +182,8 @@ export function useTransactionsController() {
 		queryFn: () => categoriesService.selectInput(),
 	})
 
-	console.log('categories', categories)
+	const filteredCategories =
+		categories?.filter((category) => category.field !== 'padrão') ?? []
 
 	const queryPageIndex = z.coerce
 		.number(numbMessage('index da página'))
@@ -269,7 +270,7 @@ export function useTransactionsController() {
 		isDeleteModalOpen,
 		selectedTransaction,
 		globalFilter,
-		categories,
+		filteredCategories,
 		setGlobalFilter,
 		setSelectedTransaction,
 		setIsDeleteModalOpen,

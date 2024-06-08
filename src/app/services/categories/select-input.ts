@@ -5,12 +5,15 @@ export interface ISelectInputCategory {
 	value: string
 }
 
-export interface Response {
-	categories: ISelectInputCategory[]
-}
+export async function selectInput(): Promise<ISelectInputCategory[]> {
+	const { data } = await httpClient.get<ISelectInputCategory[]>(
+		'/categories/select-input',
+	)
 
-export async function selectInput(): Promise<Response> {
-	const { data } = await httpClient.get<Response>('/categories/select-input')
-
-	return data
+	return (
+		data?.map((category) => ({
+			field: category.field,
+			value: category.value,
+		})) ?? []
+	)
 }

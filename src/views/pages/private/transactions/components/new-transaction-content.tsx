@@ -22,7 +22,7 @@ export function NewFundRealeaseContent() {
 		methods,
 		setOpenCreateDialog,
 		handleSubmit,
-		categories,
+		filteredCategories,
 	} = useTransactionsController()
 
 	const {
@@ -62,7 +62,7 @@ export function NewFundRealeaseContent() {
 					<Select
 						label="Categoria"
 						placeholder="Selecione uma categoria *"
-						data={categories ?? []}
+						data={filteredCategories ?? []}
 						control={control}
 						error={errors.categoryId?.message}
 						{...register('categoryId')}

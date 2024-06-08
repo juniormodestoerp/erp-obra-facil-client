@@ -1,15 +1,15 @@
+import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
 
 import { authService } from '@app/services/authenticate'
 import { cn } from '@app/utils/cn'
 
 import { Breadcrumbs } from '@views/components/breadcumbs'
-import { ComboboxDropdownMenu } from '@views/components/user-widget'
 import { DesktopSidebar } from '@views/components/sidebar/desktop-sidebar'
 import { MobileSidebar } from '@views/components/sidebar/mobile-sidebar'
 import { ThemeToggle } from '@views/components/theme/theme-toggle'
+import { ComboboxDropdownMenu } from '@views/components/user-widget'
 
 export function PrivateLayout() {
 	const route = useLocation()
