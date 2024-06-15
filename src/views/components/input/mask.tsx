@@ -9,6 +9,8 @@ interface Props extends ComponentProps<'input'> {
 	error?: string
 	mask?: string
 	defaultValue?: string
+	labelClassName?: string
+	optional?: boolean
 }
 
 export const InputMask = forwardRef<HTMLInputElement, Props>(
@@ -22,6 +24,8 @@ export const InputMask = forwardRef<HTMLInputElement, Props>(
 			error,
 			className,
 			defaultValue,
+			labelClassName,
+			optional,
 			...props
 		},
 		ref,
@@ -29,20 +33,15 @@ export const InputMask = forwardRef<HTMLInputElement, Props>(
 		const inputId = id ?? name
 
 		return (
-			<div
-				className={cn(
-					'flex w-full flex-col',
-					props.disabled && 'cursor-not-allowed select-none',
-				)}
-			>
+			<div className="flex flex-1 flex-col">
 				<label
 					htmlFor={inputId}
 					className={cn(
 						'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
-						props.disabled && 'cursor-not-allowed select-none',
+						labelClassName,
 					)}
 				>
-					{label}
+					{label} {!optional && <span className="text-red-600">*</span>}
 				</label>
 
 				<ReactInputMask

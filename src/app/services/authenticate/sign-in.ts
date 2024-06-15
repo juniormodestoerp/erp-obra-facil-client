@@ -6,6 +6,7 @@ export interface Params {
 }
 
 export interface Response {
+	accessToken: string
 	id: string
 	name: string
 	document: string
@@ -27,6 +28,7 @@ export async function signIn({
 	})
 
 	return {
+		accessToken: data.accessToken,
 		id: data.id,
 		name: data.name,
 		document: data.document,

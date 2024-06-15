@@ -2,6 +2,8 @@ import axios, { isAxiosError } from 'axios'
 
 import { env } from '@/env'
 
+import { localStorageKeys } from '@app/config/local-storage-keys'
+
 interface ResponseError {
 	code: string
 	error: string
@@ -10,11 +12,20 @@ interface ResponseError {
 }
 
 export const httpClient = axios.create({
-	baseURL: env.VITE_API_URL,
+	baseURL: import.meta.env.VITE_API_URL,
 	headers: {
 		'Content-Type': 'application/json',
 	},
-	withCredentials: true,
+})
+
+httpClient.interceptors.request.use((config) => {
+	const accessToken = localStorage.getItem(localStorageKeys.ACCESS_TOKEN)
+
+	if (accessToken) {
+		config.headers.Authorization = `Bearer ${accessToken}`
+	}
+
+	return config
 })
 
 export function parseError(err: unknown): ResponseError {

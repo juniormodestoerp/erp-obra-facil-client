@@ -15,8 +15,8 @@ export function ResetPassword() {
 			<Helmet title="Recuperar senha" />
 
 			<div className="p-8">
-				<div className="flex w-[362px] flex-col justify-center gap-6">
-					<h1 className="text-2xl font-semibold tracking-tighter text-foreground">
+				<div className="flex w-[350px] flex-col justify-center gap-6">
+					<h1 className="text-2xl font-semibold tracking-tight text-slate-50">
 						Recupere sua senha Obra Fácil!
 					</h1>
 
@@ -26,7 +26,7 @@ export function ResetPassword() {
 						className="mx-auto h-24 w-24"
 					/>
 
-					<p className="mb-8 font-medium text-foreground">
+					<p className="mb-8 font-medium text-slate-100">
 						Preencha os campos abaixo para criar uma nova senha.
 					</p>
 				</div>
@@ -35,7 +35,8 @@ export function ResetPassword() {
 					<InputPassword
 						label="Nova senha:"
 						placeholder="Digite sua nova senha *"
-						className="mb-1.5"
+						labelClassName="text-slate-100"
+						className="mb-2"
 						error={errors.password?.message}
 						{...register('password')}
 					/>
@@ -43,6 +44,7 @@ export function ResetPassword() {
 					<InputPassword
 						label="Confirmar senha:"
 						placeholder="Digite novamente sua nova senha *"
+						labelClassName="text-slate-100"
 						className="mb-6"
 						error={errors.confirmPassword?.message}
 						{...register('confirmPassword')}
@@ -53,8 +55,8 @@ export function ResetPassword() {
 
 				<Fragment>
 					<p className="mt-6 px-3 text-center">
-						<span className="select-none">Já tem uma conta?</span>
-						<Link to="/login" className="ml-1 font-semibold text-white">
+						<span className="select-none text-slate-200">Já tem uma conta?</span>
+						<Link to="/login" className="ml-1 font-semibold text-white dark:text-slate-50">
 							Faça login!
 						</Link>
 					</p>
@@ -62,8 +64,8 @@ export function ResetPassword() {
 					<div className="mx-8 my-5 h-px bg-white dark:bg-white" />
 
 					<p className="px-3 text-center">
-						<span className="select-none">Ainda não tem uma conta?</span>
-						<Link to="/sign-up" className="ml-1 font-semibold text-white">
+						<span className="select-none text-slate-200">Ainda não tem uma conta?</span>
+						<Link to="/sign-up" className="ml-1 font-semibold text-white dark:text-slate-50">
 							Cadastre-se
 						</Link>
 					</p>

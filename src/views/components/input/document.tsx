@@ -1,30 +1,33 @@
-import { cn } from '@app/utils/cn'
-import { XCircleIcon } from '@heroicons/react/24/outline'
-import CpfCnpj from '@react-br-forms/cpf-cnpj-mask'
 import { type ComponentProps, forwardRef } from 'react'
 import { Controller } from 'react-hook-form'
+import CpfCnpj from '@react-br-forms/cpf-cnpj-mask'
+import { XCircleIcon } from '@heroicons/react/24/outline'
+
+import { cn } from '@app/utils/cn'
 
 interface Props extends ComponentProps<'input'> {
+	id?: string
+	control?: any
+	placeholder?: string
 	name: string
 	label: string
-	placeholder?: string
 	error?: string
-	control?: any
-	id?: string
 	labelClassName?: string
+	optional?: boolean
 }
 
 export const InputDocument = forwardRef<HTMLInputElement, Props>(
 	(
 		{
+			id,
+			control,
 			placeholder,
 			label,
-			control,
 			name,
-			id,
 			error,
 			className,
 			labelClassName,
+			optional,
 			...props
 		},
 		ref,
@@ -42,11 +45,10 @@ export const InputDocument = forwardRef<HTMLInputElement, Props>(
 					htmlFor={inputId}
 					className={cn(
 						'block text-sm font-medium leading-6 text-zinc-900 dark:text-zinc-100',
-						props.disabled && 'cursor-not-allowed select-none',
 						labelClassName,
 					)}
 				>
-					{label}
+					{label} {!optional && <span className="text-red-600">*</span>}
 				</label>
 
 				<Controller

@@ -13,10 +13,10 @@ interface Props extends ComponentProps<'input'> {
 export const Input = forwardRef<HTMLInputElement, Props>(
 	(
 		{
+			id,
 			placeholder,
 			label,
 			name,
-			id,
 			error,
 			className,
 			labelClassName,

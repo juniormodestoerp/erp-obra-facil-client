@@ -34,7 +34,7 @@ function AnimatedNumber({ target, duration }: Props) {
 export function Statistics() {
 	return (
 		<div className="flex flex-col items-center justify-around bg-transparent py-5 text-foreground">
-			<div className="mr-28 flex flex-wrap items-center space-x-32 md:flex-nowrap">
+			<div className="ml-4 mr-20 flex flex-wrap items-center space-x-16 md:flex-nowrap">
 				<div className="flex flex-col items-center">
 					<div className="flex items-center justify-center pr-2.5">
 						<Plus
@@ -59,7 +59,7 @@ export function Statistics() {
 				</div>
 			</div>
 
-			<div className="ml-20 flex flex-wrap items-center space-x-36 md:flex-nowrap">
+			<div className="ml-20 flex flex-wrap items-center space-x-24 md:flex-nowrap">
 				<div className="flex flex-col items-center">
 					<div className="flex items-center justify-center pr-2.5">
 						<Plus

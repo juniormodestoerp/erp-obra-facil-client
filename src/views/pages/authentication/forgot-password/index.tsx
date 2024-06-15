@@ -1,6 +1,6 @@
 import { Button } from '@views/components/button'
 import { Input } from '@views/components/input'
-import { UseForgotPasswordController } from '@views/pages/authentication/forgot-password/use-forgot-password-controller'
+import { useForgotPasswordController } from '@views/pages/authentication/forgot-password/use-forgot-password-controller'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
@@ -10,8 +10,8 @@ import { InputDocument } from '@views/components/input/document'
 import { Tabs } from './components/tabs'
 
 export function ForgotPassword() {
-	const { errors, register, currentTab, setCurrentTab, handleSubmit, control } =
-		UseForgotPasswordController()
+	const { errors, register, currentTab, setCurrentTab, reset, handleSubmit, control } =
+		useForgotPasswordController()
 
 	return (
 		<Fragment>
@@ -40,7 +40,7 @@ export function ForgotPassword() {
 					</fieldset>
 				</div>
 
-				<Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
+				<Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} reset={reset} />
 
 				<form onSubmit={handleSubmit} className="mt-8 w-[350px]">
 					{currentTab === 'email' && (

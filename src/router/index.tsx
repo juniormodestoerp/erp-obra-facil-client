@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 /* Auth Guard */
-// import { AuthGuard } from '@guards/auth-guard'
+import { AuthGuard } from '@/router/auth-guard'
 
 /* Layouts */
-import { AuthLayout } from '@views/layouts/auth'
+import { AuthenticateLayout } from '@views/layouts/authenticate'
 import { PrivateLayout } from '@views/layouts/private'
 
 /* Private Routes */
@@ -30,8 +30,16 @@ export function AppRoutes() {
 	return (
 		<BrowserRouter>
 			<Routes>
+				{/* Public Routes */}
+				<Route element={<AuthenticateLayout />}>
+					<Route index path="/login" element={<SignIn />} />
+					<Route path="/sign-up" element={<SignUp />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
+					<Route path="/forgot-password" element={<ForgotPassword />} />
+				</Route>
+
 				{/* Private Routes */}
-				{/* <Route element={<AuthGuard />}> */}
+				<Route element={<AuthGuard isPrivate />}>
 				<Route element={<PrivateLayout />}>
 					<Route path="/" element={<InitialPage />} />
 					<Route path="/transactions" element={<Transactions />} />
@@ -44,14 +52,6 @@ export function AppRoutes() {
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/logout" element={<Logout />} />
 				</Route>
-				{/* </Route> */}
-
-				{/* Public Routes */}
-				<Route element={<AuthLayout />}>
-					<Route index path="/login" element={<SignIn />} />
-					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/reset-password" element={<ResetPassword />} />
-					<Route path="/forgot-password" element={<ForgotPassword />} />
 				</Route>
 
 				{/* Not Found */}

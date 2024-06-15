@@ -1,23 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ChangeEvent, DragEvent } from 'react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { authService } from '@app/services/authenticate'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { Format } from '@app/utils/format'
-
-const addressSchema = z.object({
-	zipCode: z.string(strMessage('CEP')).optional(),
-	state: z.string(strMessage('estado')).optional(),
-	city: z.string(strMessage('cidade')).optional(),
-	neighborhood: z.string(strMessage('bairro')).optional(),
-	street: z.string(strMessage('logradouro')).optional(),
-	number: z.string(strMessage('número')).optional(),
-	complement: z.string(strMessage('complemento')).optional(),
-})
+import { utilsService } from '@app/services/utils'
 
 const schema = z
 	.object({
@@ -33,8 +24,14 @@ const schema = z
 			}),
 		email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
 		phone: z.string(strMessage('telefone')),
+		zipCode: z.string(strMessage('CEP')),
+		state: z.string(strMessage('estado')),
+		city: z.string(strMessage('cidade')),
+		neighborhood: z.string(strMessage('bairro')),
+		street: z.string(strMessage('logradouro')),
+		number: z.string(strMessage('número')),
+		complement: z.string(strMessage('complemento')).optional(),
 	})
-	.merge(addressSchema)
 
 type FormData = z.infer<typeof schema>
 type PreviewImage = string | ArrayBuffer | null
@@ -92,6 +89,8 @@ export function useProfileController() {
 		control,
 		register,
 		setValue,
+		watch,
+		setFocus,
 		formState: { errors },
 		handleSubmit: hookFormHandleSubmit,
 	} = useForm<FormData>({
@@ -101,6 +100,13 @@ export function useProfileController() {
 			document: data?.document ?? '',
 			email: data?.email ?? '',
 			phone: Format.phone(data?.phone.substring(4)) ?? '',
+			zipCode: data?.zipCode ?? '',
+			state: data?.state ?? '',
+			city: data?.city ?? '',
+			neighborhood: data?.neighborhood ?? '',
+			street: data?.street ?? '',
+			number: data?.number ?? '',
+			complement: data?.complement ?? '',
 		},
 	})
 
@@ -128,6 +134,61 @@ export function useProfileController() {
 	const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
 		await updateProfile(data)
 	})
+
+	const zipCode = watch('zipCode')
+
+	const { data: address } = useQuery({
+		queryKey: ['address', zipCode],
+		queryFn: () => {
+			if (!zipCode || zipCode.length !== 9) {
+				return Promise.resolve(null)
+			}
+
+			return utilsService.showAddress({ zipCode })
+		},
+		enabled: !!(zipCode && zipCode.length === 9 && !zipCode.includes('_')),
+	})
+
+	useEffect(() => {
+		if (address) {
+			setValue('state', address.state)
+			setValue('city', address.city)
+			setValue(
+				'neighborhood',
+				Number(address.neighborhood) === 0 ? '' : address.neighborhood ?? '',
+			)
+			setValue('street', address.street ?? '')
+
+			if (address.neighborhood && address.street) {
+				setFocus('number')
+			} else if (!address.neighborhood) {
+				setFocus('neighborhood')
+			} else if (!address.street) {
+				setFocus('street')
+			}
+		}
+	}, [address, setFocus, setValue])
+
+	// const state = watch('state')
+	// const city = watch('city')
+	// const street = watch('street')
+
+	// const { data: addressData } = useQuery({
+	// 	queryKey: ['address', zipCode, state, city, street],
+	// 	queryFn: () => {
+	// 		if (!zipCode || zipCode.length !== 9) {
+	// 			return Promise.resolve(null)
+	// 		}
+
+	// 		return utilsService.showAddress({ zipCode })
+	// 	},
+	// 	enabled: !!(!zipCode && state && city && street),
+	// })
+
+	// if (addressData) {
+	// 	setValue('zipCode', addressData.zipCode)
+	// 	setFocus('complement')
+	// }
 
 	return {
 		errors,

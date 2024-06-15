@@ -31,7 +31,7 @@ export async function signUp({
 }: Params): Promise<Response> {
 	const [day, month, year] = birthDate.split('/').map(Number)
 
-	const { data } = await httpClient.put<Response>('/users', {
+	const { data } = await httpClient.post<Response>('/users', {
 		name,
 		email,
 		phone: phone.replace(/[^0-9+]/g, ''),

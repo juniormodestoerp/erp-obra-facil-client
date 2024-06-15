@@ -6,10 +6,10 @@ import { Outlet } from 'react-router-dom'
 
 import authImage from '@/assets/images/auth-image.svg'
 
-export function AuthLayout() {
+export function AuthenticateLayout() {
 	return (
-		<div className="grid min-h-screen md:grid-cols-10">
-			<div className="relative hidden h-screen flex-col p-8 md:col-span-5 md:flex">
+		<div className="grid min-h-screen xl:grid-cols-10">
+			<div className="relative hidden h-screen flex-col p-8 xl:col-span-5 xl:flex">
 				<div className="mb-4 flex items-center gap-3 text-sm font-medium text-foreground">
 					<HardHat className="h-5 w-5" />
 					<span className="font-semibold">Obra fácil</span>
@@ -43,7 +43,7 @@ export function AuthLayout() {
 				</footer>
 			</div>
 
-			<div className="col-span-11 flex h-screen w-full items-center justify-center bg-dark-blue md:col-span-5">
+			<div className="col-span-11 flex h-screen w-full items-center justify-center bg-dark-blue xl:col-span-5">
 				<Outlet />
 			</div>
 		</div>

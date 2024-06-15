@@ -4,7 +4,7 @@ import {
 	SunIcon,
 } from '@heroicons/react/24/outline'
 
-import { useTheme } from '@views/components/theme/theme-provider'
+import { useTheme } from '@app/hooks/use-theme'
 
 import { Button } from '@views/components/ui/button'
 import {

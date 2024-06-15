@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { Fragment, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { ZodError, z } from 'zod'
@@ -10,23 +10,13 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from '@views/components/ui/card'
-import { Checkbox } from '@views/components/ui/checkbox'
-import { Input } from '@views/components/ui/input'
-import { Label } from '@views/components/ui/label'
-import { useConciliationsController } from '@views/pages/private/conciliations/use-conciliations-controller'
+
+// import { useConciliationsController } from '@views/pages/private/conciliations/use-conciliations-controller'
 import { ConciliationCard } from './components/card'
 
-interface Reconciliation {
-	id: number
-	description: string
-	option1: string
-	option2: string
-	selectedOption: string
-}
 
 const fileSchema = z.object({
 	type: z.string().regex(/\.ofx$/, {
@@ -35,8 +25,6 @@ const fileSchema = z.object({
 })
 
 export function Conciliations() {
-	const controller = useConciliationsController()
-
 	const [file, setFile] = useState<File | null>(null)
 	const [error, setError] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)

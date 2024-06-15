@@ -10,19 +10,34 @@ type PwdProps = 'password' | 'text'
 interface Props extends ComponentProps<'input'> {
 	name: string
 	label: string
+	placeholder?: string
 	error?: string
 	labelClassName?: string
+	optional?: boolean
 }
 
 export const InputPassword = forwardRef<HTMLInputElement, Props>(
-	({ label, name, id, error, className, labelClassName, ...props }, ref) => {
+	(
+		{
+			id,
+			placeholder,
+			label,
+			name,
+			error,
+			className,
+			labelClassName,
+			optional,
+			...props
+		},
+		ref,
+	) => {
 		const inputId = id ?? name
 
 		const [isPasswordVisible, setIsPasswordVisible] =
 			useState<PwdProps>('password')
 
 		return (
-			<div className="relative flex flex-col">
+			<div className="relative flex flex-1 flex-col">
 				<label
 					htmlFor={inputId}
 					className={cn(
@@ -30,8 +45,9 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
 						labelClassName,
 					)}
 				>
-					{label}
+					{label} {!optional && <span className="text-red-600">*</span>}
 				</label>
+
 
 				<div className="relative">
 					<input
@@ -40,6 +56,7 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
 						type={isPasswordVisible}
 						name={name}
 						id={inputId}
+						placeholder={placeholder}
 						className={cn(
 							'block w-full max-w-sm rounded border border-zinc-400 px-3 py-1.5 text-xs text-zinc-900 shadow outline-none placeholder:text-zinc-400 hover:border-primary focus:border-primary focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6',
 							props.disabled &&

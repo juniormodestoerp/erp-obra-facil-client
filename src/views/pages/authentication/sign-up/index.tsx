@@ -38,6 +38,7 @@ export function SignUp() {
 					<Input
 						label="Nome:"
 						placeholder="Digite o seu nome *"
+						labelClassName="text-slate-100"
 						className="mb-1.5"
 						error={errors.name?.message}
 						{...register('name')}
@@ -46,6 +47,7 @@ export function SignUp() {
 					<Input
 						label="E-mail:"
 						placeholder="Digite o seu e-mail *"
+						labelClassName="text-slate-100"
 						className="mb-1.5"
 						error={errors.email?.message}
 						{...register('email')}
@@ -54,15 +56,17 @@ export function SignUp() {
 					<InputMask
 						label="Telefone:"
 						placeholder="Digite o seu telefone *"
+						labelClassName="text-slate-100"
 						className="mb-1.5"
 						error={errors.phone?.message}
 						{...register('phone')}
 					/>
 
 					<InputMask
+						mask="99/99/9999"
 						label="Data de nascimento:"
 						placeholder="Digite a sua data de nascimento *"
-						mask="99/99/9999"
+						labelClassName="text-slate-100"
 						className="mb-1.5"
 						error={errors.birthDate?.message}
 						{...register('birthDate')}
@@ -71,9 +75,10 @@ export function SignUp() {
 					<InputDocument
 						label="CPF"
 						placeholder="Digite o CPF *"
+						labelClassName="text-slate-100"
+						className="mb-1.5"
 						maxLength={14}
 						control={control}
-						className="mb-1.5"
 						error={errors.document?.message}
 						{...register('document')}
 					/>
@@ -81,6 +86,7 @@ export function SignUp() {
 					<InputPassword
 						label="Senha:"
 						placeholder="Digite sua senha *"
+						labelClassName="text-slate-100"
 						className="mb-6"
 						error={errors.password?.message}
 						{...register('password')}
@@ -90,11 +96,11 @@ export function SignUp() {
 
 					<p className="mt-1 text-center text-sm leading-relaxed text-slate-300">
 						Ao cadastrar-se, você concorda com os nossos
-						<a href="/" className="mx-1 text-primary">
+						<a href="/" className="mx-1 text-primary pointer-events-none">
 							Termos de Uso
 						</a>
 						e
-						<a href="/" className="ml-1 text-primary">
+						<a href="/" className="ml-1 text-primary pointer-events-none">
 							Política de Privacidade
 						</a>
 						.
@@ -102,8 +108,8 @@ export function SignUp() {
 				</form>
 
 				<p className="mt-4 px-3 text-center">
-					<span className="select-none">Já tem uma conta?</span>
-					<Link to="/login" className="ml-1 font-semibold text-white">
+					<span className="select-none text-slate-200">Já tem uma conta?</span>
+					<Link to="/login" className="ml-1 font-semibold text-white dark:text-slate-50">
 						Faça login!
 					</Link>
 				</p>

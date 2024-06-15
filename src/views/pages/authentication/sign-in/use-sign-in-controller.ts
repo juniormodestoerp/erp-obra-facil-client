@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { useAuth } from '@app/hooks/use-auth'
 import { authService } from '@app/services/authenticate'
 import { strMessage } from '@app/utils/custom-zod-error'
+import { parseError } from '@app/services/http-client'
 
 const signInForm = z.object({
 	document: z
@@ -25,6 +27,7 @@ const signInForm = z.object({
 type SignInForm = z.infer<typeof signInForm>
 
 export function useSignInController() {
+	const { signIn } = useAuth()
 	const navigate = useNavigate()
 
 	const {
@@ -43,13 +46,15 @@ export function useSignInController() {
 
 	const handleSubmit = hookFormHandleSubmit(async (data: SignInForm) => {
 		try {
-			const { name } = await authenticate(data)
+			const { name, accessToken } = await authenticate(data)
+
+			signIn(accessToken)
 
 			toast.success(`Seja bem-vindo ${name}!`)
 
 			navigate('/')
 		} catch (error) {
-			toast.error('Erro ao realizar login!')
+			toast.error(parseError(error).message)
 		}
 	})
 

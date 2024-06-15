@@ -7,9 +7,10 @@ import type { TabProps } from '@views/pages/authentication/forgot-password/use-f
 interface Props {
 	currentTab: string
 	setCurrentTab: (value: TabProps) => void
+	reset: () => void
 }
 
-export function Tabs({ currentTab, setCurrentTab }: Props) {
+export function Tabs({ currentTab, setCurrentTab, reset }: Props) {
 	return (
 		<div className="mx-auto w-fit px-3">
 			<div className="sm:hidden">
@@ -41,7 +42,10 @@ export function Tabs({ currentTab, setCurrentTab }: Props) {
 									: 'border-transparent text-zinc-100 hover:border-zinc-200 hover:text-zinc-50',
 								'group inline-flex items-center border-b-2 px-1 py-4 pl-3 text-sm font-medium',
 							)}
-							onClick={() => setCurrentTab('email')}
+							onClick={() => {
+								reset()
+								setCurrentTab('email')
+							}}
 							aria-current={currentTab === 'email' ? 'page' : undefined}
 						>
 							<AtSymbolIcon
@@ -64,7 +68,10 @@ export function Tabs({ currentTab, setCurrentTab }: Props) {
 									: 'border-transparent text-zinc-100 hover:border-zinc-200 hover:text-zinc-50',
 								'group inline-flex items-center border-b-2 px-1 pl-3 pr-4 text-sm font-medium',
 							)}
-							onClick={() => setCurrentTab('document')}
+							onClick={() => {
+								reset()
+								setCurrentTab('document')
+							}}
 							aria-current={currentTab === 'document' ? 'page' : undefined}
 						>
 							<IdentificationIcon

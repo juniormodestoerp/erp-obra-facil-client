@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 export type TabProps = 'document' | 'email'
 
-export function UseForgotPasswordController() {
+export function useForgotPasswordController() {
 	const navigate = useNavigate()
 	const [currentTab, setCurrentTab] = useState<TabProps>('email')
 
@@ -38,6 +38,7 @@ export function UseForgotPasswordController() {
 	const {
 		register,
 		control,
+		reset,
 		formState: { errors },
 		handleSubmit: hookFormHandleSubmit,
 	} = useForm<FormData>({
@@ -66,6 +67,7 @@ export function UseForgotPasswordController() {
 		errors,
 		control,
 		currentTab,
+		reset,
 		setCurrentTab,
 		register,
 		handleSubmit,

@@ -1,56 +1,21 @@
-import { authService } from '@app/services/authenticate'
-import { httpClient } from '@app/services/http-client'
-import { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
-export function AuthGuard() {
-	const navigate = useNavigate()
-	const [isAuthenticated, setIsAuthenticated] = useState(false)
-	const [loading, setLoading] = useState(true)
+import { useAuth } from '@app/hooks/use-auth'
 
-	useEffect(() => {
-		const checkAuthentication = async () => {
-			try {
-				const status = await authService.authGuard()
-				if (status === 204) {
-					setIsAuthenticated(true)
-				} else {
-					navigate('/login')
-				}
-			} catch (error) {
-				navigate('/login')
-			} finally {
-				setLoading(false)
-			}
-		}
+interface Props {
+  isPrivate: boolean
+}
 
-		checkAuthentication()
+export function AuthGuard({ isPrivate }: Props) {
+  const { signedIn } = useAuth()
 
-		const interceptorId = httpClient.interceptors.response.use(
-			(response) => response,
-			(error) => {
-				if (
-					error.response &&
-					(error.response.status === 401 || error.response.status === 403)
-				) {
-					navigate('/login')
-				}
-				return Promise.reject(error)
-			},
-		)
+  if (!signedIn && isPrivate) {
+    return <Navigate to="/login" replace />
+  }
 
-		return () => {
-			httpClient.interceptors.response.eject(interceptorId)
-		}
-	}, [navigate])
+  if (signedIn && !isPrivate) {
+    return <Navigate to="/" />
+  }
 
-	if (loading) {
-		return <div>Loading...</div>
-	}
-
-	if (!isAuthenticated) {
-		return null
-	}
-
-	return <Outlet />
+  return <Outlet />
 }
