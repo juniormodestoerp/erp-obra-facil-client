@@ -22,7 +22,7 @@ export function ThemeToggle() {
 		<div className="ml-auto flex items-center gap-2">
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button variant="outline" size="icon">
+					<Button variant="outline" size="icon" className='z-50'>
 						<SunIcon
 							className="mt-0.5 h-[1.4rem] w-[1.4rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
 							strokeWidth={1.5}

@@ -53,7 +53,7 @@ export function Profile() {
 						</CardDescription>
 					</CardHeader>
 
-					<div className="grid grid-cols-2 gap-x-4 gap-y-2">
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2">
 						<Input
 							id="input-name"
 							label="Nome"
@@ -98,7 +98,7 @@ export function Profile() {
 						<CardDescription>Verifique o seu endereço.</CardDescription>
 					</CardHeader>
 
-					<div className="grid w-full grid-cols-2 gap-x-4 gap-y-2">
+					<div className="grid w-full gap-x-4 gap-y-2 grid-cols-1 lg:grid-cols-2">
 						<InputMask
 							mask="99999-999"
 							label="CEP"
@@ -154,7 +154,7 @@ export function Profile() {
 							placeholder="Digite o complemento"
 							optional
 							labelClassName="mt-2"
-							className="max-w-7xl"
+							className="max-w-xl md:max-w-7xl "
 							error={errors.complement?.message}
 							{...register('complement')}
 						/>
@@ -164,7 +164,7 @@ export function Profile() {
 
 					<Button
 						type="submit"
-						className=" w-full bg-dark-blue px-3 dark:text-slate-100"
+						className=" w-full bg-dark-blue px-3 dark:text-slate-100 dark:bg-slate-700"
 					>
 						Salvar dados pessoais
 					</Button>
@@ -187,9 +187,9 @@ export function Profile() {
 						</label>
 
 						<div
-							className={`!mt-0.5 flex cursor-pointer select-none justify-center gap-x-8 items-center rounded-lg border ${
+							className={`!mt-0.5 flex cursor-pointer dark:bg-zinc-600 select-none justify-center gap-x-8 items-center rounded-lg border ${
 								dragging
-									? 'border-blue-500'
+									? 'border-blue-500 dark:bordar-zinc-100'
 									: 'border-dashed border-gray-900/50'
 							} px-6 ${previewSrc ? 'py-6' : 'py-10'} shadow dark:bg-zinc-100`}
 							onDrop={handleDrop}
@@ -198,16 +198,16 @@ export function Profile() {
 						>
 							<div className="text-center mb-2">
 								<PhotoIcon
-									className="mx-auto h-14 w-14 text-blue-900"
+									className="mx-auto h-14 w-14 text-blue-900 dark:text-zinc-100"
 									strokeWidth={1}
 									aria-hidden="true"
 								/>
 								<div className="mt-3 flex text-sm leading-6 text-gray-600 items-center">
 									<label
 										htmlFor="fileUpload"
-										className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
+										className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue dark:border-zinc-100 h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
 									>
-										<span>Carregue uma foto</span>
+										<span className='dark:text-zinc-100'>Carregue uma foto</span>
 										<input
 											id="fileUpload"
 											type="file"
@@ -218,9 +218,9 @@ export function Profile() {
 											name='fileUpload'
 										/>
 									</label>
-									<p className="pl-1 text-[15px]">ou arraste e jogue</p>
+									<p className="pl-1 text-[15px] hidden lg:block dark:text-zinc-100">ou arraste e jogue</p>
 								</div>
-								<p className="text-sm leading-5 text-gray-600 mt-1">
+								<p className="text-sm leading-5 text-gray-600 mt-1 hidden lg:block dark:text-zinc-100">
 									PNG, JPG, GIF até 10MB
 								</p>
 							</div>
@@ -231,16 +231,16 @@ export function Profile() {
 										crossOrigin="anonymous"
 										src={previewSrc as string}
 										onDoubleClick={handleRemoveImage}
-										className="h-40 rounded-lg"
+										className="h-40 rounded-lg hidden lg:block"
 										alt="profile"
 									/>
 									<Button
 										type="button"
 										variant="outline"
 										onClick={handleRemoveImage}
-										className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2"
+										className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2 hidden lg:block"
 									>
-										<XMarkIcon className="text-zinc-600 h-4" />
+										<XMarkIcon className="text-zinc-600 h-4 ml-[5px] dark:text-zinc-100" />
 									</Button>
 								</div>
 							)}
@@ -248,7 +248,7 @@ export function Profile() {
 					</div>
 					<Button
 						type="submit"
-						className=" w-full bg-dark-blue px-3 dark:text-slate-100 mt-[84px]"
+						className=" w-full bg-dark-blue px-3 dark:text-slate-100 mt-7 lg:mt-[84px] dark:bg-slate-700"
 					>
 						Salvar imagem de perfil
 					</Button>

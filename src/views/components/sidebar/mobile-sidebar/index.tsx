@@ -19,7 +19,7 @@ export function MobileSidebar() {
 						<div className="mx-auto max-w-7xl px-4 lg:px-6">
 							<div className="flex h-16 items-center justify-between">
 								<div className="-mr-2 flex items-center lg:hidden">
-									<DisclosureButton className="inline-flex h-[34px] w-12 items-center justify-center whitespace-nowrap rounded-md border border-input border-zinc-600 bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
+									<DisclosureButton className="inline-flex h-[34px] w-12 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background text-sm font-medium shadow-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
 										<span className="absolute -inset-0.5" />
 										<span className="sr-only">Open main menu</span>
 										{open ? (

@@ -41,7 +41,7 @@ export function Breadcrumbs() {
 	}
 
 	return (
-		<nav className="flex" aria-label="Breadcrumb">
+		<nav className="hidden lg:flex" aria-label="Breadcrumb">
 			<ol className="flex items-center space-x-4">
 				<li>
 					<div>

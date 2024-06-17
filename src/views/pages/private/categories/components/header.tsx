@@ -24,8 +24,8 @@ export function Header({ currentTab, setCurrentTab }: Props) {
 								onClick={() => setCurrentTab('Receitas')}
 								className={cn(
 									currentTab === 'Receitas'
-										? 'border-dark-blue text-dark-blue'
-										: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+										? 'border-green-500 text-green-500'
+										: 'border-transparent text-gray-600 dark:text-zinc-300 hover:border-gray-300 hover:text-gray-700',
 									'group inline-flex items-center border-b-2 px-1 py-4 text-sm font-medium',
 								)}
 								aria-current={currentTab === 'Receitas' ? 'page' : undefined}
@@ -33,8 +33,8 @@ export function Header({ currentTab, setCurrentTab }: Props) {
 								<IncomeIcon
 									className={cn(
 										currentTab === 'Receitas'
-											? 'text-dark-blue'
-											: 'text-gray-400 group-hover:text-gray-500',
+											? 'text-green-500'
+											: 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-100 dark:text-zinc-300',
 										'-ml-0.5 mr-2 h-5 w-5',
 									)}
 									aria-hidden="true"
@@ -48,7 +48,7 @@ export function Header({ currentTab, setCurrentTab }: Props) {
 								className={cn(
 									currentTab === 'Despesas'
 										? 'border-red-500 text-red-500'
-										: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+										: 'border-transparent text-gray-600 dark:text-zinc-300 hover:border-gray-300 hover:text-gray-700',
 									'group inline-flex items-center border-b-2 px-1 py-4 text-sm font-medium',
 								)}
 								aria-current={currentTab === 'Despesas' ? 'page' : undefined}
@@ -57,7 +57,7 @@ export function Header({ currentTab, setCurrentTab }: Props) {
 									className={cn(
 										currentTab === 'Despesas'
 											? 'text-red-500'
-											: 'text-gray-400 group-hover:text-gray-500',
+											: 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-100 dark:text-zinc-300',
 										'-ml-0.5 mr-2 h-5 w-5',
 									)}
 									aria-hidden="true"

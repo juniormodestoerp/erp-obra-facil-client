@@ -60,10 +60,10 @@ export function Select({
 	}
 
 	return (
-		<div className="flex flex-1 flex-col">
+		<div className="flex flex-1 flex-col max-w-xl">
 			<label
 				htmlFor={inputId}
-				className="block text-sm font-medium leading-6 tracking-tight text-zinc-900"
+				className="block text-sm font-medium leading-6 tracking-tight text-zinc-900 dark:text-zinc-100"
 			>
 				{label} {!optional && <span className="text-red-600">*</span>}
 			</label>
@@ -77,11 +77,11 @@ export function Select({
 							type="button"
 							onClick={handleButtonClick}
 							className={cn(
-								'relative block min-h-10 w-full rounded-md border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 hover:border-primary focus:border-none focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6',
+								'relative block min-h-8 w-full rounded border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 hover:border-primary focus:border-none focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100',
 								error && '!border-red-600',
 							)}
 						>
-							<span className={cn('text-zinc-400', value && 'text-zinc-900')}>
+							<span className={cn('text-zinc-400 dark:text-zinc-100', value && 'text-zinc-900 dark:text-zinc-100')}>
 								{value || 'Selecione uma opção...'}
 							</span>
 							<ChevronUpDownIcon className="absolute right-1.5 top-1.5 h-6 w-6" />

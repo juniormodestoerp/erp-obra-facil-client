@@ -54,7 +54,7 @@ export const InputMask = forwardRef<HTMLInputElement, Props>(
 					defaultValue={defaultValue}
 					id={inputId}
 					className={cn(
-						'block w-full max-w-sm rounded border border-zinc-400 px-3 py-1.5 text-xs text-zinc-900 shadow outline-none placeholder:text-zinc-400 hover:border-primary focus:border-primary  focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6',
+						'block w-full max-w-sm rounded border border-zinc-400 dark:text-zinc-100 px-3 py-1.5 text-xs text-zinc-900 shadow outline-none placeholder:text-zinc-400 hover:border-primary focus:border-primary focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600',
 						props.disabled &&
 							'pointer-events-none cursor-not-allowed select-none',
 						error && '!border-red-600',
