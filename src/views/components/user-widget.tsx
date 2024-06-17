@@ -45,9 +45,10 @@ import { useNavigate } from 'react-router-dom'
 
 interface Props {
 	name?: string
+	profilePicture?: string
 }
 
-export function ComboboxDropdownMenu({ name }: Props) {
+export function ComboboxDropdownMenu({ name, profilePicture }: Props) {
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
 
@@ -61,18 +62,30 @@ export function ComboboxDropdownMenu({ name }: Props) {
 		},
 	})
 
+	
+
 	return (
 		<>
 			<DropdownMenu open={open} onOpenChange={setOpen}>
 				<DropdownMenuTrigger asChild>
-					<Button variant="outline" size="icon" className="mt-px w-fit pl-1.5">
+					<Button variant="outline" size="icon" className="mt-px w-fit pl-1.5 z-50">
 						<span className="sr-only">Open user menu</span>
+						{profilePicture ? (
+									<img
+									id="image-preview"
+									crossOrigin="anonymous"
+									src={`http://localhost:8080/uploads/profile-pictures/${profilePicture?.split('/').pop()}` as string}
+									className="h-[1.5rem] w-[1.5rem] text-foreground rounded-full"
+									alt="profile"
+								/>
+						) : (
+							<UserCircleIcon
+								className="h-[1.5rem] w-[1.5rem] text-foreground"
+								strokeWidth={1.5}
+								aria-hidden="true"
+							/>
 
-						<UserCircleIcon
-							className="h-[1.5rem] w-[1.5rem] text-foreground"
-							strokeWidth={1.5}
-							aria-hidden="true"
-						/>
+						)}
 
 						<p className="mx-1.5 text-sm font-medium leading-none">{name}</p>
 

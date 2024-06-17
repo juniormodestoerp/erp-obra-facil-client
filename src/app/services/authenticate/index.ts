@@ -6,6 +6,7 @@ import { resetPassword } from '@app/services/authenticate/reset-password'
 import { save } from '@app/services/authenticate/save'
 import { signIn } from '@app/services/authenticate/sign-in'
 import { signUp } from '@app/services/authenticate/sign-up'
+import { profilePicture } from '@app/services/authenticate/profile-picture'
 
 export const authService = {
 	authGuard,
@@ -16,4 +17,5 @@ export const authService = {
 	resetPassword,
 	profile,
 	logout,
+	profilePicture
 }

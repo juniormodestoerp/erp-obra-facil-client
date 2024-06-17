@@ -32,6 +32,7 @@ export function Profile() {
 		register,
 		handleSubmit,
 		handleFileChange,
+		handleSubmitProfilePicture,
 	} = useProfileController()
 
 	return (
@@ -169,7 +170,7 @@ export function Profile() {
 					</Button>
 				</form>
 
-				<form onSubmit={handleSubmit} encType="multipart/form-data">
+				<form onSubmit={(e) => { e.preventDefault(); handleSubmitProfilePicture(); }} encType="multipart/form-data">
 					<CardHeader className="px-0 pt-6">
 						<CardTitle>Imagem de perfil</CardTitle>
 						<CardDescription>
@@ -179,7 +180,7 @@ export function Profile() {
 
 					<div className="max-h-44">
 						<label
-							htmlFor="file-upload"
+							htmlFor="fileUpload"
 							className="pointer-events-none block select-none text-sm font-medium leading-6 text-zinc-900"
 						>
 							Foto de perfil:
@@ -203,18 +204,18 @@ export function Profile() {
 								/>
 								<div className="mt-3 flex text-sm leading-6 text-gray-600 items-center">
 									<label
-										htmlFor="file-upload"
+										htmlFor="fileUpload"
 										className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
 									>
 										<span>Carregue uma foto</span>
 										<input
-											id="file-upload"
-											name="file-upload"
+											id="fileUpload"
 											type="file"
 											className="sr-only"
 											accept="image/*"
 											onChange={handleFileChange}
 											ref={fileInputRef}
+											name='fileUpload'
 										/>
 									</label>
 									<p className="pl-1 text-[15px]">ou arraste e jogue</p>
@@ -227,10 +228,11 @@ export function Profile() {
 								<div className="relative">
 									<img
 										id="image-preview"
+										crossOrigin="anonymous"
 										src={previewSrc as string}
 										onDoubleClick={handleRemoveImage}
 										className="h-40 rounded-lg"
-										alt="x"
+										alt="profile"
 									/>
 									<Button
 										type="button"

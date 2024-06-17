@@ -16,6 +16,7 @@ export interface Response {
 	street: string
 	number: string
 	complement?: string
+	profilePicture?: string
 	createdAt: string
 }
 

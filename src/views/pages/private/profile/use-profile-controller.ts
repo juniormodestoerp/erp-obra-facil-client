@@ -9,29 +9,29 @@ import { authService } from '@app/services/authenticate'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { Format } from '@app/utils/format'
 import { utilsService } from '@app/services/utils'
+import { profilePicture } from '@app/services/authenticate/profile-picture'
 
-const schema = z
-	.object({
-		name: z.string(strMessage('nome')),
-		document: z
-			.string(strMessage('CPF'))
-			.transform((value) => value.replace(/[^\d]/g, ''))
-			.refine((value) => value.length === 11, {
-				message: 'O campo CPF deve conter 11 caracteres.',
-			})
-			.refine((value) => /^[0-9]+$/.test(value), {
-				message: 'O campo CPF deve conter apenas números.',
-			}),
-		email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
-		phone: z.string(strMessage('telefone')),
-		zipCode: z.string(strMessage('CEP')),
-		state: z.string(strMessage('estado')),
-		city: z.string(strMessage('cidade')),
-		neighborhood: z.string(strMessage('bairro')),
-		street: z.string(strMessage('logradouro')),
-		number: z.string(strMessage('número')),
-		complement: z.string(strMessage('complemento')).optional(),
-	})
+const schema = z.object({
+	name: z.string(strMessage('nome')),
+	document: z
+		.string(strMessage('CPF'))
+		.transform((value) => value.replace(/[^\d]/g, ''))
+		.refine((value) => value.length === 11, {
+			message: 'O campo CPF deve conter 11 caracteres.',
+		})
+		.refine((value) => /^[0-9]+$/.test(value), {
+			message: 'O campo CPF deve conter apenas números.',
+		}),
+	email: z.string(strMessage('e-mail')).email({ message: 'E-mail inválido' }),
+	phone: z.string(strMessage('telefone')),
+	zipCode: z.string(strMessage('CEP')),
+	state: z.string(strMessage('estado')),
+	city: z.string(strMessage('cidade')),
+	neighborhood: z.string(strMessage('bairro')),
+	street: z.string(strMessage('logradouro')),
+	number: z.string(strMessage('número')),
+	complement: z.string(strMessage('complemento')).optional(),
+})
 
 type FormData = z.infer<typeof schema>
 type PreviewImage = string | ArrayBuffer | null
@@ -42,12 +42,14 @@ export function useProfileController() {
 	const [previewSrc, setPreviewSrc] = useState<PreviewImage>(null)
 	const [dragging, setDragging] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const selectedFileRef = useRef<File | null>(null);
 
 	const handleDrop = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault()
 		setDragging(false)
 		const file = event.dataTransfer.files?.[0]
 		if (file) {
+			selectedFileRef.current = file;
 			const reader = new FileReader()
 			reader.onload = () => setPreviewSrc(reader.result)
 			reader.readAsDataURL(file)
@@ -69,21 +71,30 @@ export function useProfileController() {
 		if (fileInputRef.current) {
 			fileInputRef.current.value = ''
 		}
+		selectedFileRef.current = null;
 	}
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const file = event.target.files?.[0]
 		if (file) {
+			selectedFileRef.current = file;
 			const reader = new FileReader()
 			reader.onload = () => setPreviewSrc(reader.result)
 			reader.readAsDataURL(file)
 		}
 	}
 
-	const { data } = useQuery({
+	const { data, refetch } = useQuery({
 		queryKey: ['profile'],
 		queryFn: authService.profile,
 	})
+
+	useEffect(() => {
+		if (data?.profilePicture) {
+			const profilePictureFilename = data.profilePicture.split('/').pop();
+			setPreviewSrc(`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}`);
+		}
+	}, [data]);
 
 	const {
 		control,
@@ -114,7 +125,7 @@ export function useProfileController() {
 
 	const { mutateAsync: updateProfile } = useMutation({
 		mutationFn: async (formData: FormData) => {
-			return authService.save({ id: data?.id ?? '', ...formData })
+			return authService.save(formData)
 		},
 		onSuccess(_, variables) {
 			const cached = queryClient.getQueryData(['profile', data?.id])
@@ -132,8 +143,22 @@ export function useProfileController() {
 	})
 
 	const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
-		await updateProfile(data)
+		const preparedData = {
+			...data,
+			complement: data?.complement?.trim() === '' || data?.complement === undefined ? 'Não informado' : data.complement,
+	};
+		await updateProfile(preparedData)
+		refetch()
 	})
+
+	const handleSubmitProfilePicture = async () => {
+		if (selectedFileRef.current) {
+			const response = await profilePicture(selectedFileRef.current);
+			console.log(response.profilePicture);
+		} else {
+			console.error("Nenhum arquivo selecionado.");
+		}
+	}
 
 	const zipCode = watch('zipCode')
 
@@ -169,27 +194,6 @@ export function useProfileController() {
 		}
 	}, [address, setFocus, setValue])
 
-	// const state = watch('state')
-	// const city = watch('city')
-	// const street = watch('street')
-
-	// const { data: addressData } = useQuery({
-	// 	queryKey: ['address', zipCode, state, city, street],
-	// 	queryFn: () => {
-	// 		if (!zipCode || zipCode.length !== 9) {
-	// 			return Promise.resolve(null)
-	// 		}
-
-	// 		return utilsService.showAddress({ zipCode })
-	// 	},
-	// 	enabled: !!(!zipCode && state && city && street),
-	// })
-
-	// if (addressData) {
-	// 	setValue('zipCode', addressData.zipCode)
-	// 	setFocus('complement')
-	// }
-
 	return {
 		errors,
 		control,
@@ -203,5 +207,27 @@ export function useProfileController() {
 		register,
 		handleSubmit,
 		handleFileChange,
+		handleSubmitProfilePicture,
 	}
 }
+
+// const state = watch('state')
+// const city = watch('city')
+// const street = watch('street')
+
+// const { data: addressData } = useQuery({
+// 	queryKey: ['address', zipCode, state, city, street],
+// 	queryFn: () => {
+// 		if (!zipCode || zipCode.length !== 9) {
+// 			return Promise.resolve(null)
+// 		}
+
+// 		return utilsService.showAddress({ zipCode })
+// 	},
+// 	enabled: !!(!zipCode && state && city && street),
+// })
+
+// if (addressData) {
+// 	setValue('zipCode', addressData.zipCode)
+// 	setFocus('complement')
+// }

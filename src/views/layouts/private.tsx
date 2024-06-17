@@ -55,7 +55,7 @@ export function PrivateLayout() {
 
 						<ThemeToggle />
 
-						<ComboboxDropdownMenu name={profile?.name} />
+						<ComboboxDropdownMenu name={profile?.name} profilePicture={profile?.profilePicture} />
 					</div>
 				</div>
 

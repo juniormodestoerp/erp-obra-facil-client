@@ -70,6 +70,3 @@ export async function save({
 		createdAt: data.createdAt,
 	}
 }
-// {
-// 	headers: { 'Content-Type': 'multipart/form-data' },
-// }
