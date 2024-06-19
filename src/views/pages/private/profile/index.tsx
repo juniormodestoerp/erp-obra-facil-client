@@ -17,6 +17,7 @@ import {
 } from '@views/components/ui/card'
 
 import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
+import { cn } from '@app/utils/cn'
 
 export function Profile() {
 	const {
@@ -35,6 +36,8 @@ export function Profile() {
 		handleSubmitProfilePicture,
 	} = useProfileController()
 
+	console.log(previewSrc)
+
 	return (
 		<Fragment>
 			<Helmet title="Perfil" />
@@ -44,7 +47,12 @@ export function Profile() {
 				description="Veja e gerencie suas informações pessoais e dados de perfil."
 			/>
 
-			<div className="flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-600 dark:bg-slate-950 pb-9">
+			<div
+				className={cn(
+					'flex flex-col flex-wrap space-y-2 rounded-md border border-slate-300 bg-white p-8 pt-6 shadow dark:border-slate-600 dark:bg-slate-950 pb-9',
+					previewSrc !== null && 'pb-8 lg:pb-8',
+				)}
+			>
 				<form onSubmit={handleSubmit}>
 					<CardHeader className="px-0 pt-0">
 						<CardTitle>Conta</CardTitle>
@@ -170,7 +178,13 @@ export function Profile() {
 					</Button>
 				</form>
 
-				<form onSubmit={(e) => { e.preventDefault(); handleSubmitProfilePicture(); }} encType="multipart/form-data">
+				<form
+					onSubmit={(e) => {
+						e.preventDefault()
+						handleSubmitProfilePicture()
+					}}
+					encType="multipart/form-data"
+				>
 					<CardHeader className="px-0 pt-6">
 						<CardTitle>Imagem de perfil</CardTitle>
 						<CardDescription>
@@ -196,59 +210,123 @@ export function Profile() {
 							onDragOver={handleDragOver}
 							onDragLeave={handleDragLeave}
 						>
-							<div className="text-center mb-2">
-								<PhotoIcon
-									className="mx-auto h-14 w-14 text-blue-900 dark:text-zinc-100"
-									strokeWidth={1}
-									aria-hidden="true"
-								/>
-								<div className="mt-3 flex text-sm leading-6 text-gray-600 items-center">
-									<label
-										htmlFor="fileUpload"
-										className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue dark:border-zinc-100 h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
-									>
-										<span className='dark:text-zinc-100'>Carregue uma foto</span>
-										<input
-											id="fileUpload"
-											type="file"
-											className="sr-only"
-											accept="image/*"
-											onChange={handleFileChange}
-											ref={fileInputRef}
-											name='fileUpload'
-										/>
-									</label>
-									<p className="pl-1 text-[15px] hidden lg:block dark:text-zinc-100">ou arraste e jogue</p>
-								</div>
-								<p className="text-sm leading-5 text-gray-600 mt-1 hidden lg:block dark:text-zinc-100">
-									PNG, JPG, GIF até 10MB
-								</p>
-							</div>
-							{previewSrc && (
-								<div className="relative">
+							{previewSrc !== null ? (
+								<div className="relative block lg:hidden">
 									<img
 										id="image-preview"
 										crossOrigin="anonymous"
 										src={previewSrc as string}
 										onDoubleClick={handleRemoveImage}
-										className="h-40 rounded-lg hidden lg:block"
+										className="h-40 rounded-lg"
 										alt="profile"
 									/>
 									<Button
 										type="button"
 										variant="outline"
 										onClick={handleRemoveImage}
-										className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2 hidden lg:block"
+										className="rounded-full shadow p-0 size-7 absolute -top-2 -right-2 "
 									>
-										<XMarkIcon className="text-zinc-600 h-4 ml-[5px] dark:text-zinc-100" />
+										<XMarkIcon className="text-zinc-600 h-4 ml-[1px] dark:text-zinc-100" />
 									</Button>
 								</div>
+							) : (
+								<div className="text-center mb-2">
+									<PhotoIcon
+										className="mx-auto h-14 w-14 text-blue-900 dark:text-zinc-100"
+										strokeWidth={1}
+										aria-hidden="true"
+									/>
+									<div className="mt-3 flex text-sm leading-6 text-gray-600 items-center">
+										<label
+											htmlFor="fileUpload"
+											className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue dark:border-zinc-100 h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
+										>
+											<span className="dark:text-zinc-100">
+												Carregue uma foto
+											</span>
+											<input
+												id="fileUpload"
+												type="file"
+												className="sr-only"
+												accept="image/*"
+												onChange={handleFileChange}
+												ref={fileInputRef}
+												name="fileUpload"
+											/>
+										</label>
+										<p className="pl-1 text-[15px] hidden lg:block dark:text-zinc-100">
+											ou arraste e jogue
+										</p>
+									</div>
+									<p className="text-sm leading-5 text-gray-600 mt-1 hidden lg:block dark:text-zinc-100">
+										PNG, JPG, GIF até 10MB
+									</p>
+								</div>
+							)}
+
+							{previewSrc && (
+								<>
+									<div className="text-center mb-2 hidden lg:block">
+										<PhotoIcon
+											className="mx-auto h-14 w-14 text-blue-900 dark:text-zinc-100"
+											strokeWidth={1}
+											aria-hidden="true"
+										/>
+										<div className="mt-3 flex text-sm leading-6 text-gray-600 items-center">
+											<label
+												htmlFor="fileUpload"
+												className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 shadow text-dark-blue bg-transparent border border-dark-blue dark:border-zinc-100 h-7 px-1.5 cursor-pointer hover:bg-dark-blue hover:text-white transition-colors duration-300"
+											>
+												<span className="dark:text-zinc-100">
+													Carregue uma foto
+												</span>
+												<input
+													id="fileUpload"
+													type="file"
+													className="sr-only"
+													accept="image/*"
+													onChange={handleFileChange}
+													ref={fileInputRef}
+													name="fileUpload"
+												/>
+											</label>
+											<p className="pl-1 text-[15px] hidden lg:block dark:text-zinc-100">
+												ou arraste e jogue
+											</p>
+										</div>
+										<p className="text-sm leading-5 text-gray-600 mt-1 hidden lg:block dark:text-zinc-100">
+											PNG, JPG, GIF até 10MB
+										</p>
+									</div>
+
+									<div className="relative hidden lg:block">
+										<img
+											id="image-preview"
+											crossOrigin="anonymous"
+											src={previewSrc as string}
+											onDoubleClick={handleRemoveImage}
+											className="h-40 rounded-lg"
+											alt="profile"
+										/>
+										<Button
+											type="button"
+											variant="outline"
+											onClick={handleRemoveImage}
+											className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2 "
+										>
+											<XMarkIcon className="text-zinc-600 h-4 ml-[1px] dark:text-zinc-100" />
+										</Button>
+									</div>
+								</>
 							)}
 						</div>
 					</div>
 					<Button
 						type="submit"
-						className=" w-full bg-dark-blue px-3 dark:text-slate-100 mt-7 lg:mt-[84px] dark:bg-slate-700"
+						className={cn(
+							'w-full bg-dark-blue px-3 dark:text-slate-100 mt-7 lg:mt-[84px] dark:bg-slate-700',
+							previewSrc !== null ? 'mt-[84px]' : 'mt-[62px]',
+						)}
 					>
 						Salvar imagem de perfil
 					</Button>

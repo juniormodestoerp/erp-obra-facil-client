@@ -1,4 +1,4 @@
-import { authService } from '@app/services/authenticate'
+import { useAuth } from '@app/hooks/use-auth'
 import {
 	AdjustmentsHorizontalIcon,
 	ArrowLeftStartOnRectangleIcon,
@@ -6,7 +6,6 @@ import {
 	UserCircleIcon,
 	// ServerStackIcon,
 } from '@heroicons/react/24/outline'
-import { useMutation } from '@tanstack/react-query'
 import { Button } from '@views/components/ui/button'
 // import {
 //   Command,
@@ -51,40 +50,34 @@ interface Props {
 export function ComboboxDropdownMenu({ name, profilePicture }: Props) {
 	const navigate = useNavigate()
 	const [open, setOpen] = useState(false)
-
-	// const [label, setLabel] = useState('feature')
-
-	const { mutateAsync: logoutFn } = useMutation({
-		mutationKey: ['logout'],
-		mutationFn: authService.logout,
-		onSuccess: () => {
-			navigate('/login', { replace: true })
-		},
-	})
-
-	
+	const { signOut } = useAuth()
 
 	return (
 		<>
 			<DropdownMenu open={open} onOpenChange={setOpen}>
 				<DropdownMenuTrigger asChild>
-					<Button variant="outline" size="icon" className="mt-px w-fit pl-1.5 z-50">
+					<Button
+						variant="outline"
+						size="icon"
+						className="mt-px w-fit pl-1.5 z-50"
+					>
 						<span className="sr-only">Open user menu</span>
 						{profilePicture ? (
-									<img
-									id="image-preview"
-									crossOrigin="anonymous"
-									src={`http://localhost:8080/uploads/profile-pictures/${profilePicture?.split('/').pop()}` as string}
-									className="h-[1.5rem] w-[1.5rem] text-foreground rounded-full"
-									alt="profile"
-								/>
+							<img
+								id="image-preview"
+								crossOrigin="anonymous"
+								src={
+									`http://localhost:8080/uploads/profile-pictures/${profilePicture?.split('/').pop()}` as string
+								}
+								className="h-[1.5rem] w-[1.5rem] text-foreground rounded-full"
+								alt="profile"
+							/>
 						) : (
 							<UserCircleIcon
 								className="h-[1.5rem] w-[1.5rem] text-foreground"
 								strokeWidth={1.5}
 								aria-hidden="true"
 							/>
-
 						)}
 
 						<p className="mx-1.5 text-sm font-medium leading-none">{name}</p>
@@ -141,7 +134,7 @@ export function ComboboxDropdownMenu({ name, profilePicture }: Props) {
               </DropdownMenuSubContent>
             </DropdownMenuSub> */}
 						<DropdownMenuSeparator />
-						<DropdownMenuItem className="group" onClick={() => logoutFn()}>
+						<DropdownMenuItem className="group" onClick={() => signOut()}>
 							<ArrowLeftStartOnRectangleIcon className="mr-2 h-4 w-4 group-hover:text-red-600" />
 							<span className="group-hover:text-red-600">Sair da conta</span>
 						</DropdownMenuItem>

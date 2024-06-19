@@ -89,10 +89,12 @@ export function useProfileController() {
 		queryFn: authService.profile,
 	})
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (data?.profilePicture) {
 			const profilePictureFilename = data.profilePicture.split('/').pop();
-			setPreviewSrc(`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}`);
+			setPreviewSrc(`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}` ?? '');
+			refetch();
 		}
 	}, [data]);
 
@@ -154,7 +156,9 @@ export function useProfileController() {
 	const handleSubmitProfilePicture = async () => {
 		if (selectedFileRef.current) {
 			const response = await profilePicture(selectedFileRef.current);
-			console.log(response.profilePicture);
+			await refetch()
+			window.location.reload();
+			setPreviewSrc(response.profilePicture)
 		} else {
 			console.error("Nenhum arquivo selecionado.");
 		}

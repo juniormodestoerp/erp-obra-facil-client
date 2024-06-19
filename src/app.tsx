@@ -7,6 +7,7 @@ import { Toaster } from 'sonner'
 import { AppRoutes } from '@/router'
 
 import { AuthenticateProvider } from '@app/contexts/authenticate'
+import { BalanceProvider } from '@app/contexts/balance'
 import { ThemeProvider } from '@app/contexts/theme'
 import { queryClient } from '@app/services/query-client'
 
@@ -14,6 +15,7 @@ import { queryClient } from '@app/services/query-client'
 export function App() {
 	return (
 		<AuthenticateProvider>
+			<BalanceProvider>
 			<HelmetProvider>
 				<ThemeProvider defaultTheme="light" storageKey="obra-facil-theme">
 					<Helmet titleTemplate="%s | Obra Fácil - ERP Simplificado" />
@@ -29,6 +31,7 @@ export function App() {
 					</QueryClientProvider>
 				</ThemeProvider>
 			</HelmetProvider>
+			</BalanceProvider>
 		</AuthenticateProvider>
 	)
 }

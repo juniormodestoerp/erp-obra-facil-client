@@ -17,13 +17,13 @@ function document(document = ''): string {
 	return 'Invalid document'
 }
 
-function currency(value: number | undefined) {
-	if (!value) return
+function currency(value: string | number) {
+	if (!value) return 'R$ 0,00'
 
 	return Intl.NumberFormat('pt-br', {
 		style: 'currency',
 		currency: 'BRL',
-	}).format(value)
+	}).format(+value)
 }
 
 function phone(number = ''): string {

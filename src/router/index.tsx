@@ -12,7 +12,6 @@ import { Categories } from '@views/pages/private/categories'
 import { Contracts } from '@views/pages/private/contracts'
 import { Dashboards } from '@views/pages/private/dashboards'
 import { InitialPage } from '@views/pages/private/initial-page'
-import { Logout } from '@views/pages/private/logout'
 import { Profile } from '@views/pages/private/profile'
 import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
@@ -50,7 +49,6 @@ export function AppRoutes() {
 					<Route path="/settings" element={<Settings />} />
 					<Route path="/contracts" element={<Contracts />} />
 					<Route path="/profile" element={<Profile />} />
-					<Route path="/logout" element={<Logout />} />
 				</Route>
 				</Route>
 
