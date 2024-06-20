@@ -18,6 +18,14 @@ import {
 
 import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
 import { cn } from '@app/utils/cn'
+import { useTransaction } from '@app/hooks/use-transaction'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 export function Profile() {
 	const {
@@ -36,7 +44,10 @@ export function Profile() {
 		handleSubmitProfilePicture,
 	} = useProfileController()
 
-	console.log(previewSrc)
+	const { openTransaction, isTransactionOpen, closeTransaction } =
+		useTransaction()
+
+	useGlobalShortcut('Ctrl+a', openTransaction)
 
 	return (
 		<Fragment>
@@ -332,6 +343,18 @@ export function Profile() {
 					</Button>
 				</form>
 			</div>
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent />
+			</Dialog>
 		</Fragment>
 	)
 }

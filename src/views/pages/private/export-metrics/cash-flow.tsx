@@ -1,10 +1,14 @@
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 
-export function Contracts() {
+export function CashFlow() {
 	return (
 		<Fragment>
-			<Helmet title="Contratos" />
+			<Helmet title="CashFlow" />
+
+			<div className="">
+				<h1>CashFlow</h1>
+			</div>
 		</Fragment>
 	)
 }

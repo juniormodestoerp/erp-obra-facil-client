@@ -26,11 +26,14 @@ import {
 	numbMessage,
 	strMessage,
 } from '@app/utils/custom-zod-error'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { columns } from './components/columns'
 import { toast } from 'sonner'
 import { type AppError, parseError } from '@app/services/http-client'
+import { mapBankName } from '@app/utils/bank-map'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { useTransaction } from '@app/hooks/use-transaction'
 
 interface RowSelectionState {
 	[key: string]: boolean
@@ -87,6 +90,8 @@ export function useTransactionsController() {
 	// const navigate = useNavigate()
 	const queryClient = useQueryClient()
 	const [searchParams, setSearchParams] = useSearchParams()
+
+	const { openTransaction } = useTransaction()
 
 	const [selectedTransaction, setSelectedTransaction] = useState<ITransaction>(
 		{} as ITransaction,
@@ -147,10 +152,9 @@ export function useTransactionsController() {
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-		clinicName: false,
-		clinicPhone: false,
-		clinicTechnicalResponsible: false,
-		clinicAdministrativeResponsible: false,
+		description: false,
+		establishmentName: false,
+		categoryName: false,
 	})
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 	const [globalFilter, setGlobalFilter] = useState('')
@@ -160,8 +164,7 @@ export function useTransactionsController() {
 		queryFn: () => categoriesService.selectInput(),
 	})
 
-	const filteredCategories =
-		categories?.filter((category) => category.field !== 'padrão') ?? []
+	const filteredCategories = categories
 
 	const useFetchTransactions = ({
 		pageIndex,
@@ -248,6 +251,20 @@ export function useTransactionsController() {
 		}
 	}
 
+	function handleRowDoubleClick(transaction: ITransaction) {
+		setSelectedTransaction(transaction)
+		console.log('transaction 2', transaction)
+
+		openTransaction()
+		setOpenCreateDialog(true)
+	}
+
+	const openModal = useCallback(() => {
+		setOpenCreateDialog(true)
+	}, [])
+
+	useGlobalShortcut('Ctrl+a', openModal)
+
 	return {
 		table,
 		result,
@@ -258,6 +275,8 @@ export function useTransactionsController() {
 		globalFilter,
 		filteredCategories,
 		isLoading,
+		handleRowDoubleClick,
+		mapBankName,
 		setGlobalFilter,
 		setSelectedTransaction,
 		setIsDeleteModalOpen,

@@ -1,5 +1,5 @@
 import { ChevronUpDownIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { type MouseEvent, useState } from 'react'
+import { type MouseEvent, useState, useEffect } from 'react'
 import { Controller } from 'react-hook-form'
 
 import { cn } from '@app/utils/cn'
@@ -47,10 +47,14 @@ export function Select({
 	const [isOpen, setIsOpen] = useState(false)
 	const inputId = id ?? name
 
-	function handleSelect({ item, onChange }: IHandleSelect) {
-		console.log(item)
+	useEffect(() => {
+		if (data.length === 1 && data[0].field === 'value') {
+			control.setValue(name, data[0].value)
+		}
+	}, [data, control, name])
 
-		onChange(item.field)
+	function handleSelect({ item, onChange }: IHandleSelect) {
+		onChange(item.value)
 		setIsOpen(false)
 	}
 
@@ -58,6 +62,10 @@ export function Select({
 		event.preventDefault()
 		setIsOpen(true)
 	}
+
+	const isSingleDefaultOrNoInfo =
+		data.length === 1 &&
+		(data[0].field === 'padrão' || data[0].field === 'Não informado')
 
 	return (
 		<div className="flex flex-1 flex-col max-w-xl">
@@ -102,17 +110,25 @@ export function Select({
 								className="!focus:ring-0 !focus:outline-none !focus:border-none !cursor-pointer !border-none !outline-none !ring-0"
 							/>
 							<CommandList>
-								<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-								<CommandGroup heading="Sugestões">
-									{data.map((item: IData) => (
-										<CommandItem
-											key={item.value}
-											onSelect={() => handleSelect({ item, onChange })}
-										>
-											<span>{item.field}</span>
-										</CommandItem>
-									))}
-								</CommandGroup>
+								{isSingleDefaultOrNoInfo ? (
+									<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+								) : (
+									<>
+										<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+										{data.length > 0 && (
+											<CommandGroup heading="Sugestões">
+												{data.map((item: IData) => (
+													<CommandItem
+														key={item.value}
+														onSelect={() => handleSelect({ item, onChange })}
+													>
+														<span>{item.field}</span>
+													</CommandItem>
+												))}
+											</CommandGroup>
+										)}
+									</>
+								)}
 							</CommandList>
 						</CommandDialog>
 					</>

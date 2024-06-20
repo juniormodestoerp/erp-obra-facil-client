@@ -53,8 +53,6 @@ export async function fetch({
 	const normalizeSorting = (sorting: ISorting[] | undefined): string => {
 		if (!sorting || sorting.length === 0) return ''
 
-		console.log(sorting[0].id)
-
 		const withoutClinic = sorting[0].id.replace('transactions', '')
 		const normalizedSorting =
 			withoutClinic.charAt(0).toLowerCase() + withoutClinic.slice(1)

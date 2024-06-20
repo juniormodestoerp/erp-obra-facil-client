@@ -15,6 +15,14 @@ import { FormProvider } from 'react-hook-form'
 import { columns } from './components/columns'
 import { TransactionsTableFilters } from './components/transactions-table-filters'
 import { useTransactionsController } from './use-transactions-controller'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from './components/new-transaction-content'
+import { mapBankName } from '@app/utils/bank-map'
+import { useTransaction } from '@app/hooks/use-transaction'
 
 export function Transactions() {
 	const {
@@ -22,10 +30,16 @@ export function Transactions() {
 		result,
 		methods,
 		globalFilter,
+		handleRowDoubleClick,
+		selectedTransaction,
 		isLoading,
 		setGlobalFilter,
 		handlePaginate,
+		filteredCategories,
 	} = useTransactionsController()
+
+	const { isTransactionOpen, openTransaction, closeTransaction } =
+		useTransaction()
 
 	if (isLoading) return <div>Carregando...</div>
 
@@ -56,12 +70,7 @@ export function Transactions() {
 													className={cn(
 														'py-3',
 														idx === 0 ? 'pl-4 pr-4' : '',
-														header.column.id === 'actions' && 'w-12',
-														header.column.id === 'establishmentName' && 'w-36',
-														header.column.id === 'transactionDate' &&
-															'w-[85px]',
-														header.column.id === 'totalAmount' && 'w-28',
-														header.column.id === 'currentBalance' && 'w-28',
+														header.column.id === 'actions' && 'w-16',
 													)}
 												>
 													{header.isPlaceholder
@@ -84,15 +93,24 @@ export function Transactions() {
 												data-state={
 													row.getIsSelected() ? 'selected' : undefined
 												}
+												onDoubleClick={() => handleRowDoubleClick(row.original)}
 											>
 												{row.getVisibleCells().map((cell, idx) => (
 													<TableCell
 														key={cell.id}
 														className={cn('py-3', idx === 0 ? 'pl-8 pr-4' : '')}
 													>
-														{flexRender(
-															cell.column.columnDef.cell,
-															cell.getContext(),
+														{cell.column.id === 'bankName' ? (
+															<span>
+																{mapBankName(
+																	cell.getContext().getValue() as string,
+																)}
+															</span>
+														) : (
+															flexRender(
+																cell.column.columnDef.cell,
+																cell.getContext(),
+															)
 														)}
 													</TableCell>
 												))}
@@ -122,6 +140,38 @@ export function Transactions() {
 					</div>
 				</FormProvider>
 			</div>
+			{/* 
+			<Dialog
+				open={openCreateDialog}
+				onOpenChange={(open) => {
+					setOpenCreateDialog(open)
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent
+					transaction={selectedTransaction}
+					filteredCategories={filteredCategories}
+				/>
+			</Dialog> */}
+
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent
+					transaction={selectedTransaction}
+					filteredCategories={filteredCategories}
+				/>
+			</Dialog>
 		</Fragment>
 	)
 }

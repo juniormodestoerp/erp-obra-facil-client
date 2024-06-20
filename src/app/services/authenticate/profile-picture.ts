@@ -8,8 +8,6 @@ export async function profilePicture(file: File): Promise<Response> {
 	const formData = new FormData()
 	formData.append('file', file)
 
-	console.log('formData', file)
-
 	const { data } = await httpClient.post<Response>(
 		'/users/profile-picture',
 		formData,

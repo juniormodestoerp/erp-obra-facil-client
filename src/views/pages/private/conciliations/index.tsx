@@ -2,7 +2,11 @@ import { Fragment, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { ZodError, z } from 'zod'
 
-import { httpClient } from '@app/services/http-client'
+import {
+	type AppError,
+	httpClient,
+	parseError,
+} from '@app/services/http-client'
 import { PageTitle } from '@views/components/page-title'
 import { Button } from '@views/components/ui/button'
 import {
@@ -13,7 +17,19 @@ import {
 } from '@views/components/ui/card'
 import { newTransactiosMock } from '../../../../../data'
 import { cn } from '@app/utils'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { conciliationsService } from '@app/services/conciliations'
+import { toast } from 'sonner'
+import { mapBankName } from '@app/utils/bank-map'
+
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { useTransaction } from '@app/hooks/use-transaction'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 interface ITransaction {
 	id: string
@@ -50,6 +66,11 @@ const fileSchema = z.object({
 })
 
 export function Conciliations() {
+	const { openTransaction, isTransactionOpen, closeTransaction } =
+		useTransaction()
+
+	useGlobalShortcut('Ctrl+a', openTransaction)
+
 	const [newTransactions, setNewTransactions] = useState<ITransaction[]>(
 		mapToNewStructureArray(newTransactiosMock),
 	)
@@ -87,41 +108,26 @@ export function Conciliations() {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault()
 
-		if (!file) return
+		if (!file || !fileType) return
 
 		const formData = new FormData()
 		formData.append('file', file)
-		console.log(file)
+		formData.append('fileType', fileType) // Adiciona o tipo de arquivo
+		setFile(null)
 
 		try {
 			const response = await httpClient.post('/conciliations', formData, {
 				headers: { 'Content-Type': 'multipart/form-data' },
 			})
-			console.log('File uploaded successfully:', response.data)
 			setNewTransactions(mapToNewStructureArray(response.data.newTransactions))
 			setConflictingTransactions(
 				mapToNewStructureArray(response.data.conflictingTransactions),
 			)
+			toast.success('Arquivo enviado com sucesso!')
 		} catch (error) {
 			console.error('Error uploading file:', error)
+			toast.error(parseError(error as AppError))
 		}
-	}
-
-	const mapBankName = (bankDetails: string): string => {
-		const bankMap: { [key: string]: string } = {
-			'ITAÚ UNIBANCO S.A.': 'Banco Itaú',
-			'BCO DO BRASIL S.A.': 'Banco do Brasil',
-			'NEON PAGAMENTOS S.A.': 'Banco Neon',
-			'MERCADO PAGO IP LTDA.': 'Mercado Pago',
-			'BCO SANTANDER': 'Banco Santander',
-			'BMP SCMEPP LTDA': 'Banco BMG',
-			// Adicione mais bancos conforme necessário
-		}
-
-		const bankName = Object.keys(bankMap).find((bank) =>
-			bankDetails?.includes(bank),
-		)
-		return bankName ? bankMap[bankName] : bankDetails
 	}
 
 	return (
@@ -185,7 +191,28 @@ export function Conciliations() {
 				)}
 			</div>
 
-			<div className="grid grid-cols-3 gap-4">
+			<div className="flex flex-col mt-6">
+				<p className="font-medium text-darker-blue">Legenda:</p>
+
+				<div className="flex items-center justify-between flex-wrap space-y-3">
+					<div className="flex items-center gap-2 mt-3">
+						<span className="bg-red-500 size-3 rounded-full" />
+						<span>Lançamento de débito ( saldo negativo )</span>
+					</div>
+
+					<div className="flex items-center gap-2 mt-3">
+						<span className="bg-yellow-500 size-3 rounded-full" />
+						<span>Lançamento discrepante ( conflito )</span>
+					</div>
+
+					<div className="flex items-center gap-2 mt-3">
+						<span className="bg-green-500 size-3 rounded-full" />
+						<span>Lançamento de crédito ( saldo positivo )</span>
+					</div>
+				</div>
+			</div>
+
+			<div className="flex flex-wrap w-full justify-center 2xl:justify-between gap-4 mt-10">
 				{newTransactions?.map((transaction) => {
 					const formattedDate = new Date(
 						transaction.transactionDate,
@@ -198,21 +225,53 @@ export function Conciliations() {
 						},
 					)
 
-					function handleTransactionClick() {
-						console.log('Transaction clicked:', transaction.id)
+					async function handleTransactionClick() {
+						try {
+							await conciliationsService.create(transaction)
+							console.log('transaction', transaction)
+
+							toast.success('Lancaçamento conciliado com sucesso!')
+							setNewTransactions((prevTransactions) =>
+								prevTransactions.filter((t) => t.id !== transaction.id),
+							)
+						} catch (error) {
+							toast.error(parseError(error as AppError))
+						}
+					}
+
+					async function handleRemoveTransaction() {
+						try {
+							setNewTransactions((prevTransactions) =>
+								prevTransactions.filter((t) => t.id !== transaction.id),
+							)
+							toast.success('Lancaçamento removido com sucesso!')
+						} catch (error) {
+							toast.error('Erro ao remover lancaçamento.')
+						}
 					}
 
 					return (
 						<Card
 							key={transaction.id}
 							className={cn(
-								'w-[350px] mt-10 bg-green-50/25 !border-green-500 cursor-pointer',
+								'relative lg:max-w-[350px] max-w-[420px] w-full bg-green-50/25 !border-green-500 cursor-pointer',
 								transaction.paymentMethod === 'credit'
 									? 'bg-green-50/25 !border-green-500'
 									: 'bg-red-50/25 !border-red-500',
 							)}
 							onClick={handleTransactionClick}
 						>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={(event) => {
+									event.stopPropagation()
+									handleRemoveTransaction()
+								}}
+								className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2"
+							>
+								<XMarkIcon className="text-zinc-600 h-4 ml-[1px] dark:text-zinc-100" />
+							</Button>
 							<CardHeader>
 								<p className="font-bold text-base">
 									{mapBankName(transaction?.bankName)}
@@ -237,25 +296,114 @@ export function Conciliations() {
 									<span className="ml-1 text-red-600">
 										{transaction.totalAmount > 1000 && 'valor elevado.'}
 									</span>
-									{/* <CardContent>
-								<div>Descrição: {transaction.description}</div>
-								<div>Estabelecimento: {transaction.establishmentName}</div>
-								<div>account type: {transaction.accountType}</div>
-								<div>Categoria: {transaction.categoryName}</div>
-								<div>Data da Transação: {formattedDate}</div>
-								<div>Método de Pagamento: {transaction.paymentMethod}</div>
-								<div>Status: {transaction.status}</div>
-								<div>
-									Criado em:{' '}
-									{new Date(transaction.createdAt).toLocaleDateString()}
-								</div>
-							</CardContent> */}
 								</CardDescription>
 							</CardHeader>
 						</Card>
 					)
 				})}
 			</div>
+
+			<div className="flex flex-wrap w-full justify-center 2xl:justify-between gap-4 mt-10">
+				{conflictingTransactions?.map((transaction) => {
+					const formattedDate = new Date(
+						transaction.transactionDate,
+					)?.toLocaleDateString()
+					const formattedAmount = transaction.totalAmount?.toLocaleString(
+						'pt-BR',
+						{
+							style: 'currency',
+							currency: 'BRL',
+						},
+					)
+
+					async function handleTransactionClick() {
+						try {
+							await conciliationsService.create(transaction)
+							toast.success('Lançaçamento conciliado com sucesso!')
+							setConflictingTransactions((prevTransactions) =>
+								prevTransactions.filter((t) => t.id !== transaction.id),
+							)
+						} catch (error) {
+							toast.error(parseError(error as AppError))
+						}
+					}
+
+					async function handleRemoveTransaction() {
+						try {
+							setConflictingTransactions((prevTransactions) =>
+								prevTransactions.filter((t) => t.id !== transaction.id),
+							)
+							toast.success('Lançaçamento removido com sucesso!')
+						} catch (error) {
+							toast.error('Erro ao remover lançaçamento.')
+						}
+					}
+
+					return (
+						<Card
+							key={transaction.id}
+							className={cn(
+								'relative lg:max-w-[350px] max-w-[420px] w-full bg-yellow-50/25 !border-yellow-500 cursor-pointer',
+								transaction.paymentMethod === 'credit'
+									? 'bg-yellow-50/25 !border-yellow-500'
+									: 'bg-yellow-50/25 !border-yellow-500',
+							)}
+							onClick={handleTransactionClick}
+						>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={(event) => {
+									event.stopPropagation()
+									handleRemoveTransaction()
+								}}
+								className="rounded-full shadow p-0 h-7 w-7 absolute -top-2 -right-2"
+							>
+								<XMarkIcon className="text-zinc-600 h-4 ml-[1px] dark:text-zinc-100" />
+							</Button>
+							<CardHeader>
+								<p className="font-bold text-base">
+									{mapBankName(transaction?.bankName)}
+								</p>
+								<CardTitle>
+									{transaction.name}{' '}
+									{transaction.paymentMethod === 'credit'
+										? `de ${transaction.establishmentName}`
+										: `para ${transaction.establishmentName}`}{' '}
+									em {formattedDate}.
+								</CardTitle>
+								<CardDescription>
+									{transaction.trnType === 'DEBIT' ? 'Débito' : 'Crédito'} no
+									valor de {formattedAmount}{' '}
+									{transaction?.accountType?.toLowerCase() === 'conta corrente'
+										? 'na conta corrente'
+										: transaction?.accountType?.toLowerCase() ===
+												'conta poupança'
+											? 'na conta poupança'
+											: 'no cartão de crédito'}
+									.
+									<span className="ml-1 text-red-600">
+										{transaction.totalAmount > 1000 && 'valor elevado.'}
+									</span>
+								</CardDescription>
+							</CardHeader>
+						</Card>
+					)
+				})}
+			</div>
+
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent />
+			</Dialog>
 		</Fragment>
 	)
 }

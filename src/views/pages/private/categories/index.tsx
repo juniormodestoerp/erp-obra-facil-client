@@ -13,7 +13,21 @@ import { Header } from '@views/pages/private/categories/components/header'
 import { EditCategoryDialog } from './components/edit-category-dialog'
 import { RemoveCategoryDialog } from './components/remove-category-dialog'
 
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { useTransaction } from '@app/hooks/use-transaction'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+
 export function Categories() {
+	const { openTransaction, isTransactionOpen, closeTransaction } =
+		useTransaction()
+
+	useGlobalShortcut('Ctrl+a', openTransaction)
+
 	const { currentTab, setCurrentTab, categories } = useCategoriesController()
 
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -213,6 +227,19 @@ export function Categories() {
 					setIsDeleteModalOpen={setIsDeleteModalOpen}
 				/>
 			)}
+
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent />
+			</Dialog>
 		</Fragment>
 	)
 }

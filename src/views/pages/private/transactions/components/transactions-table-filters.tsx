@@ -18,6 +18,11 @@ import {
 } from '@views/components/ui/dropdown-menu'
 
 import { DebouncedInput } from '@views/components/input/debounce'
+import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
+import { PlusIcon } from '@heroicons/react/24/outline'
+
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 
 const searchParamsSchema = z.object({
 	pageIndex: z.number(numbMessage('número da página')),
@@ -37,6 +42,8 @@ export function TransactionsTableFilters({
 	globalFilter,
 	setGlobalFilter,
 }: Props) {
+	const { openCreateDialog, setOpenCreateDialog } = useTransactionsController()
+
 	const { reset } = useForm<SearchParams>({
 		resolver: zodResolver(searchParamsSchema),
 		defaultValues: {
@@ -73,7 +80,7 @@ export function TransactionsTableFilters({
 				name="searchTerm"
 				autoComplete="off"
 				placeholder="Busque por informações da clínica..."
-				className="mr-4 h-8 w-[320px] !rounded-md border-zinc-300 shadow-sm placeholder:text-[13px]"
+				className="mr-2 h-8 w-[320px] !rounded-md border-zinc-300 shadow-sm placeholder:text-[13px]"
 				value={globalFilter ?? ''}
 				onChange={(value) => setGlobalFilter(String(value))}
 				debounce={500}
@@ -83,24 +90,43 @@ export function TransactionsTableFilters({
 				type="button"
 				variant="outline"
 				size="xs"
-				className="ml-aut !py-0 text-[13px] font-medium"
+				className="!py-0 text-[13px] font-medium"
 				onClick={handleResetFilter}
 			>
-				<X className="mr-1.5 h-4 w-4" />
+				<X className="mr-1.5 size-4" />
 				Remover filtros
 			</Button>
 
-			<div className="space-x-4">
+			<div className="flex space-x-4 ml-auto !items-center">
+				<Dialog
+					open={openCreateDialog}
+					onOpenChange={() => setOpenCreateDialog(!openCreateDialog)}
+				>
+					<DialogTrigger asChild>
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							className="!py-0 text-[13px] font-medium"
+							onClick={() => setOpenCreateDialog(true)}
+						>
+							<PlusIcon className="mr-1.5 size-4" strokeWidth={2.2} />
+							Cadastrar
+						</Button>
+					</DialogTrigger>
+					<NewFundRealeaseContent />
+				</Dialog>
+
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild className="!py-0">
 						<Button
 							type="button"
 							variant="outline"
 							size="sm"
-							className="ml-aut !py-0 text-[13px] font-medium"
+							className="ml-auto !py-0 text-[13px] font-medium"
 							ref={triggerRef}
 						>
-							Selecionar colunas <ChevronDownIcon className="ml-1.5 h-4 w-4" />
+							Selecionar colunas <ChevronDownIcon className="ml-1.5 size-4" />
 						</Button>
 					</DropdownMenuTrigger>
 

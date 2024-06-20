@@ -181,12 +181,12 @@ const createPage = (pageName: string) => {
   // console.log('Router atualizado com sucesso.')
 
   // Executa pnpm lint --fix
-  try {
-    execSync('pnpm lint --fix', { stdio: 'inherit' })
-    console.log('Linting aplicado com sucesso.')
-  } catch (error) {
-    console.error('Erro ao executar pnpm lint --fix:', error)
-  }
+  // try {
+  //   execSync('pnpm lint --fix', { stdio: 'inherit' })
+  //   console.log('Linting aplicado com sucesso.')
+  // } catch (error) {
+  //   console.error('Erro ao executar pnpm lint --fix:', error)
+  // }
 }
 
 // Obtém o nome da página do argumento da linha de comando

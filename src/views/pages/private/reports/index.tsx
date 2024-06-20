@@ -6,9 +6,23 @@ import { Helmet } from 'react-helmet-async'
 
 import { type Card, cashFlowCards, reportCards } from '@/assets/data'
 import { ReceiptIcon } from '@/assets/icons/receipt'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { useTransaction } from '@app/hooks/use-transaction'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 export function Reports() {
 	const { currentTab, setCurrentTab } = useReportsController()
+
+	const { openTransaction, isTransactionOpen, closeTransaction } =
+		useTransaction()
+
+	useGlobalShortcut('Ctrl+a', openTransaction)
+
 	return (
 		<Fragment>
 			<Helmet title="Relatórios" />
@@ -119,6 +133,19 @@ export function Reports() {
 
 				<div className="grid grid-cols-9 gap-4" />
 			</div>
+
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent />
+			</Dialog>
 		</Fragment>
 	)
 }

@@ -22,7 +22,7 @@ export function HomeCard({ title, color, children, value }: Props) {
 	}
 
 	return (
-		<Card className={cn('w-full text-xs', color && color)}>
+		<Card className={cn('w-full text-xs h-fit pb-7', color && color)}>
 			<CardHeader className="mb-0 pb-2">
 				<CardTitle className="mx-auto text-sm text-zinc-800">{title}</CardTitle>
 			</CardHeader>

@@ -8,7 +8,21 @@ import { Helmet } from 'react-helmet-async'
 import { BanksChart } from './components/banks-chart'
 import { RevenueChart } from './components/revenue-chart'
 
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { useTransaction } from '@app/hooks/use-transaction'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
+import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+
 export function Dashboards() {
+	const { openTransaction, isTransactionOpen, closeTransaction } =
+		useTransaction()
+
+	useGlobalShortcut('Ctrl+a', openTransaction)
+
 	return (
 		<Fragment>
 			<Helmet title="Lançamentos" />
@@ -28,6 +42,18 @@ export function Dashboards() {
 					<BanksChart />
 				</div>
 			</div>
+			<Dialog
+				open={isTransactionOpen}
+				onOpenChange={(open) => {
+					open ? openTransaction() : closeTransaction()
+				}}
+			>
+				<DialogOverlay />
+				<DialogTrigger asChild>
+					<button type="button" className="hidden" />
+				</DialogTrigger>
+				<NewFundRealeaseContent />
+			</Dialog>
 		</Fragment>
 	)
 }
