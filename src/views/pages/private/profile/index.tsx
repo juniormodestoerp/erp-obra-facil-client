@@ -38,6 +38,7 @@ export function Profile() {
 		handleDragOver,
 		handleDragLeave,
 		handleRemoveImage,
+		data,
 		register,
 		handleSubmit,
 		handleFileChange,
@@ -123,6 +124,7 @@ export function Profile() {
 							label="CEP"
 							placeholder="Digite o CEP *"
 							className="max-w-xl"
+							value={data?.zipCode}
 							error={errors.zipCode?.message}
 							{...register('zipCode')}
 						/>

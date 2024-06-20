@@ -186,6 +186,7 @@ export function useProfileController() {
 
 	useEffect(() => {
 		if (address) {
+			setValue('zipCode', address.zipCode)
 			setValue('state', address.state)
 			setValue('city', address.city)
 			setValue(
@@ -210,6 +211,7 @@ export function useProfileController() {
 		dragging,
 		previewSrc,
 		fileInputRef,
+		data,
 		handleDrop,
 		handleDragOver,
 		handleDragLeave,
