@@ -8,6 +8,7 @@ export interface Category {
 export interface Card {
   id: string
   label: string
+  path: string
 }
 
 export interface ISettingOption {
@@ -194,32 +195,37 @@ export const categoriesOptions: Category[] = [
 ]
 
 export const reportCards: Card[] = [
-  { id: 'aa26deed-69cb-4b8d-b389-d90b0e28dc7a', label: 'Totais por categoria' },
+  { id: 'aa26deed-69cb-4b8d-b389-d90b0e28dc7a', label: 'Totais por categoria', path: '/metrics/totals-by-category' },
   {
     id: '3f4122ce-81ed-4587-8f53-bbc5e45b40dc',
     label: 'Lançamentos por categoria',
+    path: '/metrics/entries-by-category'
   },
-  { id: '448c8ba9-cc78-442e-892f-61310af7d25a', label: 'Totais por centro' },
+  { id: '448c8ba9-cc78-442e-892f-61310af7d25a', label: 'Totais por centro', path: '/metrics/totals-by-center' },
   {
     id: '3f427b08-6af4-49fb-9a36-b69e4303d4d3',
     label: 'Lançamentos por centro',
+    path: '/metrics/entries-by-center'
   },
-  { id: '3f4a2597-2f94-4d84-99b5-3100be789846', label: 'Totais por contato' },
+  { id: '3f4a2597-2f94-4d84-99b5-3100be789846', label: 'Totais por contato', path: '/metrics/totals-by-contact' },
   {
     id: '508f3c25-0a89-402b-823d-918a1735f457',
     label: 'Lançamentos por contato',
+    path: '/metrics/entries-by-contact'
   },
-  { id: 'c53330b3-825e-4552-93c3-15e088c08939', label: 'Totais por projeto' },
+  { id: 'c53330b3-825e-4552-93c3-15e088c08939', label: 'Totais por projeto', path: '/metrics/totals-by-project' },
   {
     id: '01854359-7f5e-4ae5-8082-282d047933b3',
     label: 'Lançamentos por projeto',
+    path: '/metrics/entries-by-project'
   },
   {
     id: '56f42d2f-cb49-45c2-91fd-ad57665e0260',
     label: 'Evolução por categoria',
+    path: '/metrics/evolution-by-category'
   },
-  { id: '7691ad45-3ca5-4362-bff4-32c3d130b495', label: 'Evolução por centro' },
-  { id: 'e44e25d1-894e-465c-9290-16601a5cb079', label: 'Evolução por contato' },
+  { id: '7691ad45-3ca5-4362-bff4-32c3d130b495', label: 'Evolução por centro', path: '/metrics/evolution-by-center' },
+  { id: 'e44e25d1-894e-465c-9290-16601a5cb079', label: 'Evolução por contato', path: '/metrics/evolution-by-contact' },
   // {
   //   id: '9e7da27c-6817-4ee1-b569-9dc785290d05',
   //   label: 'Evolução das metas de categorias',
@@ -231,16 +237,17 @@ export const reportCards: Card[] = [
   {
     id: '74475790-0626-40b1-a9ca-dda43b0e78d4',
     label: 'Resultado dos projetos',
+    path: '/metrics/project-results'
   },
 ]
 
 export const cashFlowCards: Card[] = [
-  { id: '81d672b2-6a24-4960-9f14-d08b385aee26', label: 'Fluxo de caixa' },
-  { id: '8b90f79a-4b79-47c3-9dc7-97bf6d520d17', label: 'Lançamentos de caixa' },
-  { id: 'b6825749-84ab-4ed4-89a6-5a08cc46a5f2', label: 'Contas a pagar' },
-  { id: 'c661f480-3d19-4329-89ad-d6017133d3a1', label: 'Contas a receber' },
-  { id: 'e52a2037-eaf2-405a-9001-19fc59a04f10', label: 'Contas pagas' },
-  { id: '43c5c7f2-7874-40f2-a2d6-0c891587a323', label: 'Contas recebidas' },
+  { id: '81d672b2-6a24-4960-9f14-d08b385aee26', label: 'Fluxo de caixa', path: '/metrics/cash-flow' },
+  { id: '8b90f79a-4b79-47c3-9dc7-97bf6d520d17', label: 'Lançamentos de caixa', path: '/metrics/cash-entries' },
+  { id: 'b6825749-84ab-4ed4-89a6-5a08cc46a5f2', label: 'Contas a pagar', path: '/metrics/accounts-payable' },
+  { id: 'c661f480-3d19-4329-89ad-d6017133d3a1', label: 'Contas a receber', path: '/metrics/accounts-receivable' },
+  { id: 'e52a2037-eaf2-405a-9001-19fc59a04f10', label: 'Contas pagas', path: '/metrics/paid-accounts' },
+  { id: '43c5c7f2-7874-40f2-a2d6-0c891587a323', label: 'Contas recebidas', path: '/metrics/received-accounts' },
 ]
 
 export const states = [

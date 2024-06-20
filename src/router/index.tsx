@@ -35,8 +35,8 @@ import { EntriesByProject } from '@views/pages/private/export-metrics/entries-by
 import { EvolutionByCategory } from '@views/pages/private/export-metrics/evolution-by-category'
 import { EvolutionByCenter } from '@views/pages/private/export-metrics/evolution-by-center'
 import { EvolutionByContact } from '@views/pages/private/export-metrics/evolution-by-contact'
-import { EvolutionOfCategoryGoals } from '@views/pages/private/export-metrics/evolution-of-category-goals'
-import { EvolutionOfCenterGoals } from '@views/pages/private/export-metrics/evolution-of-center-goals'
+// import { EvolutionOfCategoryGoals } from '@views/pages/private/export-metrics/evolution-of-category-goals'
+// import { EvolutionOfCenterGoals } from '@views/pages/private/export-metrics/evolution-of-center-goals'
 import { PaidAccounts } from '@views/pages/private/export-metrics/paid-accounts'
 import { ProjectResults } from '@views/pages/private/export-metrics/project-results'
 import { ReceivedAccounts } from '@views/pages/private/export-metrics/received-accounts'
@@ -110,14 +110,6 @@ export function AppRoutes() {
 						path="/metrics/evolution-by-contact"
 						element={<EvolutionByContact />}
 					/>
-					<Route
-						path="/metrics/evolution-of-category-goals"
-						element={<EvolutionOfCategoryGoals />}
-					/>
-					<Route
-						path="/metrics/evolution-of-center-goals"
-						element={<EvolutionOfCenterGoals />}
-					/>
 					<Route path="/metrics/paid-accounts" element={<PaidAccounts />} />
 					<Route path="/metrics/project-results" element={<ProjectResults />} />
 
@@ -141,6 +133,14 @@ export function AppRoutes() {
 						path="/metrics/totals-by-project"
 						element={<TotalsByProject />}
 					/>
+					{/* <Route
+						path="/metrics/evolution-of-category-goals"
+						element={<EvolutionOfCategoryGoals />}
+					/>
+					<Route
+						path="/metrics/evolution-of-center-goals"
+						element={<EvolutionOfCenterGoals />}
+					/> */}
 				</Route>
 
 				{/* Not Found */}

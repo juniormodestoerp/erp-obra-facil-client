@@ -274,6 +274,15 @@ export function useTransactionsController() {
 
 	useGlobalShortcut('Ctrl+a', openModal)
 
+	const {
+		formState: { errors, },
+		watch
+	} = methods
+
+	console.log('errors', errors);
+	console.log(watch('accountType'));
+	
+
 	return {
 		table,
 		result,

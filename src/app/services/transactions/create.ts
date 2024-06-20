@@ -33,6 +33,7 @@ export interface Response {
 	categoryName: string
 	establishmentName: string
 	bankName: string
+	accountType: string
 	transactionDate: string
 	previousBalance: number
 	totalAmount: number
@@ -112,6 +113,7 @@ export async function create({
 		transactionDate: data.transactionDate,
 		previousBalance: data.previousBalance,
 		totalAmount: data.totalAmount,
+		accountType: data.accountType,
 		currentBalance: data.currentBalance,
 		paymentMethod: data.paymentMethod,
 		status: data.status,

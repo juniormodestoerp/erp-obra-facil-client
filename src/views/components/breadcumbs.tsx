@@ -28,6 +28,9 @@ export function Breadcrumbs() {
 		case '/transactions':
 			pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
 			break
+		case '/reports':
+			pages.push({ name: 'Relatórios', href: '/reports', current: true })
+			break
 		case '/conciliations':
 			pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
 			pages.push({

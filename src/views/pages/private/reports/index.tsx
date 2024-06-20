@@ -14,6 +14,7 @@ import {
 	DialogTrigger,
 } from '@views/components/ui/dialog'
 import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+import { Link } from 'react-router-dom'
 
 export function Reports() {
 	const { currentTab, setCurrentTab } = useReportsController()
@@ -105,28 +106,28 @@ export function Reports() {
 					{currentTab === 'RevenuesExpenses'
 						? reportCards.map((card: Card) => {
 								return (
-									<button
+									<Link
 										key={card.id}
-										type="button"
+										to={card.path}
 										className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary dark:border-slate-400 dark:bg-slate-800"
 									>
 										<span className="text-base font-medium text-foreground group-hover:text-white">
 											{card.label}
 										</span>
-									</button>
+									</Link>
 								)
 							})
 						: cashFlowCards.map((card: Card) => {
 								return (
-									<button
+									<Link
 										key={card.id}
-										type="button"
+										to={card.path}
 										className="group col-span-1 flex w-full items-center justify-start rounded border border-gray-300 bg-white px-4 py-2 shadow-sm hover:border-primary hover:bg-primary dark:border-slate-400 dark:bg-slate-800"
 									>
 										<span className="text-base font-medium text-foreground group-hover:text-white">
 											{card.label}
 										</span>
-									</button>
+									</Link>
 								)
 							})}
 				</div>
