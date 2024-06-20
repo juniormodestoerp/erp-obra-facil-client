@@ -20,22 +20,14 @@ export function Transactions() {
 	const {
 		table,
 		result,
-		isError,
-		isPending,
 		methods,
-		fetchData,
-		handlePaginate,
 		globalFilter,
+		isLoading,
 		setGlobalFilter,
-		// isDeleteModalOpen,
-		// setIsDeleteModalOpen,
-		// selectedTransaction,
-		// setSelectedTransaction,
+		handlePaginate,
 	} = useTransactionsController()
 
-	if (isPending) return <div>Carregando...</div>
-	if (isError) return <div>Error ao carregar os lançamentos.</div>
-	if (!result) return <div>Nenhuma lançamento foi encontrado.</div>
+	if (isLoading) return <div>Carregando...</div>
 
 	return (
 		<Fragment>
@@ -48,7 +40,6 @@ export function Transactions() {
 					<div className="relative w-full space-y-2.5 !overflow-x-auto">
 						<TransactionsTableFilters
 							table={table}
-							onFetchData={fetchData}
 							globalFilter={globalFilter}
 							setGlobalFilter={setGlobalFilter}
 						/>
@@ -84,8 +75,9 @@ export function Transactions() {
 										</TableRow>
 									))}
 								</TableHeader>
+
 								<TableBody>
-									{table.getRowModel().rows.length ? (
+									{table.getRowModel().rows.length > 0 ? (
 										table.getRowModel().rows.map((row) => (
 											<TableRow
 												key={row.id}
@@ -96,7 +88,7 @@ export function Transactions() {
 												{row.getVisibleCells().map((cell, idx) => (
 													<TableCell
 														key={cell.id}
-														className={cn('py-3', idx === 0 ? 'pl-4 pr-4' : '')}
+														className={cn('py-3', idx === 0 ? 'pl-8 pr-4' : '')}
 													>
 														{flexRender(
 															cell.column.columnDef.cell,
@@ -119,13 +111,14 @@ export function Transactions() {
 								</TableBody>
 							</Table>
 						</div>
-						{/* END OF TABLE */}
-						<Pagination
-							pageIndex={result.meta.pageIndex}
-							pageSize={result.meta.perPage}
-							totalCount={result.meta.totalCount}
-							onPageChange={handlePaginate}
-						/>
+						{!isLoading && result && (
+							<Pagination
+								pageIndex={result.meta.pageIndex}
+								pageSize={result.meta.perPage}
+								totalCount={result.meta.totalCount}
+								onPageChange={handlePaginate}
+							/>
+						)}
 					</div>
 				</FormProvider>
 			</div>

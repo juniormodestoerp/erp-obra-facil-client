@@ -13,8 +13,8 @@ export interface Response {
 }
 
 export async function showAddress({ zipCode }: Params): Promise<Response> {
-	console.log('zipCode service', zipCode);
-	
+	console.log('zipCode service', zipCode)
+
 	const { data } = await httpClient.get<Response>(
 		`/utils/zip-codes/${zipCode.replace(/\D/g, '')}/addresses`,
 	)

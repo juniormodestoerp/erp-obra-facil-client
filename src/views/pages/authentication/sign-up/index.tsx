@@ -109,7 +109,10 @@ export function SignUp() {
 
 				<p className="mt-4 px-3 text-center">
 					<span className="select-none text-slate-200">Já tem uma conta?</span>
-					<Link to="/login" className="ml-1 font-semibold text-white dark:text-slate-50">
+					<Link
+						to="/login"
+						className="ml-1 font-semibold text-white dark:text-slate-50"
+					>
 						Faça login!
 					</Link>
 				</p>

@@ -111,7 +111,9 @@ export function Categories() {
 										<p
 											className={cn(
 												'font-medium tracking-tight',
-												isPrimary ? '' : 'text-sm text-gray-600 dark:text-zinc-300',
+												isPrimary
+													? ''
+													: 'text-sm text-gray-600 dark:text-zinc-300',
 											)}
 										>
 											{!isPrimary && <span className="mr-2">&bull;</span>}
@@ -160,7 +162,9 @@ export function Categories() {
 									<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
 										<p
 											className={`font-medium tracking-tight ${
-												isPrimary ? '' : 'text-sm text-gray-600 dark:text-zinc-300'
+												isPrimary
+													? ''
+													: 'text-sm text-gray-600 dark:text-zinc-300'
 											}`}
 										>
 											{!isPrimary && <span className="mr-2">&bull;</span>}

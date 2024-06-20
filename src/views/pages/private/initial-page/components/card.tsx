@@ -31,7 +31,8 @@ export function HomeCard({ title, color, children, value }: Props) {
 				<div className="flex items-start justify-between flex-col">
 					<p className="flex gap-1.5 text-zinc-700">
 						<span className="mt-[5px] h-1.5 w-2 rounded-full bg-green-500" />
-						{value && findPercentage(250, value)}% a menos em relação ao mês anterior.
+						{value && findPercentage(250, value)}% a menos em relação ao mês
+						anterior.
 					</p>
 					{/* <p className="flex gap-1.5 text-zinc-700 mt-2">
 						<span className="mt-[3px] h-2.5 w-2.5 rounded-full bg-dark-blue" />

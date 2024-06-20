@@ -21,7 +21,9 @@ export function BalanceProvider({ children }: BalanceProviderProps) {
 	const [isBalanceVisible, setIsBalanceVisible] = useState(false)
 
 	return (
-		<BalanceProviderContext.Provider value={{ isBalanceVisible, setIsBalanceVisible }}>
+		<BalanceProviderContext.Provider
+			value={{ isBalanceVisible, setIsBalanceVisible }}
+		>
 			{children}
 		</BalanceProviderContext.Provider>
 	)

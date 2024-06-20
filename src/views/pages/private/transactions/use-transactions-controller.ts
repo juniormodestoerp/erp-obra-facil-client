@@ -1,10 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-	type QueryKey,
-	useMutation,
-	useQuery,
-	useQueryClient,
-} from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
 	type ColumnFiltersState,
 	type SortingState,
@@ -25,16 +20,17 @@ import { transactionsService } from '@app/services/transactions'
 import type {
 	ITransaction,
 	ITransactionSearchOptions,
-	ITransactionSearchResponse,
 } from '@app/services/transactions/fetch'
 import {
 	dateMessage,
 	numbMessage,
 	strMessage,
 } from '@app/utils/custom-zod-error'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { columns } from './components/columns'
+import { toast } from 'sonner'
+import { type AppError, parseError } from '@app/services/http-client'
 
 interface RowSelectionState {
 	[key: string]: boolean
@@ -88,6 +84,7 @@ const schema = z.object({
 export type FormData = z.infer<typeof schema>
 
 export function useTransactionsController() {
+	// const navigate = useNavigate()
 	const queryClient = useQueryClient()
 	const [searchParams, setSearchParams] = useSearchParams()
 
@@ -146,36 +143,17 @@ export function useTransactionsController() {
 	}, [refetch])
 
 	/* ====================== TABLE ====================== */
+
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-		previousBalance: false,
-		description: false,
+		clinicName: false,
+		clinicPhone: false,
+		clinicTechnicalResponsible: false,
+		clinicAdministrativeResponsible: false,
 	})
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 	const [globalFilter, setGlobalFilter] = useState('')
-
-	const useFetchTransactions = ({
-		pageIndex,
-		searchTerm,
-	}: ITransactionSearchOptions) => {
-		const params = new URLSearchParams()
-
-		params.append('pageIndex', pageIndex.toString())
-
-		if (searchTerm) {
-			params.append('searchTerm', searchTerm)
-		}
-
-		const queryString = params.toString()
-
-		const queryKey: QueryKey = ['transactions', queryString]
-
-		return useQuery<ITransactionSearchResponse>({
-			queryKey,
-			queryFn: () => transactionsService.fetch({ pageIndex, searchTerm }),
-		})
-	}
 
 	const { data: categories } = useQuery({
 		queryKey: ['categories/select-input'],
@@ -185,28 +163,52 @@ export function useTransactionsController() {
 	const filteredCategories =
 		categories?.filter((category) => category.field !== 'padrão') ?? []
 
-	const queryPageIndex = z.coerce
-		.number(numbMessage('index da página'))
-		.transform((page) => page - 1)
-		.parse(searchParams.get('page') ?? '1')
+	const useFetchTransactions = ({
+		pageIndex,
+		searchTerm,
+		sorting,
+	}: ITransactionSearchOptions) => {
+		const {
+			data: result,
+			isLoading,
+			isError,
+			error,
+		} = useQuery({
+			queryKey: ['transactions', pageIndex, searchTerm, sorting],
+			queryFn: () =>
+				transactionsService.fetch({ pageIndex, searchTerm, sorting }),
+		})
 
-	const querySearchTerm = searchParams.get('searchTerm') ?? ''
+		useEffect(() => {
+			if (isError && error) {
+				toast.error(parseError(error))
+			}
+		}, [isError, error])
 
-	const {
-		data: result,
-		isPending,
-		isError,
-	} = useFetchTransactions({
+		return { result, isLoading }
+	}
+
+	const queryPageIndex = useMemo(() => {
+		return z.coerce
+			.number(numbMessage('index da página'))
+			.transform((page) => page - 1)
+			.parse(searchParams.get('page') ?? '1')
+	}, [searchParams])
+
+	const { result, isLoading } = useFetchTransactions({
 		pageIndex: queryPageIndex,
-		searchTerm: querySearchTerm,
+		searchTerm: globalFilter,
+		sorting,
 	})
+
+	const transactionsData = result?.transactions ?? []
 
 	const { perPage, totalCount } = result?.meta ?? {}
 
 	const totalPages = Math.ceil((totalCount ?? 0) / (perPage ?? 12))
 
 	const table = useReactTable({
-		data: result?.transactions ?? [],
+		data: transactionsData,
 		columns,
 		state: {
 			sorting,
@@ -224,53 +226,38 @@ export function useTransactionsController() {
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
+		manualSorting: true,
 		manualFiltering: true,
 		manualPagination: true,
 		autoResetPageIndex: true,
-		pageCount: totalPages ?? -1,
+		pageCount: totalPages,
 		rowCount: totalCount ?? 0,
 	})
 
 	function handlePaginate(newPageIndex: number) {
-		setSearchParams({
-			page: (newPageIndex + 1).toString(),
-			searchTerm: globalFilter,
-		})
+		setSearchParams({ page: (newPageIndex + 1).toString() })
 	}
 
-	function fetchData({ pageIndex, searchTerm }: SearchParams) {
-		const params = new URLSearchParams()
-
-		params.set('pageIndex', (pageIndex + 1).toString())
-
-		if (searchTerm) {
-			params.set('searchTerm', searchTerm)
+	async function handleRemoveTransaction(id: string) {
+		try {
+			await transactionsService.remove({ id })
+			queryClient.invalidateQueries({ queryKey: ['transactions'] })
+			toast.success('Lançamento removida com sucesso')
+		} catch (error: unknown) {
+			toast.error(parseError(error as AppError))
 		}
-
-		queryClient.invalidateQueries({ queryKey: ['transactions'] })
-		setSearchParams(params)
-	}
-	/* ====================== END OF TABLE ====================== */
-
-	function handleRemoveTransaction(id: string) {
-		transactionsService.remove({ id }).then(() => {
-			queryClient.invalidateQueries({
-				queryKey: ['transactions'],
-			})
-		})
 	}
 
 	return {
 		table,
 		result,
-		isError,
-		isPending,
 		methods,
 		openCreateDialog,
 		isDeleteModalOpen,
 		selectedTransaction,
 		globalFilter,
 		filteredCategories,
+		isLoading,
 		setGlobalFilter,
 		setSelectedTransaction,
 		setIsDeleteModalOpen,
@@ -278,7 +265,6 @@ export function useTransactionsController() {
 		getFieldInfo,
 		handleSubmit,
 		handleRemoveTransaction,
-		fetchData,
 		handlePaginate,
 	}
 }

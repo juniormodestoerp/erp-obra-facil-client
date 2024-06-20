@@ -48,7 +48,6 @@ export const InputPassword = forwardRef<HTMLInputElement, Props>(
 					{label} {!optional && <span className="text-red-600">*</span>}
 				</label>
 
-
 				<div className="relative">
 					<input
 						{...props}

@@ -1,14 +1,18 @@
-import axios, { isAxiosError } from 'axios'
+import axios from 'axios'
 
 import { env } from '@/env'
 
 import { localStorageKeys } from '@app/config/local-storage-keys'
 
-interface ResponseError {
-	code: string
-	error: string
-	message: string
-	data: unknown
+export interface AppError {
+	response: {
+		data: {
+			code: string
+			error: string
+			message: string
+			data: unknown
+		}
+	}
 }
 
 export const httpClient = axios.create({
@@ -28,22 +32,11 @@ httpClient.interceptors.request.use((config) => {
 	return config
 })
 
-export function parseError(err: unknown): ResponseError {
-	if (isAxiosError(err)) {
-		return {
-			code: err.response?.data?.code,
-			error: err.response?.data?.error,
-			message: err.response?.data?.message,
-			data: [],
-		}
-	}
-
-	return {
-		code: '',
-		error: '',
-		message: '',
-		data: [],
-	}
+export function parseError(error: AppError): string {
+	return (
+		error?.response?.data?.message ??
+		'Ocorreu um erro no servidor, por favor tente novamente mais tarde'
+	)
 }
 
 if (env.VITE_ENABLE_API_DELAY) {

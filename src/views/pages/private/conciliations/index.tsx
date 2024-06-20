@@ -7,13 +7,13 @@ import { PageTitle } from '@views/components/page-title'
 import { Button } from '@views/components/ui/button'
 import {
 	Card,
-	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
 } from '@views/components/ui/card'
 import { newTransactiosMock } from '../../../../../data'
 import { cn } from '@app/utils'
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 interface ITransaction {
 	id: string
@@ -59,6 +59,7 @@ export function Conciliations() {
 	const [file, setFile] = useState<File | null>(null)
 	const [error, setError] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const [fileType, setFileType] = useState<'.ofx' | '.xls, .xlsx' | null>(null)
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = event.target.files ? event.target.files[0] : null
@@ -76,8 +77,9 @@ export function Conciliations() {
 		}
 	}
 
-	const handleButtonClick = () => {
+	const handleButtonClick = (type: '.ofx' | '.xls, .xlsx') => {
 		if (fileInputRef.current) {
+			setFileType(type)
 			fileInputRef.current.click()
 		}
 	}
@@ -131,28 +133,56 @@ export function Conciliations() {
 				description="Resolva as conciliações de suas transações que estão pendentes de resolução."
 			/>
 
-			<div>
+			<div className="flex items-end gap-4">
 				<form onSubmit={handleSubmit} encType="multipart/form-data">
 					<input
 						type="file"
-						accept=".ofx"
+						accept=".ofx,.xlsx,.xls"
 						onChange={handleFileChange}
 						ref={fileInputRef}
 						style={{ display: 'none' }}
 					/>
+
 					{error && <p style={{ color: 'red' }}>{error}</p>}
 					<Button
 						type="button"
-						onClick={handleButtonClick}
+						onClick={() => handleButtonClick('.ofx')}
 						variant="outline"
 						className="mr-4"
 					>
 						Arquivo OFX
 					</Button>
+
+					<Button
+						type="button"
+						onClick={() => handleButtonClick('.xls, .xlsx')}
+						variant="outline"
+						className="mr-4"
+					>
+						Planilha Excel
+					</Button>
 					<Button type="submit" disabled={!file} variant="outline">
 						Enviar arquivo
 					</Button>
 				</form>
+				{file && (
+					<div className="flex gap-4 items-end">
+						<p className="font-medium">
+							Arquivo escolhido:{' '}
+							<span className="text-green-600">{file?.name}</span>
+						</p>
+						<Button
+							type="button"
+							onClick={() => setFile(null)}
+							variant="outline"
+							className="border-rose-500 size-9"
+						>
+							<div className="">
+								<TrashIcon className="size-4 text-rose-500" />
+							</div>
+						</Button>
+					</div>
+				)}
 			</div>
 
 			<div className="grid grid-cols-3 gap-4">
@@ -168,6 +198,10 @@ export function Conciliations() {
 						},
 					)
 
+					function handleTransactionClick() {
+						console.log('Transaction clicked:', transaction.id)
+					}
+
 					return (
 						<Card
 							key={transaction.id}
@@ -177,13 +211,18 @@ export function Conciliations() {
 									? 'bg-green-50/25 !border-green-500'
 									: 'bg-red-50/25 !border-red-500',
 							)}
+							onClick={handleTransactionClick}
 						>
 							<CardHeader>
 								<p className="font-bold text-base">
 									{mapBankName(transaction?.bankName)}
 								</p>
 								<CardTitle>
-									{transaction.name} {transaction.paymentMethod === 'credit' ? `de ${transaction.establishmentName}` : `para ${transaction.establishmentName}`} em {formattedDate}.
+									{transaction.name}{' '}
+									{transaction.paymentMethod === 'credit'
+										? `de ${transaction.establishmentName}`
+										: `para ${transaction.establishmentName}`}{' '}
+									em {formattedDate}.
 								</CardTitle>
 								<CardDescription>
 									{transaction.trnType === 'DEBIT' ? 'Débito' : 'Crédito'} no
@@ -198,9 +237,7 @@ export function Conciliations() {
 									<span className="ml-1 text-red-600">
 										{transaction.totalAmount > 1000 && 'valor elevado.'}
 									</span>
-								</CardDescription>
-							</CardHeader>
-							{/* <CardContent>
+									{/* <CardContent>
 								<div>Descrição: {transaction.description}</div>
 								<div>Estabelecimento: {transaction.establishmentName}</div>
 								<div>account type: {transaction.accountType}</div>
@@ -213,6 +250,8 @@ export function Conciliations() {
 									{new Date(transaction.createdAt).toLocaleDateString()}
 								</div>
 							</CardContent> */}
+								</CardDescription>
+							</CardHeader>
 						</Card>
 					)
 				})}

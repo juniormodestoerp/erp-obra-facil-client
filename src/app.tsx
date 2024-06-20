@@ -11,26 +11,25 @@ import { BalanceProvider } from '@app/contexts/balance'
 import { ThemeProvider } from '@app/contexts/theme'
 import { queryClient } from '@app/services/query-client'
 
-
 export function App() {
 	return (
 		<AuthenticateProvider>
 			<BalanceProvider>
-			<HelmetProvider>
-				<ThemeProvider defaultTheme="light" storageKey="obra-facil-theme">
-					<Helmet titleTemplate="%s | Obra Fácil - ERP Simplificado" />
-					<Toaster
-						richColors
-						closeButton
-						expand
-						duration={3500}
-						position="top-right"
-					/>
-					<QueryClientProvider client={queryClient}>
-						<AppRoutes />
-					</QueryClientProvider>
-				</ThemeProvider>
-			</HelmetProvider>
+				<HelmetProvider>
+					<ThemeProvider defaultTheme="light" storageKey="obra-facil-theme">
+						<Helmet titleTemplate="%s | Obra Fácil - ERP Simplificado" />
+						<Toaster
+							richColors
+							closeButton
+							expand
+							duration={3500}
+							position="top-right"
+						/>
+						<QueryClientProvider client={queryClient}>
+							<AppRoutes />
+						</QueryClientProvider>
+					</ThemeProvider>
+				</HelmetProvider>
 			</BalanceProvider>
 		</AuthenticateProvider>
 	)

@@ -4,7 +4,6 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import type { ColumnDef, Row } from '@tanstack/react-table'
 
 import {
-	ArrowsUpDownIcon,
 	EyeIcon,
 	PencilSquareIcon,
 	TrashIcon,
@@ -227,7 +226,6 @@ export const columns: ColumnDef<ITransaction>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 				>
 					Data
-					<ArrowsUpDownIcon className="ml-1.5 h-4 w-4 text-dark-blue" />
 				</Button>
 			)
 		},

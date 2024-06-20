@@ -42,14 +42,14 @@ export function useProfileController() {
 	const [previewSrc, setPreviewSrc] = useState<PreviewImage>(null)
 	const [dragging, setDragging] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
-	const selectedFileRef = useRef<File | null>(null);
+	const selectedFileRef = useRef<File | null>(null)
 
 	const handleDrop = (event: DragEvent<HTMLDivElement>) => {
 		event.preventDefault()
 		setDragging(false)
 		const file = event.dataTransfer.files?.[0]
 		if (file) {
-			selectedFileRef.current = file;
+			selectedFileRef.current = file
 			const reader = new FileReader()
 			reader.onload = () => setPreviewSrc(reader.result)
 			reader.readAsDataURL(file)
@@ -71,13 +71,13 @@ export function useProfileController() {
 		if (fileInputRef.current) {
 			fileInputRef.current.value = ''
 		}
-		selectedFileRef.current = null;
+		selectedFileRef.current = null
 	}
 
 	function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
 		const file = event.target.files?.[0]
 		if (file) {
-			selectedFileRef.current = file;
+			selectedFileRef.current = file
 			const reader = new FileReader()
 			reader.onload = () => setPreviewSrc(reader.result)
 			reader.readAsDataURL(file)
@@ -92,11 +92,14 @@ export function useProfileController() {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (data?.profilePicture) {
-			const profilePictureFilename = data.profilePicture.split('/').pop();
-			setPreviewSrc(`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}` ?? '');
-			refetch();
+			const profilePictureFilename = data.profilePicture.split('/').pop()
+			setPreviewSrc(
+				`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}` ??
+					'',
+			)
+			refetch()
 		}
-	}, [data]);
+	}, [data])
 
 	const {
 		control,
@@ -147,20 +150,23 @@ export function useProfileController() {
 	const handleSubmit = hookFormHandleSubmit(async (data: FormData) => {
 		const preparedData = {
 			...data,
-			complement: data?.complement?.trim() === '' || data?.complement === undefined ? 'Não informado' : data.complement,
-	};
+			complement:
+				data?.complement?.trim() === '' || data?.complement === undefined
+					? 'Não informado'
+					: data.complement,
+		}
 		await updateProfile(preparedData)
 		refetch()
 	})
 
 	const handleSubmitProfilePicture = async () => {
 		if (selectedFileRef.current) {
-			const response = await profilePicture(selectedFileRef.current);
+			const response = await profilePicture(selectedFileRef.current)
 			await refetch()
-			window.location.reload();
+			window.location.reload()
 			setPreviewSrc(response.profilePicture)
 		} else {
-			console.error("Nenhum arquivo selecionado.");
+			console.error('Nenhum arquivo selecionado.')
 		}
 	}
 

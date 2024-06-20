@@ -1,8 +1,16 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
+
+interface ISorting {
+	id: string
+	desc: boolean
+}
 
 export interface ITransactionSearchOptions {
 	pageIndex: number
 	searchTerm?: string
+	sorting?: ISorting[]
 }
 
 export interface ITransaction {
@@ -40,23 +48,37 @@ export interface ITransactionSearchResponse {
 export async function fetch({
 	pageIndex,
 	searchTerm,
+	sorting,
 }: ITransactionSearchOptions): Promise<ITransactionSearchResponse> {
-	const params = new URLSearchParams()
+	const normalizeSorting = (sorting: ISorting[] | undefined): string => {
+		if (!sorting || sorting.length === 0) return ''
 
-	params.append('pageIndex', pageIndex.toString())
+		console.log(sorting[0].id)
 
-	if (searchTerm) {
-		params.append('searchTerm', searchTerm)
+		const withoutClinic = sorting[0].id.replace('transactions', '')
+		const normalizedSorting =
+			withoutClinic.charAt(0).toLowerCase() + withoutClinic.slice(1)
+
+		return normalizedSorting
 	}
 
-	const queryString = params.toString()
+	const searchTermQuery = searchTerm ? `&searchTerm=${searchTerm}` : ''
+	const sortingQuery = sorting
+		? `&sortingField=${normalizeSorting(sorting)}&${sorting?.[0]?.desc ? 'orderBy=desc' : 'orderBy=asc'}`
+		: ''
 
-	const { data } = await httpClient.get<ITransactionSearchResponse>(
-		`/transactions?${queryString}`,
+	const response = await httpClient.get<ITransactionSearchResponse>(
+		`/transactions?pageIndex=${pageIndex}${searchTermQuery}${sortingQuery}`,
 	)
 
+	if (response?.status === 200) {
+		toast.success(
+			`${response?.data?.transactions?.length === 1 ? 'Lançamento carregado' : 'Lançamentos carregados'} com sucesso!`,
+		)
+	}
+
 	return {
-		transactions: data.transactions.map((transaction) => ({
+		transactions: response?.data.transactions.map((transaction) => ({
 			id: transaction.id,
 			name: transaction.name,
 			description: transaction.description,
@@ -81,9 +103,9 @@ export async function fetch({
 			createdAt: new Date(transaction.createdAt),
 		})),
 		meta: {
-			pageIndex: data.meta.pageIndex,
-			perPage: data.meta.perPage,
-			totalCount: data.meta.totalCount,
+			pageIndex: response?.data.meta.pageIndex,
+			perPage: response?.data.meta.perPage,
+			totalCount: response?.data.meta.totalCount,
 		},
 	}
 }

@@ -17,5 +17,5 @@ export const authService = {
 	resetPassword,
 	profile,
 	logout,
-	profilePicture
+	profilePicture,
 }

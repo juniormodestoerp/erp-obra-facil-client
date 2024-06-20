@@ -4,6 +4,6 @@ export function useInitialPageController() {
 	const { isBalanceVisible } = useBalance()
 
 	return {
-		isBalanceVisible
+		isBalanceVisible,
 	}
 }

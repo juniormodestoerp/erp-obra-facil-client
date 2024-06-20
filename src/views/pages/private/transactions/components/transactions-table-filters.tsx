@@ -1,10 +1,8 @@
-import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { Column } from '@tanstack/react-table'
-import { ChevronDownIcon, SearchCheck, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import type { Column, Table } from '@tanstack/react-table'
+import { ChevronDownIcon, X } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
 import type { ITransaction } from '@app/services/transactions/fetch'
@@ -12,17 +10,14 @@ import { numbMessage, strMessage } from '@app/utils/custom-zod-error'
 import { getColumnName } from '@app/utils/switchs/transactions'
 
 import { Button } from '@views/components/ui/button'
-import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from '@views/components/ui/dropdown-menu'
-import { Input } from '@views/components/ui/input'
 
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
-import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
+import { DebouncedInput } from '@views/components/input/debounce'
 
 const searchParamsSchema = z.object({
 	pageIndex: z.number(numbMessage('número da página')),
@@ -32,39 +27,31 @@ const searchParamsSchema = z.object({
 export type SearchParams = z.infer<typeof searchParamsSchema>
 
 interface Props {
-	table: any
+	table: Table<ITransaction>
 	globalFilter: string
-	setGlobalFilter: (value: string) => void
-	onFetchData: (params: SearchParams) => void
+	setGlobalFilter: (filter: string) => void
 }
 
 export function TransactionsTableFilters({
 	table,
 	globalFilter,
 	setGlobalFilter,
-	onFetchData,
 }: Props) {
-	const { openCreateDialog, setOpenCreateDialog } = useTransactionsController()
-	const [searchParams, setSearchParams] = useSearchParams()
-
-	const { reset, watch } = useForm<SearchParams>({
+	const { reset } = useForm<SearchParams>({
 		resolver: zodResolver(searchParamsSchema),
 		defaultValues: {
-			pageIndex: Number.parseInt(searchParams.get('pageIndex') ?? '1'),
-			searchTerm: searchParams.get('searchTerm') ?? '',
+			pageIndex: 1,
+			searchTerm: '',
 		},
 	})
 
-	const pageIndex = watch('pageIndex')
-
-	function handleResetFilter() {
+	const handleResetFilter = useCallback(() => {
 		reset({
-			pageIndex: Number.parseInt(searchParams.get('pageIndex') ?? '1'),
-			searchTerm: searchParams.get('searchTerm') ?? '',
+			pageIndex: 1,
+			searchTerm: '',
 		})
 		setGlobalFilter('')
-		setSearchParams({ pageIndex: '1' }, { replace: true })
-	}
+	}, [reset, setGlobalFilter])
 
 	const triggerRef = useRef<HTMLButtonElement>(null)
 	const [dropdownWidth, setDropdownWidth] = useState<number | undefined>(
@@ -81,44 +68,16 @@ export function TransactionsTableFilters({
 		<form className="flex items-center gap-2 p-px">
 			<span className="text-sm font-semibold">Filtros:</span>
 
-			<Input
-				placeholder="Informações do lançamento..."
-				className="h-8 w-full"
-				value={globalFilter}
-				onChange={(e) => setGlobalFilter(e.target.value)}
+			<DebouncedInput
+				tabIndex={0}
+				name="searchTerm"
+				autoComplete="off"
+				placeholder="Busque por informações da clínica..."
+				className="mr-4 h-8 w-[320px] !rounded-md border-zinc-300 shadow-sm placeholder:text-[13px]"
+				value={globalFilter ?? ''}
+				onChange={(value) => setGlobalFilter(String(value))}
+				debounce={500}
 			/>
-
-			{/* <Select defaultValue="all">
-        <div className="">
-          <SelectTrigger className="h-8 w-44">
-            <SelectValue />
-          </SelectTrigger>
-        </div>
-
-        <SelectContent>
-          <SelectItem value="all">Todos status</SelectItem>
-          <SelectItem value="pending">Pendentes</SelectItem>
-          <SelectItem value="scheduled">Agendados</SelectItem>
-          <SelectItem value="approved">Aprovados</SelectItem>
-          <SelectItem value="reconciled">Conciliados</SelectItem>
-        </SelectContent>
-      </Select> */}
-
-			<Button
-				type="submit"
-				variant="outline"
-				size="xs"
-				className="ml-aut !py-0 text-[13px] font-medium"
-				onClick={() =>
-					onFetchData({
-						pageIndex,
-						searchTerm: globalFilter,
-					})
-				}
-			>
-				<SearchCheck className="mr-1.5 h-4 w-4" />
-				Filtrar resultados
-			</Button>
 
 			<Button
 				type="button"
@@ -130,25 +89,6 @@ export function TransactionsTableFilters({
 				<X className="mr-1.5 h-4 w-4" />
 				Remover filtros
 			</Button>
-
-			<Dialog
-				open={openCreateDialog}
-				onOpenChange={() => setOpenCreateDialog(!openCreateDialog)}
-			>
-				<DialogTrigger asChild>
-					<Button
-						type="button"
-						variant="outline"
-						size="sm"
-						className="ml-aut !py-0 text-[13px] font-medium"
-						onClick={() => setOpenCreateDialog(true)}
-					>
-						<PlusIcon className="mr-1.5 h-4 w-4" strokeWidth={2.2} />
-						Cadastrar
-					</Button>
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
 
 			<div className="space-x-4">
 				<DropdownMenu>

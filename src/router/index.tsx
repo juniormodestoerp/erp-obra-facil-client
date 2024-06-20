@@ -39,17 +39,17 @@ export function AppRoutes() {
 
 				{/* Private Routes */}
 				<Route element={<AuthGuard isPrivate />}>
-				<Route element={<PrivateLayout />}>
-					<Route path="/" element={<InitialPage />} />
-					<Route path="/transactions" element={<Transactions />} />
-					<Route path="/conciliations" element={<Conciliations />} />
-					<Route path="/dashboards" element={<Dashboards />} />
-					<Route path="/reports" element={<Reports />} />
-					<Route path="/categories" element={<Categories />} />
-					<Route path="/settings" element={<Settings />} />
-					<Route path="/contracts" element={<Contracts />} />
-					<Route path="/profile" element={<Profile />} />
-				</Route>
+					<Route element={<PrivateLayout />}>
+						<Route path="/" element={<InitialPage />} />
+						<Route path="/transactions" element={<Transactions />} />
+						<Route path="/conciliations" element={<Conciliations />} />
+						<Route path="/dashboards" element={<Dashboards />} />
+						<Route path="/reports" element={<Reports />} />
+						<Route path="/categories" element={<Categories />} />
+						<Route path="/settings" element={<Settings />} />
+						<Route path="/contracts" element={<Contracts />} />
+						<Route path="/profile" element={<Profile />} />
+					</Route>
 				</Route>
 
 				{/* Not Found */}

@@ -10,8 +10,15 @@ import { InputDocument } from '@views/components/input/document'
 import { Tabs } from './components/tabs'
 
 export function ForgotPassword() {
-	const { errors, register, currentTab, setCurrentTab, reset, handleSubmit, control } =
-		useForgotPasswordController()
+	const {
+		errors,
+		register,
+		currentTab,
+		setCurrentTab,
+		reset,
+		handleSubmit,
+		control,
+	} = useForgotPasswordController()
 
 	return (
 		<Fragment>
@@ -40,7 +47,11 @@ export function ForgotPassword() {
 					</fieldset>
 				</div>
 
-				<Tabs currentTab={currentTab} setCurrentTab={setCurrentTab} reset={reset} />
+				<Tabs
+					currentTab={currentTab}
+					setCurrentTab={setCurrentTab}
+					reset={reset}
+				/>
 
 				<form onSubmit={handleSubmit} className="mt-8 w-[350px]">
 					{currentTab === 'email' && (

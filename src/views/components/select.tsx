@@ -81,7 +81,12 @@ export function Select({
 								error && '!border-red-600',
 							)}
 						>
-							<span className={cn('text-zinc-400 dark:text-zinc-100', value && 'text-zinc-900 dark:text-zinc-100')}>
+							<span
+								className={cn(
+									'text-zinc-400 dark:text-zinc-100',
+									value && 'text-zinc-900 dark:text-zinc-100',
+								)}
+							>
 								{value || 'Selecione uma opção...'}
 							</span>
 							<ChevronUpDownIcon className="absolute right-1.5 top-1.5 h-6 w-6" />

@@ -55,8 +55,13 @@ export function ResetPassword() {
 
 				<Fragment>
 					<p className="mt-6 px-3 text-center">
-						<span className="select-none text-slate-200">Já tem uma conta?</span>
-						<Link to="/login" className="ml-1 font-semibold text-white dark:text-slate-50">
+						<span className="select-none text-slate-200">
+							Já tem uma conta?
+						</span>
+						<Link
+							to="/login"
+							className="ml-1 font-semibold text-white dark:text-slate-50"
+						>
 							Faça login!
 						</Link>
 					</p>
@@ -64,8 +69,13 @@ export function ResetPassword() {
 					<div className="mx-8 my-5 h-px bg-white dark:bg-white" />
 
 					<p className="px-3 text-center">
-						<span className="select-none text-slate-200">Ainda não tem uma conta?</span>
-						<Link to="/sign-up" className="ml-1 font-semibold text-white dark:text-slate-50">
+						<span className="select-none text-slate-200">
+							Ainda não tem uma conta?
+						</span>
+						<Link
+							to="/sign-up"
+							className="ml-1 font-semibold text-white dark:text-slate-50"
+						>
 							Cadastre-se
 						</Link>
 					</p>
