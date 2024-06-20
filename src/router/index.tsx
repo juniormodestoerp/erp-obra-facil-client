@@ -9,7 +9,6 @@ import { PrivateLayout } from '@views/layouts/private'
 
 /* Private Routes */
 import { Categories } from '@views/pages/private/categories'
-import { Dashboards } from '@views/pages/private/dashboards'
 import { InitialPage } from '@views/pages/private/initial-page'
 import { Profile } from '@views/pages/private/profile'
 import { Reports } from '@views/pages/private/reports'
@@ -64,7 +63,6 @@ export function AppRoutes() {
 						<Route path="/" element={<InitialPage />} />
 						<Route path="/transactions" element={<Transactions />} />
 						<Route path="/conciliations" element={<Conciliations />} />
-						<Route path="/dashboards" element={<Dashboards />} />
 						<Route path="/reports" element={<Reports />} />
 						<Route path="/categories" element={<Categories />} />
 						<Route path="/settings" element={<Settings />} />

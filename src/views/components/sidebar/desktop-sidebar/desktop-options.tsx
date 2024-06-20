@@ -5,7 +5,7 @@ import {
 	BanknotesIcon,
 	ClipboardDocumentListIcon,
 	HomeIcon,
-	PresentationChartLineIcon,
+	// PresentationChartLineIcon,
 	TagIcon,
 	UserCircleIcon,
 } from '@heroicons/react/24/outline'
@@ -94,14 +94,14 @@ export function DesktopOptions({ path, small, balance }: Props) {
 						selected={path.startsWith('/conciliations')}
 					/>
 
-					<Option
+					{/* <Option
 						open={!small}
 						small={small}
 						Icon={<PresentationChartLineIcon className="h-6 w-6" />}
 						linkTo="/dashboards"
 						title="Dashboards"
 						selected={path.startsWith('/dashboards')}
-					/>
+					/> */}
 
 					<Option
 						open={!small}

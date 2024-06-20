@@ -12,6 +12,10 @@ export interface Params {
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
+	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	competencyDate: Date | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -34,6 +38,10 @@ export interface Response {
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
+	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -56,6 +64,10 @@ export async function create({
 	totalAmount,
 	currentBalance,
 	paymentMethod,
+	status,
+	accountToTransfer,
+	contact,
+	card,
 	competencyDate,
 	costAndProfitCenters,
 	tags,
@@ -68,15 +80,19 @@ export async function create({
 		name,
 		description,
 		categoryId,
-		establishmentName,
 		accountType,
+		establishmentName,
 		bankName,
 		transactionDate: transactionDate.toISOString(),
 		previousBalance,
 		totalAmount,
 		currentBalance,
 		paymentMethod,
-		competencyDate: competencyDate ? competencyDate.toISOString() : null,
+		status: status || 'Pendente',
+		accountToTransfer,
+		contact,
+		card,
+		competencyDate: competencyDate?.toISOString() || null,
 		costAndProfitCenters,
 		tags,
 		documentNumber,
@@ -98,6 +114,10 @@ export async function create({
 		totalAmount: data.totalAmount,
 		currentBalance: data.currentBalance,
 		paymentMethod: data.paymentMethod,
+		status: data.status,
+		accountToTransfer: data.accountToTransfer,
+		contact: data.contact,
+		card: data.card,
 		competencyDate: data.competencyDate,
 		costAndProfitCenters: data.costAndProfitCenters,
 		tags: data.tags,

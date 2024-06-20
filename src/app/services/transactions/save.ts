@@ -7,12 +7,18 @@ export interface Params {
 	categoryId: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	transactionDate: string
 	previousBalance: number
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
-	competencyDate: Date | null
+	status: string
+	accountType: string
+	fitId: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
+	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
 	documentNumber: string | null
@@ -29,19 +35,25 @@ export interface Response {
 	categoryName: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	transactionDate: string
 	previousBalance: number
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
-	competencyDate: Date | null
+	status: string
+	accountType: string
+	fitId: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
+	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
-	createdAt: Date
+	createdAt: string
 }
 
 export async function save({
@@ -56,6 +68,12 @@ export async function save({
 	totalAmount,
 	currentBalance,
 	paymentMethod,
+	status,
+	accountType,
+	fitId,
+	accountToTransfer,
+	contact,
+	card,
 	competencyDate,
 	costAndProfitCenters,
 	tags,
@@ -70,12 +88,18 @@ export async function save({
 		categoryId,
 		establishmentName,
 		bankName,
-		transactionDate: transactionDate.toISOString(),
+		transactionDate,
 		previousBalance,
 		totalAmount,
 		currentBalance,
 		paymentMethod,
-		competencyDate: competencyDate ? competencyDate.toISOString() : null,
+		status,
+		accountType,
+		fitId,
+		accountToTransfer,
+		contact,
+		card,
+		competencyDate: competencyDate || null,
 		costAndProfitCenters,
 		tags,
 		documentNumber,
@@ -92,18 +116,24 @@ export async function save({
 		categoryName: data.categoryName,
 		establishmentName: data.establishmentName,
 		bankName: data.bankName,
-		transactionDate: new Date(data.transactionDate),
+		transactionDate: data.transactionDate,
 		previousBalance: data.previousBalance,
 		totalAmount: data.totalAmount,
 		currentBalance: data.currentBalance,
 		paymentMethod: data.paymentMethod,
-		competencyDate: new Date(data.competencyDate ?? new Date()),
+		status: data.status,
+		accountType: data.accountType,
+		fitId: data.fitId,
+		accountToTransfer: data.accountToTransfer,
+		contact: data.contact,
+		card: data.card,
+		competencyDate: data.competencyDate,
 		costAndProfitCenters: data.costAndProfitCenters,
 		tags: data.tags,
 		documentNumber: data.documentNumber,
 		associatedContracts: data.associatedContracts,
 		associatedProjects: data.associatedProjects,
 		additionalComments: data.additionalComments,
-		createdAt: new Date(data.createdAt),
+		createdAt: data.createdAt,
 	}
 }

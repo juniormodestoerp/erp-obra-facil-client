@@ -63,34 +63,37 @@ const schema = z.object({
 	bankName: z
 		.string(strMessage('nome do banco'))
 		.min(1, 'O campo nome do banco é obrigatório.'),
-	transactionDate: z.coerce.date(dateMessage('data da transação')),
+	transactionDate: z.date(dateMessage('data da transação')),
+	status: z.string(strMessage('status')),
+	accountToTransfer: z
+		.string(strMessage('conta para transferência'))
+		.nullable(),
+	contact: z.string(strMessage('contato')).nullable(),
+	card: z.string(strMessage('cartão')).nullable(),
 	previousBalance: z
 		.string(numbMessage('saldo anterior'))
 		.transform((value) => +value.replace(',', '.')),
 	totalAmount: z
-		.string(numbMessage('valor base do procedimento'))
+		.string(numbMessage('valor total'))
 		.transform((value) => +value.replace(',', '.')),
 	currentBalance: z
-		.string(numbMessage('valor base do procedimento'))
+		.string(numbMessage('saldo atual'))
 		.transform((value) => +value.replace(',', '.')),
 	paymentMethod: z
 		.string(strMessage('forma de pagamento'))
 		.min(1, 'O campo forma de pagamento é obrigatório.'),
-
-	// Configurações opcionais adicionais
 	competencyDate: z.coerce.date(dateMessage('data de competência')).nullable(),
 	costAndProfitCenters: z.string(strMessage('centro de custo')).nullable(),
 	tags: z.string(strMessage('tags')).nullable(),
 	documentNumber: z.string(strMessage('número do documento')).nullable(),
-	associatedContracts: z.string(strMessage('contratos assosiados')).nullable(),
-	associatedProjects: z.string(strMessage('projetos assosiados')).nullable(),
+	associatedContracts: z.string(strMessage('contratos associados')).nullable(),
+	associatedProjects: z.string(strMessage('projetos associados')).nullable(),
 	additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
 })
 
 export type FormData = z.infer<typeof schema>
 
 export function useTransactionsController() {
-	// const navigate = useNavigate()
 	const queryClient = useQueryClient()
 	const [searchParams, setSearchParams] = useSearchParams()
 
@@ -180,19 +183,19 @@ export function useTransactionsController() {
 		const {
 			data: result,
 			isLoading,
-			isError,
-			error,
+			// isError,
+			// error,
 		} = useQuery({
 			queryKey: ['transactions', pageIndex, searchTerm, sorting],
 			queryFn: () =>
 				transactionsService.fetch({ pageIndex, searchTerm, sorting }),
 		})
 
-		useEffect(() => {
-			if (isError && error) {
-				toast.error(parseError(error))
-			}
-		}, [isError, error])
+		// useEffect(() => {
+		// 	if (isError && error) {
+		// 		toast.error(parseError(error))
+		// 	}
+		// }, [isError, error])
 
 		return { result, isLoading }
 	}

@@ -220,14 +220,14 @@ export const reportCards: Card[] = [
   },
   { id: '7691ad45-3ca5-4362-bff4-32c3d130b495', label: 'Evolução por centro' },
   { id: 'e44e25d1-894e-465c-9290-16601a5cb079', label: 'Evolução por contato' },
-  {
-    id: '9e7da27c-6817-4ee1-b569-9dc785290d05',
-    label: 'Evolução das metas de categorias',
-  },
-  {
-    id: '978171b9-c5f2-42c9-9496-903a097c6f68',
-    label: 'Evolução das metas de centros',
-  },
+  // {
+  //   id: '9e7da27c-6817-4ee1-b569-9dc785290d05',
+  //   label: 'Evolução das metas de categorias',
+  // },
+  // {
+  //   id: '978171b9-c5f2-42c9-9496-903a097c6f68',
+  //   label: 'Evolução das metas de centros',
+  // },
   {
     id: '74475790-0626-40b1-a9ca-dda43b0e78d4',
     label: 'Resultado dos projetos',

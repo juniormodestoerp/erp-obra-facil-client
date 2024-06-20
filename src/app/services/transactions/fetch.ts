@@ -1,5 +1,4 @@
 import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
 interface ISorting {
@@ -21,19 +20,24 @@ export interface ITransaction {
 	categoryName: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	accountType: string
+	accountToTransfer: string | null
+	card: string | null
+	contact: string | null
+	transactionDate: string
 	previousBalance: number
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
-	competencyDate: Date | null
+	status: string
+	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
-	createdAt: Date
+	createdAt: string
 }
 
 export interface ITransactionSearchResponse {
@@ -62,16 +66,21 @@ export async function fetch({
 
 	const searchTermQuery = searchTerm ? `&searchTerm=${searchTerm}` : ''
 	const sortingQuery = sorting
-		? `&sortingField=${normalizeSorting(sorting)}&${sorting?.[0]?.desc ? 'orderBy=desc' : 'orderBy=asc'}`
+		? `&sortingField=${normalizeSorting(sorting)}&${
+				sorting?.[0]?.desc ? 'orderBy=desc' : 'orderBy=asc'
+			}`
 		: ''
 
 	const response = await httpClient.get<ITransactionSearchResponse>(
 		`/transactions?pageIndex=${pageIndex}${searchTermQuery}${sortingQuery}`,
 	)
-
 	if (response?.status === 200) {
 		toast.success(
-			`${response?.data?.transactions?.length === 1 ? 'Lançamento carregado' : 'Lançamentos carregados'} com sucesso!`,
+			`${
+				response?.data?.transactions?.length === 1
+					? 'Lançamento carregado'
+					: 'Lançamentos carregados'
+			} com sucesso!`,
 		)
 	}
 
@@ -82,23 +91,26 @@ export async function fetch({
 			description: transaction.description,
 			categoryId: transaction.categoryId,
 			categoryName: transaction.categoryName,
+			accountType: transaction.accountType,
+			accountToTransfer: transaction.accountToTransfer,
+			card: transaction.card,
 			establishmentName: transaction.establishmentName,
+			contact: transaction.contact,
 			bankName: transaction.bankName,
-			transactionDate: new Date(transaction.transactionDate),
+			transactionDate: transaction.transactionDate,
 			previousBalance: transaction.previousBalance,
 			totalAmount: transaction.totalAmount,
 			currentBalance: transaction.currentBalance,
 			paymentMethod: transaction.paymentMethod,
-			competencyDate: transaction.competencyDate
-				? new Date(transaction.competencyDate)
-				: null,
+			status: transaction.status,
+			competencyDate: transaction.competencyDate,
 			costAndProfitCenters: transaction.costAndProfitCenters,
 			tags: transaction.tags,
 			documentNumber: transaction.documentNumber,
 			associatedContracts: transaction.associatedContracts,
 			associatedProjects: transaction.associatedProjects,
 			additionalComments: transaction.additionalComments,
-			createdAt: new Date(transaction.createdAt),
+			createdAt: transaction.createdAt,
 		})),
 		meta: {
 			pageIndex: response?.data.meta.pageIndex,

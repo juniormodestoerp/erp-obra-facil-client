@@ -99,7 +99,9 @@ export function Select({
 									value && 'text-zinc-900 dark:text-zinc-100',
 								)}
 							>
-								{selectedField === 'padrão' ? 'Selecione uma opção...' : selectedField || 'Selecione uma opção...'}
+								{selectedField === 'padrão'
+									? 'Selecione uma opção...'
+									: selectedField || 'Selecione uma opção...'}
 							</span>
 							<ChevronUpDownIcon className="absolute right-1.5 top-1.5 h-6 w-6" />
 						</button>

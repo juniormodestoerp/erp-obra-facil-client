@@ -17,6 +17,10 @@ export interface Params {
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
+	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -24,7 +28,6 @@ export interface Params {
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
-	status: string
 	createdAt: string
 }
 
@@ -45,6 +48,10 @@ export interface Response {
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
+	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -52,7 +59,6 @@ export interface Response {
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
-	status: string
 	createdAt: string
 }
 
@@ -73,6 +79,10 @@ export async function create({
 	totalAmount,
 	currentBalance,
 	paymentMethod,
+	status,
+	accountToTransfer,
+	contact,
+	card,
 	competencyDate,
 	costAndProfitCenters,
 	tags,
@@ -80,7 +90,6 @@ export async function create({
 	associatedContracts,
 	associatedProjects,
 	additionalComments,
-	status,
 	createdAt,
 }: Params): Promise<Response> {
 	const { data } = await httpClient.post<Response>('/conciliations/add', {
@@ -100,14 +109,17 @@ export async function create({
 		totalAmount,
 		currentBalance,
 		paymentMethod,
-		competencyDate: competencyDate && null,
+		status,
+		accountToTransfer: accountToTransfer || null,
+		contact: contact || null,
+		card: card || null,
+		competencyDate,
 		costAndProfitCenters,
 		tags,
 		documentNumber,
 		associatedContracts,
 		associatedProjects,
 		additionalComments,
-		status,
 		createdAt,
 	})
 
@@ -128,14 +140,17 @@ export async function create({
 		totalAmount: data.totalAmount,
 		currentBalance: data.currentBalance,
 		paymentMethod: data.paymentMethod,
-		competencyDate: data.competencyDate ? data.competencyDate : null,
+		status: data.status,
+		accountToTransfer: data.accountToTransfer,
+		contact: data.contact,
+		card: data.card,
+		competencyDate: data.competencyDate,
 		costAndProfitCenters: data.costAndProfitCenters,
 		tags: data.tags,
 		documentNumber: data.documentNumber,
 		associatedContracts: data.associatedContracts,
 		associatedProjects: data.associatedProjects,
 		additionalComments: data.additionalComments,
-		status: data.status,
 		createdAt: data.createdAt,
 	}
 }
