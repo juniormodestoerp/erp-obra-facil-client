@@ -15,7 +15,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@views/components/ui/card'
-import { newTransactiosMock } from '../../../../../data'
+// import { newTransactiosMock } from '../../../../../data'
 import { cn } from '@app/utils'
 import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { conciliationsService } from '@app/services/conciliations'
@@ -35,7 +35,7 @@ interface ITransaction {
 	id: string
 	userId: string
 	fitId: string
-	trnType: string
+	trnType?: string
 	accountType: string
 	name: string
 	description: string
@@ -72,7 +72,7 @@ export function Conciliations() {
 	useGlobalShortcut('Ctrl+a', openTransaction)
 
 	const [newTransactions, setNewTransactions] = useState<ITransaction[]>(
-		mapToNewStructureArray(newTransactiosMock),
+		mapToNewStructureArray([]), // newTransactiosMock
 	)
 	const [conflictingTransactions, setConflictingTransactions] = useState<
 		ITransaction[]

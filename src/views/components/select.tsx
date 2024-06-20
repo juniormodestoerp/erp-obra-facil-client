@@ -12,6 +12,7 @@ import {
 	CommandItem,
 	CommandList,
 } from '@views/components/ui/command'
+import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 
 interface IData {
 	field: string
@@ -45,16 +46,21 @@ export function Select({
 	optional,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false)
+	const { methods } = useTransactionsController()
+	const [selectedField, setSelectedField] = useState<string | null>(null)
 	const inputId = id ?? name
 
 	useEffect(() => {
-		if (data.length === 1 && data[0].field === 'value') {
-			control.setValue(name, data[0].value)
+		const defaultOption = data.find((item: IData) => item.field === 'padrão')
+		if (defaultOption) {
+			methods.setValue(name as any, defaultOption.value)
+			setSelectedField(defaultOption.field)
 		}
-	}, [data, control, name])
+	}, [data, name, methods])
 
 	function handleSelect({ item, onChange }: IHandleSelect) {
 		onChange(item.value)
+		setSelectedField(item.field)
 		setIsOpen(false)
 	}
 
@@ -63,9 +69,7 @@ export function Select({
 		setIsOpen(true)
 	}
 
-	const isSingleDefaultOrNoInfo =
-		data.length === 1 &&
-		(data[0].field === 'padrão' || data[0].field === 'Não informado')
+	const filteredData = data.filter((item: IData) => item.field !== 'padrão')
 
 	return (
 		<div className="flex flex-1 flex-col max-w-xl">
@@ -95,7 +99,7 @@ export function Select({
 									value && 'text-zinc-900 dark:text-zinc-100',
 								)}
 							>
-								{value || 'Selecione uma opção...'}
+								{selectedField === 'padrão' ? 'Selecione uma opção...' : selectedField || 'Selecione uma opção...'}
 							</span>
 							<ChevronUpDownIcon className="absolute right-1.5 top-1.5 h-6 w-6" />
 						</button>
@@ -110,24 +114,18 @@ export function Select({
 								className="!focus:ring-0 !focus:outline-none !focus:border-none !cursor-pointer !border-none !outline-none !ring-0"
 							/>
 							<CommandList>
-								{isSingleDefaultOrNoInfo ? (
-									<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-								) : (
-									<>
-										<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-										{data.length > 0 && (
-											<CommandGroup heading="Sugestões">
-												{data.map((item: IData) => (
-													<CommandItem
-														key={item.value}
-														onSelect={() => handleSelect({ item, onChange })}
-													>
-														<span>{item.field}</span>
-													</CommandItem>
-												))}
-											</CommandGroup>
-										)}
-									</>
+								<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
+								{filteredData.length > 0 && (
+									<CommandGroup heading="Sugestões">
+										{filteredData.map((item: IData) => (
+											<CommandItem
+												key={item.value}
+												onSelect={() => handleSelect({ item, onChange })}
+											>
+												<span>{item.field}</span>
+											</CommandItem>
+										))}
+									</CommandGroup>
 								)}
 							</CommandList>
 						</CommandDialog>

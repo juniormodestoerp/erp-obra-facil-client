@@ -4,6 +4,7 @@ export interface Params {
 	name: string
 	description: string
 	categoryId: string
+	accountType: string
 	establishmentName: string
 	bankName: string
 	transactionDate: Date
@@ -28,25 +29,26 @@ export interface Response {
 	categoryName: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	transactionDate: string
 	previousBalance: number
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
-	competencyDate: Date | null
+	competencyDate: string | null
 	costAndProfitCenters: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
-	createdAt: Date
+	createdAt: string
 }
 
 export async function create({
 	name,
 	description,
 	categoryId,
+	accountType,
 	establishmentName,
 	bankName,
 	transactionDate,
@@ -67,6 +69,7 @@ export async function create({
 		description,
 		categoryId,
 		establishmentName,
+		accountType,
 		bankName,
 		transactionDate: transactionDate.toISOString(),
 		previousBalance,
@@ -90,18 +93,18 @@ export async function create({
 		categoryName: data.categoryName,
 		establishmentName: data.establishmentName,
 		bankName: data.bankName,
-		transactionDate: new Date(data.transactionDate),
+		transactionDate: data.transactionDate,
 		previousBalance: data.previousBalance,
 		totalAmount: data.totalAmount,
 		currentBalance: data.currentBalance,
 		paymentMethod: data.paymentMethod,
-		competencyDate: new Date(data.competencyDate ?? new Date()),
+		competencyDate: data.competencyDate,
 		costAndProfitCenters: data.costAndProfitCenters,
 		tags: data.tags,
 		documentNumber: data.documentNumber,
 		associatedContracts: data.associatedContracts,
 		associatedProjects: data.associatedProjects,
 		additionalComments: data.additionalComments,
-		createdAt: new Date(data.createdAt),
+		createdAt: data.createdAt,
 	}
 }

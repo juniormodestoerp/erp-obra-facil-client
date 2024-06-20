@@ -24,7 +24,7 @@ interface Props {
 	balance: number
 }
 
-export function DesktopOptions({ path, small, balance = 39000 }: Props) {
+export function DesktopOptions({ path, small, balance }: Props) {
 	const { isBalanceVisible, setIsBalanceVisible } = useBalance()
 	return (
 		<nav className={cn('ml-2 flex flex-1 flex-col', small && 'mx-auto')}>
@@ -56,7 +56,7 @@ export function DesktopOptions({ path, small, balance = 39000 }: Props) {
 							<p className="w-full text-2xl font-semibold text-main-white">
 								<p className="w-full text-xl font-semibold text-main-white pl-2">
 									{isBalanceVisible ? (
-										<p className="text-white">{Format.currency(39000)}</p>
+										<p className="text-white">{Format.currency(balance)}</p>
 									) : (
 										<p className="text-white">R$ ***</p>
 									)}

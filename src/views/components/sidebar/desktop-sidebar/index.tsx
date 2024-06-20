@@ -5,10 +5,11 @@ import { DesktopOptions } from '@views/components/sidebar/desktop-sidebar/deskto
 interface Props {
 	small: boolean
 	path: string
+	balance: number
 	handleSize: () => void
 }
 
-export function DesktopSidebar({ small, path, handleSize }: Props) {
+export function DesktopSidebar({ small, path, balance, handleSize }: Props) {
 	return (
 		<div
 			className={cn(
@@ -19,7 +20,7 @@ export function DesktopSidebar({ small, path, handleSize }: Props) {
 			{/* Sidebar component */}
 			<div className="flex w-full grow flex-col gap-y-5 overflow-y-auto border-r bg-dark-blue px-4 pb-4 dark:border-zinc-600 dark:bg-zinc-900">
 				<DesktopHeader small={small} handleSize={handleSize} />
-				<DesktopOptions path={path} small={small} />
+				<DesktopOptions path={path} small={small} balance={balance} />
 			</div>
 		</div>
 	)

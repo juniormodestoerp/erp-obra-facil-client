@@ -11,24 +11,27 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@views/components/ui/dialog'
+import {
+	Select as SelectRdx,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@views/components/ui/select'
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import type { ITransaction } from '@app/services/transactions/fetch'
+import { type ComponentPropsWithoutRef, type ElementRef, forwardRef } from 'react'
+import { Icon, Trigger, } from '@radix-ui/react-select'
+import { cn } from '@app/utils/cn'
+import { CaretSortIcon } from '@radix-ui/react-icons'
 
-interface IData {
-	field: string
-	value: string
-}
 
 interface Props {
 	transaction?: ITransaction
-	filteredCategories?: IData[] | any
 }
 
-export function NewFundRealeaseContent({
-	transaction,
-	filteredCategories = [],
-}: Props) {
-	const { getFieldInfo, methods, setOpenCreateDialog, handleSubmit } =
+export function NewFundRealeaseContent({ transaction }: Props) {
+	const { getFieldInfo, methods, handleSubmit, filteredCategories } =
 		useTransactionsController()
 
 	const {
@@ -39,6 +42,26 @@ export function NewFundRealeaseContent({
 
 	const getDefaultValue = (value: any) =>
 		value === null || value === '' ? 'Não informado' : value
+
+	const SelectTrigger = forwardRef<
+		ElementRef<typeof Trigger>,
+		ComponentPropsWithoutRef<typeof Trigger>
+	>(({ className, children, ...props }, ref) => (
+		<Trigger
+			ref={ref}
+			className={cn(
+				'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+				className,
+			)}
+			{...props}
+		>
+			{children}
+			<Icon asChild>
+				<CaretSortIcon className="size-6 opacity-50 absolute right-2 top-2" />
+			</Icon>
+		</Trigger>
+	))
+	SelectTrigger.displayName = Trigger.displayName
 
 	return (
 		<DialogContent className="sm:max-w-5xl p-8">
@@ -70,10 +93,36 @@ export function NewFundRealeaseContent({
 						{...register('description')}
 					/>
 
+					<div className="">
+						<label
+							htmlFor="accountType"
+							className="block text-sm font-medium leading-6 tracking-tight text-zinc-900 dark:text-zinc-100"
+						>
+							Tipo de conta <span className="text-red-600">*</span>
+						</label>
+
+						<SelectRdx defaultValue="current">
+							<div className="">
+								<SelectTrigger
+									id="accountType"
+									className="relative block h-[38px] w-full rounded border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 focus:border-primary focus:outline-none focus:ring-0 focus:border-zinc-400 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100"
+								>
+									<SelectValue />
+								</SelectTrigger>
+							</div>
+
+							<SelectContent className="">
+								<SelectItem value="current">Conta corrente</SelectItem>
+								<SelectItem value="savings">Conta poupança</SelectItem>
+								<SelectItem value="credit">Cartão de crédito</SelectItem>
+							</SelectContent>
+						</SelectRdx>
+					</div>
+
 					<Select
 						label="Categoria"
 						placeholder="Selecione uma categoria *"
-						data={filteredCategories ?? []}
+						data={filteredCategories}
 						control={control}
 						error={errors.categoryId?.message}
 						{...register('categoryId')}
@@ -237,7 +286,6 @@ export function NewFundRealeaseContent({
 				<DialogClose asChild>
 					<Button
 						type="submit"
-						onClick={() => setOpenCreateDialog(false)}
 						className="w-full bg-dark-blue px-3 dark:text-slate-100"
 					>
 						Cadastrar

@@ -11,6 +11,7 @@ export interface Response {
 	status: string
 	zipCode: string
 	state: string
+	balance: number
 	city: string
 	neighborhood: string
 	street: string

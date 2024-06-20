@@ -4,7 +4,7 @@ export interface Params {
 	id: string
 	userId: string
 	fitId: string
-	trnType: string
+	trnType?: string
 	name: string
 	description: string
 	accountType: string

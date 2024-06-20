@@ -41,6 +41,7 @@ export function PrivateLayout() {
 			<DesktopSidebar
 				small={small}
 				path={route.pathname}
+				balance={profile?.balance ?? 0}
 				handleSize={handleSize}
 			/>
 

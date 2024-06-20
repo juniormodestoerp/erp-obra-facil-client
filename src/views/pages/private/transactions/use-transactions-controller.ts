@@ -57,6 +57,9 @@ const schema = z.object({
 	establishmentName: z
 		.string(strMessage('nome do estabelecimento'))
 		.min(1, 'O campo nome do estabelecimento é obrigatório.'),
+	accountType: z
+		.string(strMessage('tipo de conta'))
+		.min(1, 'O campo tipo de conta é obrigatório.'),
 	bankName: z
 		.string(strMessage('nome do banco'))
 		.min(1, 'O campo nome do banco é obrigatório.'),
@@ -122,7 +125,10 @@ export function useTransactionsController() {
 	})
 
 	const handleSubmit = methods.handleSubmit(async (data: FormData) => {
+		console.log('data', data, 'executou a transação')
+
 		await createTransaction(data)
+		setOpenCreateDialog(false)
 	})
 
 	const { data: settings, refetch } = useQuery<{ settings: ISetting[] }>({
