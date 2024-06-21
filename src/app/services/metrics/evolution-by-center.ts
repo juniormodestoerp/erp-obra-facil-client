@@ -6,7 +6,7 @@ interface IEvolution {
 }
 
 interface IEvolutionByCenter {
-	id?: string
+	id: string
 	centerId: string | null
 	evolution: IEvolution[]
 }

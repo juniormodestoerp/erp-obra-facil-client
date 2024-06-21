@@ -6,7 +6,7 @@ interface IEvolution {
 }
 
 interface IEvolutionByContact {
-	id?: string
+	id: string
 	contactId: string | null
 	evolution: IEvolution[]
 }
