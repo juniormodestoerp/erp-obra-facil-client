@@ -5,11 +5,13 @@ import { httpClient } from '@app/services/http-client'
 interface IEvolution {
 	date: string
 	totalAmount: number
+	percentageChange: number
+	accumulatedTotal: number
 }
 
 interface IEvolutionByContact {
 	id: string
-	contactId: string | null
+	contact: string | null
 	evolution: IEvolution[]
 }
 
@@ -39,10 +41,12 @@ export async function evolutionByContact(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: IEvolutionByContact) => ({
 			id: transaction.id,
-			contactId: transaction.contactId,
+			contact: transaction.contact,
 			evolution: transaction.evolution.map((evolution: IEvolution) => ({
 				date: evolution.date,
 				totalAmount: evolution.totalAmount,
+				percentageChange: evolution.percentageChange,
+				accumulatedTotal: evolution.accumulatedTotal,
 			})),
 		})),
 	}

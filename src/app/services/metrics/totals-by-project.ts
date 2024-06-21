@@ -4,7 +4,7 @@ import { httpClient } from '@app/services/http-client'
 
 interface ITotalsByProject {
 	id: string
-	projectId: string | null
+	associatedProject: string | null
 	totalAmount: number
 }
 
@@ -34,7 +34,7 @@ export async function totalsByProject(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: ITotalsByProject) => ({
 			id: transaction.id,
-			projectId: transaction.projectId,
+			associatedProject: transaction.associatedProject,
 			totalAmount: transaction.totalAmount,
 		})),
 	}

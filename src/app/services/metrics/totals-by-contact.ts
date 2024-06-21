@@ -1,10 +1,9 @@
 import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
 interface ITotalsByContact {
 	id: string
-	contactId: string | null
+	contact: string | null
 	totalAmount: number
 }
 
@@ -34,7 +33,7 @@ export async function totalsByContact(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: ITotalsByContact) => ({
 			id: transaction.id,
-			contactId: transaction.contactId,
+			contact: transaction.contact,
 			totalAmount: transaction.totalAmount,
 		})),
 	}

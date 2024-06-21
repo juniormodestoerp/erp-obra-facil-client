@@ -2,10 +2,12 @@ import { toast } from 'sonner'
 
 import { httpClient } from '@app/services/http-client'
 
-interface IEntriesByCategory {
+export interface IEntriesByCategory {
 	id: string
-	categoryId: string | null
+	category: string | null
 	totalAmount: number
+	name: string
+	transactionDate: string
 }
 
 interface Response {
@@ -25,8 +27,8 @@ export async function entriesByCategory(): Promise<Response> {
 		toast.success(
 			`${
 				response?.data?.length === 1
-					? 'Entrada carregada'
-					: 'Entradas carregadas'
+					? 'Lançamento carregada'
+					: 'Lançamentos carregadas'
 			} com sucesso!`,
 		)
 	}
@@ -34,8 +36,10 @@ export async function entriesByCategory(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: IEntriesByCategory) => ({
 			id: transaction.id,
-			categoryId: transaction.categoryId,
+			category: transaction.category,
+			name: transaction.name,
 			totalAmount: transaction.totalAmount,
+			transactionDate: transaction.transactionDate,
 		})),
 	}
 }
