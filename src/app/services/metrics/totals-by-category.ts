@@ -1,31 +1,23 @@
 import { httpClient } from '@app/services/http-client'
 
-interface IReceivedAccounts {
+interface ITotalsByCategory {
 	id: string
-	userId: string
-	name: string
-	description: string
+	categoryId: string | null
 	totalAmount: number
-	transactionDate: string
-	status: string
 }
 
 interface Response {
-	transactions: IReceivedAccounts[]
+	transactions: ITotalsByCategory[]
 }
 
-export async function totalsByProject(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/received-accounts')
+export async function totalsByCategory(): Promise<Response> {
+	const { data } = await httpClient.get('/metrics/totals-by-category')
 
 	return {
-		transactions: data.transactions.map((transaction: IReceivedAccounts) => ({
+		transactions: data.transactions.map((transaction: ITotalsByCategory) => ({
 			id: transaction.id,
-			userId: transaction.userId,
-			name: transaction.name,
-			description: transaction.description,
+			categoryId: transaction.categoryId,
 			totalAmount: transaction.totalAmount,
-			transactionDate: transaction.transactionDate,
-			status: transaction.status,
 		})),
 	}
 }
