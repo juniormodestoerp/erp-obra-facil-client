@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 export function ReceivedAccounts() {
 	return (
 		<Fragment>
-			<Helmet title="ReceivedAccounts" />
+			<Helmet title="Contas recebidas" />
 
 			<div className="">
 				<h1>ReceivedAccounts</h1>

@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 export function TotalsByProject() {
 	return (
 		<Fragment>
-			<Helmet title="TotalsByProject" />
+			<Helmet title="Totais por projeto" />
 
 			<div className="">
 				<h1>TotalsByProject</h1>

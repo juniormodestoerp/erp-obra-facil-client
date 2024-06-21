@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 export function EvolutionByContact() {
 	return (
 		<Fragment>
-			<Helmet title="EvolutionByContact" />
+			<Helmet title="Evolução por contato" />
 
 			<div className="">
 				<h1>EvolutionByContact</h1>

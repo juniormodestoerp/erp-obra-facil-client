@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 export function CashFlow() {
 	return (
 		<Fragment>
-			<Helmet title="CashFlow" />
+			<Helmet title="Fluxo de caixa" />
 
 			<div className="">
 				<h1>CashFlow</h1>
