@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
 
 interface IEvolution {
@@ -16,10 +18,26 @@ interface Response {
 }
 
 export async function evolutionByContact(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/evolution-by-contact')
+	const response = await httpClient.get('/metrics/evolution-by-contact')
+
+	if (!response) {
+		return {
+			transactions: [],
+		}
+	}
+
+	if (response.status === 200) {
+		toast.success(
+			`${
+				response?.data?.length === 1
+					? 'Evolução carregada'
+					: 'Evoluções carregadas'
+			} com sucesso!`,
+		)
+	}
 
 	return {
-		transactions: data.transactions.map((transaction: IEvolutionByContact) => ({
+		transactions: response.data.map((transaction: IEvolutionByContact) => ({
 			id: transaction.id,
 			contactId: transaction.contactId,
 			evolution: transaction.evolution.map((evolution: IEvolution) => ({

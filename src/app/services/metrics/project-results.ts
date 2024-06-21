@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
 
 interface IProjectResult {
@@ -11,10 +13,26 @@ interface Response {
 }
 
 export async function projectResults(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/project-results')
+	const response = await httpClient.get('/metrics/project-results')
+
+	if (!response) {
+		return {
+			transactions: [],
+		}
+	}
+
+	if (response.status === 200) {
+		toast.success(
+			`${
+				response?.data?.length === 1
+					? 'Resultado do projeto carregado'
+					: 'Resultados dos projetos carregados'
+			} com sucesso!`,
+		)
+	}
 
 	return {
-		transactions: data.transactions.map((transaction: IProjectResult) => ({
+		transactions: response.data.map((transaction: IProjectResult) => ({
 			id: transaction.id,
 			project: transaction.project,
 			totalAmount: transaction.totalAmount,

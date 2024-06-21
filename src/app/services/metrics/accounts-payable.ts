@@ -23,15 +23,15 @@ export async function accountsPayable(): Promise<Response> {
 	}
 
 	if (response.status === 200) {
-		toast.success(`${
-				response?.data?.transactions?.length === 1
-					? 'Conta carregada'
-					: 'Contas carregadas'
-			} com sucesso!`)
+		toast.success(
+			`${
+				response?.data?.length === 1 ? 'Conta carregada' : 'Contas carregadas'
+			} com sucesso!`,
+		)
 	}
 
 	return {
-		transactions: response.data.transactions.map((transaction: IAccountsPayable) => ({
+		transactions: response.data.map((transaction: IAccountsPayable) => ({
 			id: transaction.id,
 			categoryId: transaction.categoryId,
 			totalAmount: transaction.totalAmount,

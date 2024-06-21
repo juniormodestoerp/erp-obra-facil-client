@@ -1,13 +1,34 @@
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useQuery } from '@tanstack/react-query'
+
+import { metricsService } from '@app/services/metrics'
+import { Format } from '@app/utils/format'
 
 export function TotalsByContact() {
+	const { data } = useQuery({
+		queryKey: ['totalsByContact'],
+		queryFn: async () => await metricsService.totalsByContact(),
+	})
+
 	return (
 		<Fragment>
 			<Helmet title="Totais por contato" />
 
 			<div className="">
-				<h1>TotalsByContact</h1>
+				<h1>Totais por contato</h1>
+
+				<ul>
+					{data?.transactions?.length === 0 && (
+						<li>Nenhum resultado encontrado.</li>
+					)}
+					{data?.transactions?.map((transaction) => (
+						<li key={transaction.id}>
+							{transaction.contactId} -{' '}
+							{Format.currency(transaction.totalAmount)}
+						</li>
+					))}
+				</ul>
 			</div>
 		</Fragment>
 	)

@@ -1,12 +1,13 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
 
 interface IPaidAccounts {
 	id: string
-	userId: string
 	name: string
 	description: string
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 	status: string
 }
 
@@ -15,16 +16,31 @@ interface Response {
 }
 
 export async function paidAccounts(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/paid-accounts')
+	const response = await httpClient.get('/metrics/paid-accounts')
+
+	if (!response) {
+		return {
+			transactions: [],
+		}
+	}
+
+	if (response.status === 200) {
+		toast.success(
+			`${
+				response?.data?.length === 1
+					? 'Conta paga carregada'
+					: 'Contas pagas carregadas'
+			} com sucesso!`,
+		)
+	}
 
 	return {
-		transactions: data.transactions.map((transaction: IPaidAccounts) => ({
+		transactions: response.data.map((transaction: IPaidAccounts) => ({
 			id: transaction.id,
-			userId: transaction.userId,
 			name: transaction.name,
 			description: transaction.description,
 			totalAmount: transaction.totalAmount,
-			transactionDate: new Date(transaction.transactionDate),
+			transactionDate: transaction.transactionDate,
 			status: transaction.status,
 		})),
 	}

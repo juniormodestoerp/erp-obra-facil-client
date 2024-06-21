@@ -24,7 +24,8 @@ export function AccountsReceivable() {
 					)}
 					{data?.transactions?.map((transaction) => (
 						<li key={transaction.id}>
-							{transaction.categoryId} - {Format.currency(transaction.totalAmount)} -{' '}
+							{transaction.categoryId} -{' '}
+							{Format.currency(transaction.totalAmount)} -{' '}
 							{Format.parseIso(transaction.transactionDate)}
 						</li>
 					))}

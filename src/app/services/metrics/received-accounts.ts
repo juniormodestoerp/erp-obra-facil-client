@@ -1,8 +1,9 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
 
 interface IReceivedAccounts {
 	id: string
-	userId: string
 	name: string
 	description: string
 	totalAmount: number
@@ -15,12 +16,27 @@ interface Response {
 }
 
 export async function receivedAccounts(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/received-accounts')
+	const response = await httpClient.get('/metrics/received-accounts')
+
+	if (!response) {
+		return {
+			transactions: [],
+		}
+	}
+
+	if (response.status === 200) {
+		toast.success(
+			`${
+				response?.data?.length === 1
+					? 'Conta recebida carregada'
+					: 'Contas recebidas carregadas'
+			} com sucesso!`,
+		)
+	}
 
 	return {
-		transactions: data.transactions.map((transaction: IReceivedAccounts) => ({
+		transactions: response.data.map((transaction: IReceivedAccounts) => ({
 			id: transaction.id,
-			userId: transaction.userId,
 			name: transaction.name,
 			description: transaction.description,
 			totalAmount: transaction.totalAmount,
