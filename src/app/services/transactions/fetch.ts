@@ -74,6 +74,7 @@ export async function fetch({
 	const response = await httpClient.get<ITransactionSearchResponse>(
 		`/transactions?pageIndex=${pageIndex}${searchTermQuery}${sortingQuery}`,
 	)
+
 	if (response?.status === 200) {
 		toast.success(
 			`${

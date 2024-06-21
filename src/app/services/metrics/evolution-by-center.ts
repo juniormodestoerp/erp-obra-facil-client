@@ -25,7 +25,7 @@ export async function evolutionByCenter(): Promise<Response> {
 			evolution: transaction.evolution.map((evolution: IEvolution) => ({
 				date: evolution.date,
 				totalAmount: evolution.totalAmount,
-			}))
+			})),
 		})),
 	}
 }

@@ -1,27 +1,41 @@
+import { toast } from 'sonner'
+
 import { httpClient } from '@app/services/http-client'
 
 interface IAccountsPayable {
 	id: string
-	userId: string
 	categoryId: string | null
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 }
 
 export interface Response {
-	transactions: IAccountsPayable[]
+	transactions: IAccountsPayable[] | []
 }
 
 export async function accountsPayable(): Promise<Response> {
-	const { data } = await httpClient.get('/metrics/accounts-payable')
+	const response = await httpClient.get('/metrics/accounts-payable')
+
+	if (!response) {
+		return {
+			transactions: [],
+		}
+	}
+
+	if (response.status === 200) {
+		toast.success(`${
+				response?.data?.transactions?.length === 1
+					? 'Conta carregada'
+					: 'Contas carregadas'
+			} com sucesso!`)
+	}
 
 	return {
-		transactions: data.transactions.map((transaction: IAccountsPayable) => ({
+		transactions: response.data.transactions.map((transaction: IAccountsPayable) => ({
 			id: transaction.id,
-			userId: transaction.userId,
 			categoryId: transaction.categoryId,
 			totalAmount: transaction.totalAmount,
-			transactionDate: new Date(transaction.transactionDate),
+			transactionDate: transaction.transactionDate,
 		})),
 	}
 }

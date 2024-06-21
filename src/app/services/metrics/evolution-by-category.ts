@@ -19,13 +19,15 @@ export async function evolutionByCategory(): Promise<Response> {
 	const { data } = await httpClient.get('/metrics/evolution-by-category')
 
 	return {
-		transactions: data.transactions.map((transaction: IEvolutionByCategory) => ({
-			id: transaction.id,
-			categoryId: transaction.categoryId,
-			evolution: transaction.evolution.map((evolution: IEvolution) => ({
-				date: evolution.date,
-				totalAmount: evolution.totalAmount,
-			}))
-		})),
+		transactions: data.transactions.map(
+			(transaction: IEvolutionByCategory) => ({
+				id: transaction.id,
+				categoryId: transaction.categoryId,
+				evolution: transaction.evolution.map((evolution: IEvolution) => ({
+					date: evolution.date,
+					totalAmount: evolution.totalAmount,
+				})),
+			}),
+		),
 	}
 }

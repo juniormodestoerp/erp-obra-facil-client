@@ -26,7 +26,6 @@ export function MobileOption({ linkTo, title }: Props) {
 	)
 }
 
-
 // import { cn } from "@app/utils/cn";
 // import { DisclosureButton } from "@headlessui/react";
 // import { Link } from "react-router-dom";
