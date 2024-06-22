@@ -1,8 +1,7 @@
 import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
-interface IPaidAccounts {
+export interface IPaidAccounts {
 	id: string
 	name: string
 	description: string
@@ -12,7 +11,7 @@ interface IPaidAccounts {
 }
 
 interface Response {
-	transactions: IPaidAccounts[]
+	transactions: IPaidAccounts[] | []
 }
 
 export async function paidAccounts(): Promise<Response> {
@@ -27,9 +26,7 @@ export async function paidAccounts(): Promise<Response> {
 	if (response.status === 200) {
 		toast.success(
 			`${
-				response?.data?.length === 1
-					? 'Conta paga carregada'
-					: 'Contas pagas carregadas'
+				response?.data?.length === 1 ? 'Conta paga carregada' : 'Contas pagas carregadas'
 			} com sucesso!`,
 		)
 	}

@@ -10,7 +10,6 @@ import { evolutionByCategory } from '@app/services/metrics/evolution-by-category
 import { evolutionByCenter } from '@app/services/metrics/evolution-by-center'
 import { evolutionByContact } from '@app/services/metrics/evolution-by-contact'
 import { paidAccounts } from '@app/services/metrics/paid-accounts'
-import { projectResults } from '@app/services/metrics/project-results'
 import { receivedAccounts } from '@app/services/metrics/received-accounts'
 import { totalsByCategory } from '@app/services/metrics/totals-by-category'
 import { totalsByCenter } from '@app/services/metrics/totals-by-center'
@@ -30,7 +29,6 @@ export const metricsService = {
 	evolutionByCenter,
 	evolutionByContact,
 	paidAccounts,
-	projectResults,
 	receivedAccounts,
 	totalsByCategory,
 	totalsByCenter,

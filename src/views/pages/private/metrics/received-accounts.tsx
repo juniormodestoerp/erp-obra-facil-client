@@ -2,8 +2,11 @@ import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 
+import type { IReceivedAccounts } from '@app/services/metrics/received-accounts'
 import { metricsService } from '@app/services/metrics'
 import { Format } from '@app/utils/format'
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { cn } from '@app/utils/cn'
 
 export function ReceivedAccounts() {
 	const { data } = useQuery({
@@ -11,26 +14,107 @@ export function ReceivedAccounts() {
 		queryFn: async () => await metricsService.receivedAccounts(),
 	})
 
+	if (!data) {
+		return (
+			<Fragment>
+				<Helmet title="Contas recebidas" />
+				<div className="p-8">
+					<h1 className="text-3xl font-bold mb-6 text-darker-blue">
+						Contas recebidas
+					</h1>
+					<p className="text-center text-gray-500">Carregando...</p>
+				</div>
+			</Fragment>
+		)
+	}
+
+	const groupByMonth = (transactions: IReceivedAccounts[]) => {
+		return transactions.reduce(
+			(acc: Record<string, IReceivedAccounts[]>, transaction: IReceivedAccounts) => {
+				const month = new Date(transaction.transactionDate).toLocaleString(
+					'default',
+					{ month: 'long', year: 'numeric' },
+				)
+				if (!acc[month]) {
+					acc[month] = []
+				}
+				acc[month].push(transaction)
+				return acc
+			},
+			{},
+		)
+	}
+
+	const groupedTransactions = groupByMonth(data.transactions)
+
 	return (
 		<Fragment>
 			<Helmet title="Contas recebidas" />
 
-			<div className="">
-				<h1>Contas recebidas</h1>
+			<div className="p-8">
+				<h1 className="text-3xl font-bold mb-6 text-darker-blue">
+					Contas recebidas
+				</h1>
+				{Object.keys(groupedTransactions).length === 0 ? (
+					<p className="text-center text-gray-500">
+						Nenhum resultado encontrado.
+					</p>
+				) : (
+					Object.entries(groupedTransactions).map(([month, transactions]) => (
+						<div key={month} className="mb-8">
+							<h2 className="text-2xl font-semibold mb-4">{Format.capitalizeFirstLetter(month)}</h2>
+							<div className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
+								<ul className="space-y-6">
+									{transactions.map((transaction, idx) => (
+										<li key={transaction.id} className="relative flex gap-x-4">
+											<div
+												className={cn(
+													idx === transactions.length - 1 ? 'h-6' : '-bottom-6',
+													'absolute left-0 top-0 flex w-6 justify-center',
+												)}
+											>
+												<div className="w-px bg-gray-200" />
+											</div>
 
-				<ul>
-					{data?.transactions?.length === 0 && (
-						<li>Nenhum resultado encontrado.</li>
-					)}
-					{data?.transactions?.map((transaction) => (
-						<li key={transaction.id}>
-							{transaction.name} - {transaction.description} -{' '}
-							{Format.currency(transaction.totalAmount)} -{' '}
-							{Format.parseIso(transaction.transactionDate)} -{' '}
-							{transaction.status}
-						</li>
-					))}
-				</ul>
+											<div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
+												<CheckCircleIcon
+													className="h-6 w-6"
+													aria-hidden="true"
+												/>
+											</div>
+											<p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 px-4">
+												<span className="font-medium text-gray-900 mr-1">
+													{transaction.name}
+												</span>
+												{transaction.description && (
+													<span className="italic text-gray-600 mr-1">
+														({transaction.description})
+													</span>
+												)}
+												no valor de{' '}
+												<span
+													className={cn(
+														transaction.totalAmount > 0
+															? 'text-green-600'
+															: 'text-red-600',
+													)}
+												>
+													{Format.currency(transaction.totalAmount)}
+												</span>
+											</p>
+											<time
+												dateTime={transaction.transactionDate}
+												className="flex-none py-0.5 text-xs leading-5 text-gray-500"
+											>
+												{Format.parseIso(transaction.transactionDate)}
+											</time>
+										</li>
+									))}
+								</ul>
+							</div>
+						</div>
+					))
+				)}
 			</div>
 		</Fragment>
 	)

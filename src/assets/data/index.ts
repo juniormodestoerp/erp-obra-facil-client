@@ -234,11 +234,11 @@ export const reportCards: Card[] = [
   //   id: '978171b9-c5f2-42c9-9496-903a097c6f68',
   //   label: 'Evolução das metas de centros',
   // },
-  {
-    id: '74475790-0626-40b1-a9ca-dda43b0e78d4',
-    label: 'Resultado dos projetos',
-    path: '/metrics/project-results'
-  },
+  // {
+  //   id: '74475790-0626-40b1-a9ca-dda43b0e78d4',
+  //   label: 'Resultado dos projetos',
+  //   path: '/metrics/project-results'
+  // },
 ]
 
 export const cashFlowCards: Card[] = [

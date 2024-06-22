@@ -1,12 +1,13 @@
 import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
-interface IAccountsReceivable {
+export interface IAccountsReceivable {
 	id: string
-	categoryId: string | null
+	name: string
 	totalAmount: number
 	transactionDate: string
+	tags: string | null
+	paymentMethod: string
 }
 
 interface Response {
@@ -33,9 +34,11 @@ export async function accountsReceivable(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: IAccountsReceivable) => ({
 			id: transaction.id,
-			categoryId: transaction.categoryId,
+			name: transaction.name,
 			totalAmount: transaction.totalAmount,
 			transactionDate: transaction.transactionDate,
+			tags: transaction.tags,
+			paymentMethod: transaction.paymentMethod,
 		})),
 	}
 }

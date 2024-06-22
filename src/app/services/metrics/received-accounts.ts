@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 
 import { httpClient } from '@app/services/http-client'
 
-interface IReceivedAccounts {
+export interface IReceivedAccounts {
 	id: string
 	name: string
 	description: string

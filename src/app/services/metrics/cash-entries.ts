@@ -1,12 +1,13 @@
 import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
-interface ICashEntries {
+export interface ICashEntries {
 	id: string
 	totalAmount: number
+	tags: string | null
+	name: string
+	paymentMethod: string
 	transactionDate: string
-	description: string
 }
 
 interface Response {
@@ -36,8 +37,10 @@ export async function cashEntries(): Promise<Response> {
 		transactions: response.data.map((transaction: ICashEntries) => ({
 			id: transaction.id,
 			totalAmount: transaction.totalAmount,
+			tags: transaction.tags,
+			name: transaction.name,
+			paymentMethod: transaction.paymentMethod,
 			transactionDate: transaction.transactionDate,
-			description: transaction.description,
 		})),
 	}
 }

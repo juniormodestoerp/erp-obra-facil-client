@@ -35,10 +35,7 @@ import { EntriesByProject } from '@views/pages/private/metrics/entries-by-projec
 import { EvolutionByCategory } from '@views/pages/private/metrics/evolution-by-category'
 import { EvolutionByCenter } from '@views/pages/private/metrics/evolution-by-center'
 import { EvolutionByContact } from '@views/pages/private/metrics/evolution-by-contact'
-// import { EvolutionOfCategoryGoals } from '@views/pages/private/export-metrics/evolution-of-category-goals'
-// import { EvolutionOfCenterGoals } from '@views/pages/private/export-metrics/evolution-of-center-goals'
 import { PaidAccounts } from '@views/pages/private/metrics/paid-accounts'
-import { ProjectResults } from '@views/pages/private/metrics/project-results'
 import { ReceivedAccounts } from '@views/pages/private/metrics/received-accounts'
 import { TotalsByCategory } from '@views/pages/private/metrics/totals-by-category'
 import { TotalsByCenter } from '@views/pages/private/metrics/totals-by-center'
@@ -111,7 +108,6 @@ export function AppRoutes() {
 						element={<EvolutionByContact />}
 					/>
 					<Route path="/metrics/paid-accounts" element={<PaidAccounts />} />
-					<Route path="/metrics/project-results" element={<ProjectResults />} />
 
 					<Route
 						path="/metrics/received-accounts"
