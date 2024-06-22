@@ -9,6 +9,7 @@ import { cn } from '@app/utils/cn'
 
 import type { ICashEntries } from '@app/services/metrics/cash-entries'
 import { Badge } from '@views/components/ui/badge'
+import { Button } from '@views/components/ui/button'
 
 export function CashEntries() {
 	const { data } = useQuery({
@@ -30,7 +31,6 @@ export function CashEntries() {
 		)
 	}
 
-	// Função para agrupar transações por mês
 	const groupByMonth = (transactions: ICashEntries[]) => {
 		return transactions.reduce(
 			(acc: Record<string, ICashEntries[]>, transaction: ICashEntries) => {
@@ -64,7 +64,7 @@ export function CashEntries() {
 				) : (
 					Object.entries(groupedTransactions).map(([month, transactions]) => (
 						<div key={month} className="mb-8">
-							<h2 className="text-2xl font-semibold mb-4">{month}</h2>
+							<h2 className="text-2xl font-semibold mb-4">{Format.capitalizeFirstLetter(month)}</h2>
 							<div className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
 								<ul className="space-y-6">
 									{transactions.map((transaction, idx) => (
@@ -98,13 +98,20 @@ export function CashEntries() {
 												>
 													{Format.currency(transaction.totalAmount)}
 												</span>
-												<span className='mx-1'>
+												<span className="mx-1">
 													{transaction?.tags?.split(', ').map((tag) => (
-														<Badge key={tag} className='bg-dark-blue'>{tag}</Badge>
+														<Badge key={tag} className="bg-dark-blue">
+															{tag}
+														</Badge>
 													))}
 												</span>
 												<span>
-													Método de Pagamento: {transaction.paymentMethod === 'credit' ? 'cartão de crédito' : transaction.paymentMethod === 'debit' ? 'cartão de débito' : transaction.paymentMethod}
+													Método de Pagamento:{' '}
+													{transaction.paymentMethod === 'credit'
+														? 'cartão de crédito'
+														: transaction.paymentMethod === 'debit'
+															? 'cartão de débito'
+															: transaction.paymentMethod}
 												</span>
 											</p>
 											<time
@@ -120,6 +127,15 @@ export function CashEntries() {
 						</div>
 					))
 				)}
+				<div className="w-full flex justify-end mt-8">
+					<Button
+						type="button"
+						onClick={() => window.print()}
+						className="bg-dark-blue hover:bg-dark-blue/90 text-white font-bold py-2 px-4 rounded print:hidden"
+					>
+						Imprimir relatório
+					</Button>
+				</div>
 			</div>
 		</Fragment>
 	)

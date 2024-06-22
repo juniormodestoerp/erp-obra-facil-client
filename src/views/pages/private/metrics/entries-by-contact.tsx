@@ -8,6 +8,8 @@ import { metricsService } from '@app/services/metrics'
 import { Format } from '@app/utils/format'
 import { cn } from '@app/utils/cn'
 
+import { Button } from '@views/components/ui/button'
+
 export function EntriesByContact() {
 	const { data } = useQuery({
 		queryKey: ['entriesByContact'],
@@ -36,19 +38,27 @@ export function EntriesByContact() {
 					Lançamentos por contato
 				</h1>
 				{data?.transactions?.length === 0 ? (
-					<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+					<p className="text-center text-gray-500">
+						Nenhum resultado encontrado.
+					</p>
 				) : (
 					Object.entries(
-						data.transactions.reduce((acc, transaction) => {
-							const contact = transaction.contact || 'Contato não informado'
-							if (!acc[contact]) {
-								acc[contact] = []
-							}
-							acc[contact].push(transaction)
-							return acc
-						}, {} as Record<string, IEntriesByContact[]>)
+						data.transactions.reduce(
+							(acc, transaction) => {
+								const contact = transaction.contact || 'Contato não informado'
+								if (!acc[contact]) {
+									acc[contact] = []
+								}
+								acc[contact].push(transaction)
+								return acc
+							},
+							{} as Record<string, IEntriesByContact[]>,
+						),
 					).map(([contact, transactions]) => (
-						<div key={contact} className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
+						<div
+							key={contact}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800 mb-4">
 								{contact}
 							</h2>
@@ -71,7 +81,16 @@ export function EntriesByContact() {
 												<span className="font-medium text-gray-900 mr-1">
 													{transaction.name}
 												</span>
-												no valor de <span className={cn(transaction.totalAmount > 0 ? 'text-green-600' : 'text-red-600')}>{Format.currency(transaction.totalAmount)}</span>
+												no valor de{' '}
+												<span
+													className={cn(
+														transaction.totalAmount > 0
+															? 'text-green-600'
+															: 'text-red-600',
+													)}
+												>
+													{Format.currency(transaction.totalAmount)}
+												</span>
 											</p>
 											<time
 												dateTime={transaction.transactionDate}
@@ -86,6 +105,15 @@ export function EntriesByContact() {
 						</div>
 					))
 				)}
+				<div className="w-full flex justify-end mt-8">
+					<Button
+						type="button"
+						onClick={() => window.print()}
+						className="bg-dark-blue hover:bg-dark-blue/90 text-white font-bold py-2 px-4 rounded print:hidden"
+					>
+						Imprimir relatório
+					</Button>
+				</div>
 			</div>
 		</Fragment>
 	)

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { metricsService } from '@app/services/metrics'
 import { Format } from '@app/utils/format'
+import { Button } from '@views/components/ui/button'
 
 export function TotalsByCategory() {
 	const { data } = useQuery({
@@ -50,6 +51,15 @@ export function TotalsByCategory() {
 								</div>
 							),
 					)}
+				</div>
+				<div className="w-full flex justify-end mt-8">
+					<Button
+						type="button"
+						onClick={() => window.print()}
+						className="bg-dark-blue hover:bg-dark-blue/90 text-white font-bold py-2 px-4 rounded print:hidden"
+					>
+						Imprimir relatório
+					</Button>
 				</div>
 			</div>
 		</Fragment>

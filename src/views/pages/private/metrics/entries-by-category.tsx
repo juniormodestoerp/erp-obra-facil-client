@@ -7,6 +7,7 @@ import type { IEntriesByCategory } from '@app/services/metrics/entries-by-catego
 import { metricsService } from '@app/services/metrics'
 import { Format } from '@app/utils/format'
 import { cn } from '@app/utils/cn'
+import { Button } from '@views/components/ui/button'
 
 export function EntriesByCategory() {
 	const { data } = useQuery({
@@ -89,6 +90,15 @@ export function EntriesByCategory() {
 						</div>
 					))
 				)}
+								<div className="w-full flex justify-end mt-8">
+					<Button
+						type="button"
+						onClick={() => window.print()}
+						className="bg-dark-blue hover:bg-dark-blue/90 text-white font-bold py-2 px-4 rounded print:hidden"
+					>
+						Imprimir relatório
+					</Button>
+				</div>
 			</div>
 		</Fragment>
 	)

@@ -21,6 +21,7 @@ import colors from 'tailwindcss/colors'
 
 import { metricsService } from '@app/services/metrics'
 import { Format } from '@app/utils/format'
+import { Button } from '@views/components/ui/button'
 
 export function CashFlow() {
 	const { data } = useQuery({
@@ -65,6 +66,7 @@ export function CashFlow() {
 	return (
 		<Fragment>
 			<Helmet title="Fluxo de caixa" />
+
 			<div className="p-8 bg-white">
 				<h1 className="text-3xl font-bold mb-6 text-darker-blue">
 					Fluxo de caixa
@@ -116,11 +118,11 @@ export function CashFlow() {
 				) : (
 					Object.keys(groupedByMonth).map((month) => (
 						<div key={month} className="mb-8">
-							<h2 className="text-xl font-semibold text-gray-800 mb-4 capitalize">
-								{new Date(`${month}-01`).toLocaleString('default', {
+							<h2 className="text-xl font-semibold text-gray-800 mb-4">
+								{Format.capitalizeFirstLetter(new Date(`${month}-01`).toLocaleString('default', {
 									month: 'long',
 									year: 'numeric',
-								})}
+								}))}
 							</h2>
 							<div className="overflow-x-auto">
 								<table className="min-w-full divide-y divide-gray-200">
@@ -228,6 +230,15 @@ export function CashFlow() {
 						</div>
 					))
 				)}
+				<div className="w-full flex justify-end mt-8">
+					<Button
+						type="button"
+						onClick={() => window.print()}
+						className="bg-dark-blue hover:bg-dark-blue/90 text-white font-bold py-2 px-4 rounded print:hidden"
+					>
+						Imprimir relatório
+					</Button>
+				</div>
 			</div>
 		</Fragment>
 	)
