@@ -13,8 +13,8 @@ import { Header } from '@views/pages/private/categories/components/header'
 import { EditCategoryDialog } from './components/edit-transfer-dialog'
 import { RemoveCategoryDialog } from './components/remove-transfer-dialog'
 
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import { useTransaction } from '@app/hooks/use-transaction'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import {
 	Dialog,
 	DialogOverlay,

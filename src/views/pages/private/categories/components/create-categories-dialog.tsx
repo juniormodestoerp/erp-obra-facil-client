@@ -13,9 +13,9 @@ import {
 	DialogTrigger,
 } from '@views/components/ui/dialog'
 
+import { Select } from '@views/components/select'
 import { CheckboxGroup } from '@views/pages/private/categories/components/checkbox'
 import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
-import { Select } from '@views/components/select'
 
 export function CreateCategoryDialog() {
 	const {

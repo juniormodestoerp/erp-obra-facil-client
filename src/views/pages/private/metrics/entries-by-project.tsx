@@ -1,12 +1,12 @@
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { useQuery } from '@tanstack/react-query'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useQuery } from '@tanstack/react-query'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
-import type { IEntriesByProject } from '@app/services/metrics/entries-by-project'
 import { metricsService } from '@app/services/metrics'
-import { Format } from '@app/utils/format'
+import type { IEntriesByProject } from '@app/services/metrics/entries-by-project'
 import { cn } from '@app/utils/cn'
+import { Format } from '@app/utils/format'
 import { Button } from '@views/components/ui/button'
 
 export function EntriesByProject() {

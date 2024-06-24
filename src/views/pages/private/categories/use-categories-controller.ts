@@ -1,16 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { categoriesService } from '@app/services/categories';
-import { strMessage } from '@app/utils/custom-zod-error';
-import { toast } from 'sonner';
-import { parseError } from '@app/services/http-client';
-import type { ICategory } from '@app/services/categories/fetch';
+import { categoriesService } from '@app/services/categories'
+import type { ICategory } from '@app/services/categories/fetch'
+import { parseError } from '@app/services/http-client'
+import { strMessage } from '@app/utils/custom-zod-error'
+import { toast } from 'sonner'
 
-export type TabProps = 'Receitas' | 'Despesas';
+export type TabProps = 'Receitas' | 'Despesas'
 
 const schema = z.object({
 	type: z.string(strMessage('tipo')).min(1, 'O tipo é obrigatório!'),
@@ -18,96 +18,95 @@ const schema = z.object({
 		.string(strMessage('nome da categoria'))
 		.min(1, 'O nome da categoria é obrigatório!'),
 	subcategoryOf: z.string(strMessage('subcategoria da categoria')),
-});
+})
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof schema>
 
 export function useCategoriesController() {
-	const queryClient = useQueryClient();
+	const queryClient = useQueryClient()
 
-	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-	const [, setUpdateCategoryId] = useState('');
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+	const [, setUpdateCategoryId] = useState('')
 
-	const [currentTab, setCurrentTab] = useState<TabProps>('Receitas');
+	const [currentTab, setCurrentTab] = useState<TabProps>('Receitas')
 
 	function handleCloseCreateModal() {
-		setIsCreateModalOpen(!isCreateModalOpen);
+		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 	function handleOpenCreateModal() {
-		setIsCreateModalOpen(!isCreateModalOpen);
+		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 
 	const { data: categories, refetch } = useQuery({
 		queryKey: ['categories'],
 		queryFn: async () => await categoriesService.fetch(),
-	});
+	})
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(schema),
-	});
+	})
 
 	const { mutateAsync: createCategory } = useMutation({
 		mutationFn: async (formData: FormData) => {
-			return categoriesService.create(formData);
+			return categoriesService.create(formData)
 		},
 		onSuccess(newCategory) {
 			queryClient.setQueryData(['categories'], (oldData: any) => {
 				return {
 					...oldData,
 					categories: [...(oldData?.categories || []), newCategory],
-				};
-			});
-			refetch();
+				}
+			})
+			refetch()
 			toast.success(
 				`${newCategory.subcategoryOf === null ? 'Categoria' : 'Subcategoria'} ${newCategory.name.toLowerCase()} criada com sucesso!`,
-			);
-			handleCloseCreateModal();
+			)
+			handleCloseCreateModal()
 		},
 		onError(err) {
-			toast.error(parseError(err));
+			toast.error(parseError(err))
 		},
-	});
+	})
 
 	const { mutateAsync: updateCategory } = useMutation({
 		mutationFn: async (formData: FormData) => {
-			return categoriesService.save(formData);
+			return categoriesService.save(formData)
 		},
 		onSuccess(updatedCategory) {
 			queryClient.setQueryData(['categories'], (oldData: any) => {
 				const updatedCategories = oldData?.categories.map((cat: ICategory) =>
 					cat.id === updatedCategory.id ? updatedCategory : cat,
-				);
+				)
 				return {
 					...oldData,
 					categories: updatedCategories,
-				};
-			});
-			refetch();
+				}
+			})
+			refetch()
 			toast.success(
 				`${updatedCategory.subcategoryOf === null ? 'Categoria' : 'Subcategoria'} ${updatedCategory.name.toLowerCase()} atualizada com sucesso!`,
-			);
+			)
 			// handleCloseCreateModal();
 		},
 		onError(err) {
-			toast.error(parseError(err));
+			toast.error(parseError(err))
 		},
-	});
+	})
 
 	const handleSubmit = methods.handleSubmit(async (data: FormData) => {
-		await createCategory(data);
-	});
+		await createCategory(data)
+	})
 
 	const handleSubmitUpdate = methods.handleSubmit(async (data: FormData) => {
-
-		await updateCategory(data);
-	});
+		await updateCategory(data)
+	})
 
 	function handleRemoveCategory(id: string) {
 		categoriesService.remove({ id }).then(() => {
 			queryClient.invalidateQueries({
 				queryKey: ['categories'],
-			});
-		});
+			})
+		})
 	}
 
 	return {
@@ -122,5 +121,5 @@ export function useCategoriesController() {
 		handleSubmit,
 		setCurrentTab,
 		handleRemoveCategory,
-	};
+	}
 }

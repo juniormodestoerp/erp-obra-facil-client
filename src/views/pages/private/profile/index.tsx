@@ -1,6 +1,6 @@
+import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 import { states } from '@/assets/data'
 
@@ -16,15 +16,15 @@ import {
 	CardTitle,
 } from '@views/components/ui/card'
 
-import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
-import { cn } from '@app/utils/cn'
 import { useTransaction } from '@app/hooks/use-transaction'
+import { cn } from '@app/utils/cn'
 import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import {
 	Dialog,
 	DialogOverlay,
 	DialogTrigger,
 } from '@views/components/ui/dialog'
+import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
 import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 export function Profile() {

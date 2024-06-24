@@ -1,6 +1,13 @@
+import { useTransaction } from '@app/hooks/use-transaction'
+import { mapBankName } from '@app/utils/bank-map'
 import { cn } from '@app/utils/cn'
 import { flexRender } from '@tanstack/react-table'
 import { Pagination } from '@views/components/pagination'
+import {
+	Dialog,
+	DialogOverlay,
+	DialogTrigger,
+} from '@views/components/ui/dialog'
 import {
 	Table,
 	TableBody,
@@ -13,16 +20,9 @@ import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider } from 'react-hook-form'
 import { columns } from './components/columns'
+import { NewFundRealeaseContent } from './components/new-transaction-content'
 import { TransactionsTableFilters } from './components/transactions-table-filters'
 import { useTransactionsController } from './use-transactions-controller'
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
-import { NewFundRealeaseContent } from './components/new-transaction-content'
-import { mapBankName } from '@app/utils/bank-map'
-import { useTransaction } from '@app/hooks/use-transaction'
 
 export function Transactions() {
 	const {

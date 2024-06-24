@@ -1,7 +1,7 @@
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 
 import { type Card, cashFlowCards, reportCards } from '@/assets/data'
 

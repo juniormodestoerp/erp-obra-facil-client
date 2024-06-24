@@ -1,12 +1,12 @@
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { useQuery } from '@tanstack/react-query'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useQuery } from '@tanstack/react-query'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
-import type { IEntriesByCenter } from '@app/services/metrics/entries-by-center'
 import { metricsService } from '@app/services/metrics'
-import { Format } from '@app/utils/format'
+import type { IEntriesByCenter } from '@app/services/metrics/entries-by-center'
 import { cn } from '@app/utils/cn'
+import { Format } from '@app/utils/format'
 import { Button } from '@views/components/ui/button'
 
 export function EntriesByCenter() {

@@ -10,13 +10,12 @@ import { IncomeIcon } from '@/assets/icons/income'
 import type { ICategory } from '@app/services/categories/fetch'
 import { PageTitle } from '@views/components/page-title'
 import { Header } from '@views/pages/private/categories/components/header'
+import { CreateCategoryDialog } from './components/create-categories-dialog'
 import { EditCategoryDialog } from './components/edit-categories-dialog'
 import { RemoveCategoryDialog } from './components/remove-categories-dialog'
-import { CreateCategoryDialog } from './components/create-categories-dialog'
 
 export function Categories() {
-	const { currentTab, setCurrentTab, categories } =
-	useCategoriesController()
+	const { currentTab, setCurrentTab, categories } = useCategoriesController()
 
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)

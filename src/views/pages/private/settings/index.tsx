@@ -10,8 +10,8 @@ import { FormProvider } from 'react-hook-form'
 import { PageTitle } from './components/page-title'
 import { UseSettingsController } from './use-settings-controller'
 
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import { useTransaction } from '@app/hooks/use-transaction'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import {
 	Dialog,
 	DialogOverlay,

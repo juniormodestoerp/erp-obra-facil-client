@@ -11,7 +11,7 @@ export interface Response {
 }
 
 export async function create({ name }: Params): Promise<Response> {
-	const { data } = await httpClient.post('/cost-and-profit-centers', {
+	const { data } = await httpClient.post('/payment-methods', {
 		name,
 	})
 

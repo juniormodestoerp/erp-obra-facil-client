@@ -1,9 +1,9 @@
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
 import { httpClient } from '@app/services/http-client'
+import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 
-type IUpdateCostAndProfitCenterDTO = Partial<
-	Omit<ICostAndProfitCenter, 'id'>
-> & { id: string }
+type IUpdatePaymentMethodDTO = Partial<Omit<IPaymentMethod, 'id'>> & {
+	id: string
+}
 
 export interface Response {
 	id: string
@@ -14,13 +14,12 @@ export interface Response {
 export async function save({
 	id,
 	name,
-}: IUpdateCostAndProfitCenterDTO): Promise<Response> {
+}: IUpdatePaymentMethodDTO): Promise<Response> {
 	console.log('save called with id:', id, 'name:', name)
 
-	const { data } = await httpClient.put<Response>(
-		`/cost-and-profit-centers/${id}`,
-		{ name },
-	)
+	const { data } = await httpClient.put<Response>(`/payment-methods/${id}`, {
+		name,
+	})
 
 	console.log('save response data:', data)
 

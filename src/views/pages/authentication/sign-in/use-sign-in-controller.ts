@@ -7,8 +7,8 @@ import { z } from 'zod'
 
 import { useAuth } from '@app/hooks/use-auth'
 import { authService } from '@app/services/authenticate'
-import { strMessage } from '@app/utils/custom-zod-error'
 import { type AppError, parseError } from '@app/services/http-client'
+import { strMessage } from '@app/utils/custom-zod-error'
 
 const signInForm = z.object({
 	document: z

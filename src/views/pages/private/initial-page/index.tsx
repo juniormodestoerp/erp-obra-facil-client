@@ -8,8 +8,8 @@ import { HomeCard } from '@views/pages/private/initial-page/components/card'
 
 import { useInitialPageController } from '@views/pages/private/initial-page/use-initial-page-controller'
 
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import { useTransaction } from '@app/hooks/use-transaction'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import {
 	Dialog,
 	DialogOverlay,

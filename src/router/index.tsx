@@ -7,18 +7,18 @@ import { AuthGuard } from '@/router/auth-guard'
 import { AuthenticateLayout } from '@views/layouts/authenticate'
 import { PrivateLayout } from '@views/layouts/private'
 
+import { BankAccounts } from '@views/pages/private/bank-accounts'
 /* Private Routes */
 import { Categories } from '@views/pages/private/categories'
+import { Conciliations } from '@views/pages/private/conciliations'
+import { CostAndProfitCenters } from '@views/pages/private/cost-and-profit-centers'
 import { InitialPage } from '@views/pages/private/initial-page'
+import { PaymentMethods } from '@views/pages/private/payment-methods'
 import { Profile } from '@views/pages/private/profile'
 import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
-import { Transactions } from '@views/pages/private/transactions'
-import { Conciliations } from '@views/pages/private/conciliations'
-import { BankAccounts } from '@views/pages/private/bank-accounts'
-import { CostAndProfitCenters } from '@views/pages/private/cost-and-profit-centers'
-import { PaymentMethods } from '@views/pages/private/payment-methods'
 import { Tags } from '@views/pages/private/tags'
+import { Transactions } from '@views/pages/private/transactions'
 import { Transfers } from '@views/pages/private/transfers'
 
 /* Public Routes */

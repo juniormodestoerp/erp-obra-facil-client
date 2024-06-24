@@ -1,12 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useQuery } from '@tanstack/react-query'
 
-import type { IReceivedAccounts } from '@app/services/metrics/received-accounts'
 import { metricsService } from '@app/services/metrics'
+import type { IReceivedAccounts } from '@app/services/metrics/received-accounts'
+import { cn } from '@app/utils/cn'
 import { Format } from '@app/utils/format'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { cn } from '@app/utils/cn'
 import { Button } from '@views/components/ui/button'
 
 export function ReceivedAccounts() {

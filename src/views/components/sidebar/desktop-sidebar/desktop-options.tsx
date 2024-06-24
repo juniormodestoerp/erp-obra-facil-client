@@ -14,9 +14,9 @@ import { useBalance } from '@app/hooks/use-balance'
 import { cn } from '@app/utils/cn'
 import { Format } from '@app/utils/format'
 
-import { Option } from '@views/components/sidebar/option'
 import { EyeIcon } from '@/assets/icons/eye-icon'
 import { EyeSlashIcon } from '@/assets/icons/eye-slash-icon'
+import { Option } from '@views/components/sidebar/option'
 
 interface Props {
 	path: string

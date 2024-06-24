@@ -1,5 +1,5 @@
 import { ChevronUpDownIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { type MouseEvent, useState, useEffect } from 'react'
+import { type MouseEvent, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 import { cn } from '@app/utils/cn'

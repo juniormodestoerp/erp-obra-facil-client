@@ -1,71 +1,143 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { categoriesService } from '@app/services/categories'
+import { useCreatePaymentMethod } from '@app/hooks/payment-methods/use-create-payment-method'
+import { usePaymentMethods } from '@app/hooks/payment-methods/use-payment-methods'
+import { useUpdateIPaymentMethodCenter } from '@app/hooks/payment-methods/use-update-payment-method'
+import { type AppError, parseError } from '@app/services/http-client'
+import { paymentMethodsService } from '@app/services/payment-methods'
+import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 import { strMessage } from '@app/utils/custom-zod-error'
-
-export type TabProps = 'Receitas' | 'Despesas'
+import { toast } from 'sonner'
 
 const schema = z.object({
-	categoryName: z
-		.string(strMessage('nome da categoria'))
-		.min(1, 'O nome da categoria é obrigatório!'),
-	subcategoryName: z.string(strMessage('nome da subcategoria')).optional(),
-	type: z.string(strMessage('tipo')).min(1, 'O tipo é obrigatório!'),
-	model: z.string(strMessage('modelo')).min(1, 'O modelo é obrigatório!'),
+	id: z.string(strMessage('identificador do método de pagamento')).optional(),
+	name: z
+		.string(strMessage('nome do método de pagamento'))
+		.min(1, 'O método de pagamento é obrigatório!'),
 })
 
 type FormData = z.infer<typeof schema>
 
-export function useCategoriesController() {
+export function usePaymentMethodsController() {
 	const queryClient = useQueryClient()
 
-	const [currentTab, setCurrentTab] = useState<TabProps>('Receitas')
+	const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+		{} as IPaymentMethod,
+	)
 
-	const { data: response } = useQuery({
-		queryKey: ['categories'],
-		queryFn: () => categoriesService.fetch({ pageIndex: 1 }),
-	})
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+	function handleOpenCreateModal() {
+		setIsCreateModalOpen(!isCreateModalOpen)
+	}
+	function handleCloseCreateModal() {
+		setIsCreateModalOpen(!isCreateModalOpen)
+	}
+	function handleOpenUpdateModal(paymentMethod: IPaymentMethod) {
+		setSelectedPaymentMethod(paymentMethod)
+		setIsUpdateModalOpen(!isUpdateModalOpen)
+	}
+	function handleCloseUpdateModal() {
+		setIsUpdateModalOpen(!isUpdateModalOpen)
+	}
+	function handleOpenDeleteModal(paymentMethod: IPaymentMethod) {
+		setSelectedPaymentMethod(paymentMethod)
+		setIsDeleteModalOpen(!isDeleteModalOpen)
+	}
+	function handleCloseDeleteModal() {
+		setIsDeleteModalOpen(!isDeleteModalOpen)
+	}
+
+	const { paymentMethods, refetch } = usePaymentMethods()
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(schema),
 	})
 
-	const { mutateAsync: createCategory } = useMutation({
-		mutationFn: async (formData: FormData) => {
-			return categoriesService.create(formData)
-		},
-		onSuccess(newCategory) {
-			queryClient.setQueryData(['categories'], (oldData: any) => {
-				return {
-					...oldData,
-					categories: [...(oldData?.categories || []), newCategory],
-				}
+	const { createPaymentMethod } = useCreatePaymentMethod()
+	const { updatePaymentMethod } = useUpdateIPaymentMethodCenter()
+
+	const handleSubmit = methods.handleSubmit(async ({ name }: FormData) => {
+		try {
+			const { name: paymentMethodName } = await createPaymentMethod({
+				name,
 			})
-		},
+			toast.success(
+				`Método de pagamento ${paymentMethodName.toLowerCase()} criado com sucesso!`,
+			)
+			refetch()
+			handleCloseCreateModal()
+		} catch (error) {
+			toast.error(parseError(error as AppError))
+		}
 	})
 
-	const handleSubmit = methods.handleSubmit(async (data: FormData) => {
-		await createCategory(data)
-	})
+	const handleSubmitUpdate = methods.handleSubmit(
+		async ({ id, name }: FormData) => {
+			if (!id || !selectedPaymentMethod) {
+				return
+			}
 
-	function handleRemoveCategory(id: string) {
-		categoriesService.remove({ id }).then(() => {
-			queryClient.invalidateQueries({
-				queryKey: ['categories'],
+			try {
+				await updatePaymentMethod({ id, name })
+				refetch()
+				setIsUpdateModalOpen(false)
+			} catch (error) {
+				toast.error(parseError(error as AppError))
+			}
+		},
+	)
+
+	function handleSubmitRemove(paymentMethod: IPaymentMethod) {
+		paymentMethodsService
+			.remove({ id: paymentMethod.id })
+			.then(() => {
+				queryClient.invalidateQueries({
+					queryKey: ['paymentMethods'],
+				})
+				refetch().then((result) => {
+					if (result.status === 'success') {
+						toast.success(
+							`Método de pagamento ${paymentMethod.name.toLowerCase()} removido com sucesso!`,
+						)
+					}
+
+					if (
+						result.error?.response.data.message ===
+						'O método de pagamento solicitado não foi encontrado.'
+					) {
+						queryClient.setQueryData(['paymentMethods'], [])
+						window.location.reload()
+					}
+				})
 			})
-		})
+			.catch((error) => {
+				toast.error(parseError(error as AppError))
+			})
 	}
 
 	return {
 		methods,
-		currentTab,
-		categories: response?.categories,
+		paymentMethods,
+		isCreateModalOpen,
+		isUpdateModalOpen,
+		isDeleteModalOpen,
+		selectedPaymentMethod,
+		setIsUpdateModalOpen,
+		handleOpenCreateModal,
+		handleCloseCreateModal,
+		handleOpenUpdateModal,
+		handleCloseUpdateModal,
+		handleOpenDeleteModal,
+		handleCloseDeleteModal,
 		handleSubmit,
-		setCurrentTab,
-		handleRemoveCategory,
+		handleSubmitUpdate,
+		handleSubmitRemove,
 	}
 }

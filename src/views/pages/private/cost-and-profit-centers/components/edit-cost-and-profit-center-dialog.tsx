@@ -53,8 +53,8 @@ export function EditCostAndProfitCentersDialog({
 					/>
 
 					<Input
-						label="Categoria:"
-						placeholder="Digite o nome da categoria"
+						label="Centro de custo:"
+						placeholder="Digite o nome do centro de custo"
 						defaultValue={selectedCostAndProfitCenter?.name}
 						error={errors?.name?.message}
 						{...register('name')}

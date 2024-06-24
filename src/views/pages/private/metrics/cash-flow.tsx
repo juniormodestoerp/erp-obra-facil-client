@@ -1,5 +1,3 @@
-import { Fragment } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { useQuery } from '@tanstack/react-query'
 import {
 	Card,
@@ -8,6 +6,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@views/components/ui/card'
+import { Fragment } from 'react'
+import { Helmet } from 'react-helmet-async'
 import {
 	CartesianGrid,
 	Line,

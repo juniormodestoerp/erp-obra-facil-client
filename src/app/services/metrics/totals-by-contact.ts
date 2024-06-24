@@ -1,5 +1,5 @@
-import { toast } from 'sonner'
 import { httpClient } from '@app/services/http-client'
+import { toast } from 'sonner'
 
 interface ITotalsByContact {
 	id: string

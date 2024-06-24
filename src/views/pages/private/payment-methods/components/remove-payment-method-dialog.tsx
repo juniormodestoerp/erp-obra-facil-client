@@ -1,4 +1,4 @@
-import type { ICategory } from '@app/services/categories/fetch'
+import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 import { Button } from '@views/components/ui/button'
 import {
 	Dialog,
@@ -9,30 +9,28 @@ import {
 	DialogTitle,
 } from '@views/components/ui/dialog'
 
-import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
+import { usePaymentMethodsController } from '@views/pages/private/payment-methods/use-payment-methods-controller'
 
 interface Props {
-	category: ICategory
+	selectedPaymentMethod: IPaymentMethod
 	isDeleteModalOpen: boolean
-	setIsDeleteModalOpen: (value: boolean) => void
+	handleCloseDeleteModal: () => void
 }
 
-export function RemoveCategoryDialog({
-	category,
+export function RemovePaymentMethodsDialog({
+	selectedPaymentMethod,
 	isDeleteModalOpen,
-	setIsDeleteModalOpen,
+	handleCloseDeleteModal,
 }: Props) {
-	const { handleRemoveCategory } = useCategoriesController()
-
-	function handleClose() {
-		setIsDeleteModalOpen(false)
-	}
+	const { handleSubmitRemove } = usePaymentMethodsController()
 
 	return (
-		<Dialog open={isDeleteModalOpen} onOpenChange={handleClose}>
+		<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Remover a categoria {category.categoryName}</DialogTitle>
+					<DialogTitle>
+						Remover a categoria {selectedPaymentMethod.name}
+					</DialogTitle>
 					<DialogDescription>
 						Tem certeza de que deseja remover esta categoria? Essa ação poderá
 						ser desfeita.
@@ -44,8 +42,8 @@ export function RemoveCategoryDialog({
 						type="submit"
 						variant="destructive"
 						onClick={() => {
-							handleRemoveCategory(category.id)
-							handleClose()
+							handleSubmitRemove(selectedPaymentMethod)
+							handleCloseDeleteModal()
 						}}
 					>
 						Remover categoria

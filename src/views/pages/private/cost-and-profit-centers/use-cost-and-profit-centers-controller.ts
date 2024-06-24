@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useCostAndProfitCenters } from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
 import { useCreateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-create-cost-and-profit-center'
 import { useUpdateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-update-cost-and-profit-center'
 import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
-import { parseError, type AppError } from '@app/services/http-client'
+import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
+import { type AppError, parseError } from '@app/services/http-client'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { toast } from 'sonner'
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
-import { useCostAndProfitCenters } from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
 
 const schema = z.object({
 	id: z.string(strMessage('identificador do centro de custo')).optional(),
@@ -113,8 +113,8 @@ export function useCostAndProfitCentersController() {
 						result.error?.response.data.message ===
 						'O centro de custo solicitado não foi encontrado.'
 					) {
-						queryClient.setQueryData(['costAndProfitCenters'], []);
-						window.location.reload();
+						queryClient.setQueryData(['costAndProfitCenters'], [])
+						window.location.reload()
 					}
 				})
 			})

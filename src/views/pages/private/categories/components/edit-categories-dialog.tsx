@@ -14,9 +14,9 @@ import {
 } from '@views/components/ui/dialog'
 
 import type { ICategory } from '@app/services/categories/fetch'
+import { Select } from '@views/components/select'
 import { CheckboxGroup } from '@views/pages/private/categories/components/checkbox'
 import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
-import { Select } from '@views/components/select'
 
 interface Props {
 	category: ICategory
@@ -82,13 +82,13 @@ export function EditCategoryDialog({
 	}, [setValue, category])
 
 	const mappedCategories = categories
-	?.filter((category) => category.subcategoryOf === '')
-	.map((category) => {
-		return {
-			field: category.name,
-			value: category.name,
-		}
-	})
+		?.filter((category) => category.subcategoryOf === '')
+		.map((category) => {
+			return {
+				field: category.name,
+				value: category.name,
+			}
+		})
 
 	return (
 		<Dialog open={isEditModalOpen} onOpenChange={handleClose}>

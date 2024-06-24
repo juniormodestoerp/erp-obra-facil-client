@@ -1,7 +1,7 @@
+import { XCircleIcon } from '@heroicons/react/24/outline'
+import CpfCnpj from '@react-br-forms/cpf-cnpj-mask'
 import { type ComponentProps, forwardRef } from 'react'
 import { Controller } from 'react-hook-form'
-import CpfCnpj from '@react-br-forms/cpf-cnpj-mask'
-import { XCircleIcon } from '@heroicons/react/24/outline'
 
 import { cn } from '@app/utils/cn'
 

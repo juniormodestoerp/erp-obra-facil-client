@@ -1,4 +1,7 @@
-import { Controller } from 'react-hook-form'
+import type { ITransaction } from '@app/services/transactions/fetch'
+import { cn } from '@app/utils/cn'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+import { Icon, Trigger } from '@radix-ui/react-select'
 import { Input } from '@views/components/input'
 import { InputCurrency } from '@views/components/input/currency'
 import { Select } from '@views/components/select'
@@ -11,21 +14,18 @@ import {
 	DialogTitle,
 } from '@views/components/ui/dialog'
 import {
-	Select as SelectRdx,
 	SelectContent,
 	SelectItem,
+	Select as SelectRdx,
 	SelectValue,
 } from '@views/components/ui/select'
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
-import type { ITransaction } from '@app/services/transactions/fetch'
 import {
 	type ComponentPropsWithoutRef,
 	type ElementRef,
 	forwardRef,
 } from 'react'
-import { Icon, Trigger } from '@radix-ui/react-select'
-import { cn } from '@app/utils/cn'
-import { CaretSortIcon } from '@radix-ui/react-icons'
+import { Controller } from 'react-hook-form'
 
 interface Props {
 	transaction?: ITransaction

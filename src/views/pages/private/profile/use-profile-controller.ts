@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { authService } from '@app/services/authenticate'
+import { profilePicture } from '@app/services/authenticate/profile-picture'
+import { utilsService } from '@app/services/utils'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { Format } from '@app/utils/format'
-import { utilsService } from '@app/services/utils'
-import { profilePicture } from '@app/services/authenticate/profile-picture'
 
 const schema = z.object({
 	name: z.string(strMessage('nome')),

@@ -2,11 +2,16 @@ import { Fragment, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { ZodError, z } from 'zod'
 
+import { conciliationsService } from '@app/services/conciliations'
 import {
 	type AppError,
 	httpClient,
 	parseError,
 } from '@app/services/http-client'
+// import { newTransactiosMock } from '../../../../../data'
+import { cn } from '@app/utils'
+import { mapBankName } from '@app/utils/bank-map'
+import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PageTitle } from '@views/components/page-title'
 import { Button } from '@views/components/ui/button'
 import {
@@ -15,15 +20,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@views/components/ui/card'
-// import { newTransactiosMock } from '../../../../../data'
-import { cn } from '@app/utils'
-import { TrashIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { conciliationsService } from '@app/services/conciliations'
 import { toast } from 'sonner'
-import { mapBankName } from '@app/utils/bank-map'
 
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import { useTransaction } from '@app/hooks/use-transaction'
+import { useGlobalShortcut } from '@app/utils/global-shortcut'
 import {
 	Dialog,
 	DialogOverlay,
