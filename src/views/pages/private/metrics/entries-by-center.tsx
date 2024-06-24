@@ -37,19 +37,28 @@ export function EntriesByCenter() {
 					Lançamentos por centro
 				</h1>
 				{data?.transactions?.length === 0 ? (
-					<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+					<p className="text-center text-gray-500">
+						Nenhum resultado encontrado.
+					</p>
 				) : (
 					Object.entries(
-						data.transactions.reduce((acc, transaction) => {
-							const center = transaction.costAndProfitCenters || 'Centro não informado'
-							if (!acc[center]) {
-								acc[center] = []
-							}
-							acc[center].push(transaction)
-							return acc
-						}, {} as Record<string, IEntriesByCenter[]>)
+						data.transactions.reduce(
+							(acc, transaction) => {
+								const center =
+									transaction.costAndProfitCenters || 'Centro não informado'
+								if (!acc[center]) {
+									acc[center] = []
+								}
+								acc[center].push(transaction)
+								return acc
+							},
+							{} as Record<string, IEntriesByCenter[]>,
+						),
 					).map(([center, transactions]) => (
-						<div key={center} className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
+						<div
+							key={center}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800 mb-4">
 								{center}
 							</h2>
@@ -72,7 +81,16 @@ export function EntriesByCenter() {
 												<span className="font-medium text-gray-900 mr-1">
 													{transaction.name}
 												</span>
-												no valor de <span className={cn(transaction.totalAmount > 0 ? 'text-green-600' : 'text-red-600')}>{Format.currency(transaction.totalAmount)}</span>
+												no valor de{' '}
+												<span
+													className={cn(
+														transaction.totalAmount > 0
+															? 'text-green-600'
+															: 'text-red-600',
+													)}
+												>
+													{Format.currency(transaction.totalAmount)}
+												</span>
 											</p>
 											<time
 												dateTime={transaction.transactionDate}
@@ -87,7 +105,7 @@ export function EntriesByCenter() {
 						</div>
 					))
 				)}
-								<div className="w-full flex justify-end mt-8">
+				<div className="w-full flex justify-end mt-8">
 					<Button
 						type="button"
 						onClick={() => window.print()}

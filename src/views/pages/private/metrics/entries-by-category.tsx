@@ -37,19 +37,27 @@ export function EntriesByCategory() {
 					Lançamentos por categoria
 				</h1>
 				{data?.transactions?.length === 0 ? (
-					<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+					<p className="text-center text-gray-500">
+						Nenhum resultado encontrado.
+					</p>
 				) : (
 					Object.entries(
-						data.transactions.reduce((acc, transaction) => {
-							const category = transaction.category || 'Sem categoria'
-							if (!acc[category]) {
-								acc[category] = []
-							}
-							acc[category].push(transaction)
-							return acc
-						}, {} as Record<string, IEntriesByCategory[]>)
+						data.transactions.reduce(
+							(acc, transaction) => {
+								const category = transaction.category || 'Sem categoria'
+								if (!acc[category]) {
+									acc[category] = []
+								}
+								acc[category].push(transaction)
+								return acc
+							},
+							{} as Record<string, IEntriesByCategory[]>,
+						),
 					).map(([category, transactions]) => (
-						<div key={category} className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
+						<div
+							key={category}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800 mb-4">
 								{category === 'padrão' ? 'Categoria não informada' : category}
 							</h2>
@@ -58,8 +66,10 @@ export function EntriesByCategory() {
 									<li key={transaction.id} className="relative flex">
 										<div
 											className={
-												idx === transactions.length - 1 ? 'h-6' : '-bottom-6' +
-												' absolute left-0 top-0 flex w-6 justify-center'
+												idx === transactions.length - 1
+													? 'h-6'
+													: '-bottom-6' +
+														' absolute left-0 top-0 flex w-6 justify-center'
 											}
 										>
 											<div className="w-px bg-gray-200" />
@@ -75,7 +85,16 @@ export function EntriesByCategory() {
 												<span className="font-medium text-gray-900 mr-1">
 													{transaction.name}
 												</span>
-												no valor de <span className={cn(transaction.totalAmount > 0 ? 'text-green-600' : 'text-red-600')}>{Format.currency(transaction.totalAmount)}</span>
+												no valor de{' '}
+												<span
+													className={cn(
+														transaction.totalAmount > 0
+															? 'text-green-600'
+															: 'text-red-600',
+													)}
+												>
+													{Format.currency(transaction.totalAmount)}
+												</span>
 											</p>
 											<time
 												dateTime={transaction.transactionDate}
@@ -90,7 +109,7 @@ export function EntriesByCategory() {
 						</div>
 					))
 				)}
-								<div className="w-full flex justify-end mt-8">
+				<div className="w-full flex justify-end mt-8">
 					<Button
 						type="button"
 						onClick={() => window.print()}

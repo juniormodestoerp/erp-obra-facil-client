@@ -24,12 +24,19 @@ export function EvolutionByCategory() {
 
 				<div className="space-y-6">
 					{data?.transactions?.length === 0 && (
-						<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+						<p className="text-center text-gray-500">
+							Nenhum resultado encontrado.
+						</p>
 					)}
 					{data?.transactions?.map((transaction) => (
-						<div key={transaction.id} className="bg-white shadow border border-dark-blue rounded-lg p-6">
+						<div
+							key={transaction.id}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800">
-								{transaction.categoryName === 'padrão' ? 'Categoria não informada' : transaction.categoryName }
+								{transaction.categoryName === 'padrão'
+									? 'Categoria não informada'
+									: transaction.categoryName}
 							</h2>
 							<ul className="mt-4 space-y-2">
 								{transaction.evolution.map((evolution) => (

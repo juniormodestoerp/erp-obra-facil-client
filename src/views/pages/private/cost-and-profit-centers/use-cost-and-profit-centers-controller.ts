@@ -1,71 +1,144 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { categoriesService } from '@app/services/categories'
+import { useCreateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-create-cost-and-profit-center'
+import { useUpdateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-update-cost-and-profit-center'
+import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
+import { parseError, type AppError } from '@app/services/http-client'
 import { strMessage } from '@app/utils/custom-zod-error'
-
-export type TabProps = 'Receitas' | 'Despesas'
+import { toast } from 'sonner'
+import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
+import { useCostAndProfitCenters } from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
 
 const schema = z.object({
-	categoryName: z
-		.string(strMessage('nome da categoria'))
-		.min(1, 'O nome da categoria é obrigatório!'),
-	subcategoryName: z.string(strMessage('nome da subcategoria')).optional(),
-	type: z.string(strMessage('tipo')).min(1, 'O tipo é obrigatório!'),
-	model: z.string(strMessage('modelo')).min(1, 'O modelo é obrigatório!'),
+	id: z.string(strMessage('identificador do centro de custo')).optional(),
+	name: z
+		.string(strMessage('nome do centro de custo'))
+		.min(1, 'O centro de custo é obrigatório!'),
 })
 
 type FormData = z.infer<typeof schema>
 
-export function useCategoriesController() {
+export function useCostAndProfitCentersController() {
 	const queryClient = useQueryClient()
 
-	const [currentTab, setCurrentTab] = useState<TabProps>('Receitas')
+	const [selectedCostAndProfitCenter, setSelectedCostAndProfitCenter] =
+		useState({} as ICostAndProfitCenter)
 
-	const { data: response } = useQuery({
-		queryKey: ['categories'],
-		queryFn: () => categoriesService.fetch({ pageIndex: 1 }),
-	})
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+	function handleOpenCreateModal() {
+		setIsCreateModalOpen(!isCreateModalOpen)
+	}
+	function handleCloseCreateModal() {
+		setIsCreateModalOpen(!isCreateModalOpen)
+	}
+	function handleOpenUpdateModal(costAndProfitCenter: ICostAndProfitCenter) {
+		setSelectedCostAndProfitCenter(costAndProfitCenter)
+		setIsUpdateModalOpen(!isUpdateModalOpen)
+	}
+	function handleCloseUpdateModal() {
+		setIsUpdateModalOpen(!isUpdateModalOpen)
+	}
+	function handleOpenDeleteModal(costAndProfitCenter: ICostAndProfitCenter) {
+		setSelectedCostAndProfitCenter(costAndProfitCenter)
+		setIsDeleteModalOpen(!isDeleteModalOpen)
+	}
+	function handleCloseDeleteModal() {
+		setIsDeleteModalOpen(!isDeleteModalOpen)
+	}
+
+	const { costAndProfitCenters, refetch } = useCostAndProfitCenters()
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(schema),
 	})
 
-	const { mutateAsync: createCategory } = useMutation({
-		mutationFn: async (formData: FormData) => {
-			return categoriesService.create(formData)
-		},
-		onSuccess(newCategory) {
-			queryClient.setQueryData(['categories'], (oldData: any) => {
-				return {
-					...oldData,
-					categories: [...(oldData?.categories || []), newCategory],
-				}
-			})
-		},
+	const { createCostAndProfitCenter } = useCreateCostAndProfitCenter()
+	const { updateCostAndProfitCenter } = useUpdateCostAndProfitCenter()
+
+	const handleSubmit = methods.handleSubmit(async ({ name }: FormData) => {
+		try {
+			const { name: costAndProfitCenterName } = await createCostAndProfitCenter(
+				{
+					name,
+				},
+			)
+			toast.success(
+				`Centro de custo ${costAndProfitCenterName.toLowerCase()} criado com sucesso!`,
+			)
+			refetch()
+			handleCloseCreateModal()
+		} catch (error) {
+			toast.error(parseError(error as AppError))
+		}
 	})
 
-	const handleSubmit = methods.handleSubmit(async (data: FormData) => {
-		await createCategory(data)
-	})
+	const handleSubmitUpdate = methods.handleSubmit(
+		async ({ id, name }: FormData) => {
+			if (!id || !selectedCostAndProfitCenter) {
+				return
+			}
 
-	function handleRemoveCategory(id: string) {
-		categoriesService.remove({ id }).then(() => {
-			queryClient.invalidateQueries({
-				queryKey: ['categories'],
+			try {
+				await updateCostAndProfitCenter({ id, name })
+				refetch()
+				setIsUpdateModalOpen(false)
+			} catch (error) {
+				toast.error(parseError(error as AppError))
+			}
+		},
+	)
+
+	function handleSubmitRemove(costAndProfitCenter: ICostAndProfitCenter) {
+		costAndProfitCentersService
+			.remove({ id: costAndProfitCenter.id })
+			.then(() => {
+				queryClient.invalidateQueries({
+					queryKey: ['costAndProfitCenters'],
+				})
+				refetch().then((result) => {
+					if (result.status === 'success') {
+						toast.success(
+							`Centro de custo ${costAndProfitCenter.name.toLowerCase()} removido com sucesso!`,
+						)
+					}
+
+					if (
+						result.error?.response.data.message ===
+						'O centro de custo solicitado não foi encontrado.'
+					) {
+						queryClient.setQueryData(['costAndProfitCenters'], []);
+						window.location.reload();
+					}
+				})
 			})
-		})
+			.catch((error) => {
+				toast.error(parseError(error as AppError))
+			})
 	}
 
 	return {
 		methods,
-		currentTab,
-		categories: response?.categories,
+		costAndProfitCenters,
+		isCreateModalOpen,
+		isUpdateModalOpen,
+		isDeleteModalOpen,
+		selectedCostAndProfitCenter,
+		setIsUpdateModalOpen,
+		handleOpenCreateModal,
+		handleCloseCreateModal,
+		handleOpenUpdateModal,
+		handleCloseUpdateModal,
+		handleOpenDeleteModal,
+		handleCloseDeleteModal,
 		handleSubmit,
-		setCurrentTab,
-		handleRemoveCategory,
+		handleSubmitUpdate,
+		handleSubmitRemove,
 	}
 }

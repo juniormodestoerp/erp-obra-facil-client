@@ -24,10 +24,15 @@ export function EvolutionByCenter() {
 
 				<div className="space-y-6">
 					{data?.transactions?.length === 0 && (
-						<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+						<p className="text-center text-gray-500">
+							Nenhum resultado encontrado.
+						</p>
 					)}
 					{data?.transactions?.map((transaction) => (
-						<div key={transaction.id} className="bg-white shadow border border-dark-blue rounded-lg p-6">
+						<div
+							key={transaction.id}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800">
 								{transaction.centerName ?? 'Centro não informado'}
 							</h2>

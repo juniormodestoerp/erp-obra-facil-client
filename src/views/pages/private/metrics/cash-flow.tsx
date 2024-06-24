@@ -119,10 +119,12 @@ export function CashFlow() {
 					Object.keys(groupedByMonth).map((month) => (
 						<div key={month} className="mb-8">
 							<h2 className="text-xl font-semibold text-gray-800 mb-4">
-								{Format.capitalizeFirstLetter(new Date(`${month}-01`).toLocaleString('default', {
-									month: 'long',
-									year: 'numeric',
-								}))}
+								{Format.capitalizeFirstLetter(
+									new Date(`${month}-01`).toLocaleString('default', {
+										month: 'long',
+										year: 'numeric',
+									}),
+								)}
 							</h2>
 							<div className="overflow-x-auto">
 								<table className="min-w-full divide-y divide-gray-200">

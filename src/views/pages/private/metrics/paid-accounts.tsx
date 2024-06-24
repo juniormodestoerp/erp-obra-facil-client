@@ -62,7 +62,9 @@ export function PaidAccounts() {
 				) : (
 					Object.entries(groupedTransactions).map(([month, transactions]) => (
 						<div key={month} className="mb-8">
-							<h2 className="text-2xl font-semibold mb-4">{Format.capitalizeFirstLetter(month)}</h2>
+							<h2 className="text-2xl font-semibold mb-4">
+								{Format.capitalizeFirstLetter(month)}
+							</h2>
 							<div className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
 								<ul className="space-y-6">
 									{transactions.map((transaction, idx) => (
@@ -115,7 +117,7 @@ export function PaidAccounts() {
 						</div>
 					))
 				)}
-								<div className="w-full flex justify-end mt-8">
+				<div className="w-full flex justify-end mt-8">
 					<Button
 						type="button"
 						onClick={() => window.print()}

@@ -1,49 +1,39 @@
 import { httpClient } from '@app/services/http-client'
 
 export interface Params {
-	id: string
-	categoryId?: string
-	categoryName: string
-	subcategoryName?: string
+	id?: string
 	type: string
-	model: string
+	name: string
+	subcategoryOf: string
 }
 
 export interface Response {
 	id: string
-	userId: string
-	categoryId: string | null
-	categoryName: string
-	subcategoryName: string | null
-	model: string
 	type: string
-	createdAt: Date
+	name: string
+	subcategoryOf: string | null
+	createdAt: string
 }
 
 export async function save({
 	id,
-	categoryId,
-	categoryName,
-	subcategoryName,
 	type,
-	model,
+	name,
+	subcategoryOf,
 }: Params): Promise<Response> {
+	console.log(id);
+	
 	const { data } = await httpClient.put<Response>(`/categories/${id}`, {
-		categoryId,
-		categoryName,
-		subcategoryName,
 		type,
-		model,
+		name,
+		subcategoryOf: subcategoryOf || null,
 	})
 
 	return {
 		id: data.id,
-		userId: data.userId,
-		categoryId: data.categoryId,
-		categoryName: data.categoryName,
-		subcategoryName: data.subcategoryName,
 		type: data.type,
-		model: data.model,
-		createdAt: new Date(data.createdAt),
+		name: data.name,
+		subcategoryOf: data.subcategoryOf,
+		createdAt: data.createdAt,
 	}
 }

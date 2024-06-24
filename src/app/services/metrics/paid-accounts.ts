@@ -26,7 +26,9 @@ export async function paidAccounts(): Promise<Response> {
 	if (response.status === 200) {
 		toast.success(
 			`${
-				response?.data?.length === 1 ? 'Conta paga carregada' : 'Contas pagas carregadas'
+				response?.data?.length === 1
+					? 'Conta paga carregada'
+					: 'Contas pagas carregadas'
 			} com sucesso!`,
 		)
 	}

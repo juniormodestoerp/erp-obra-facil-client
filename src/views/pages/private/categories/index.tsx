@@ -10,25 +10,13 @@ import { IncomeIcon } from '@/assets/icons/income'
 import type { ICategory } from '@app/services/categories/fetch'
 import { PageTitle } from '@views/components/page-title'
 import { Header } from '@views/pages/private/categories/components/header'
-import { EditCategoryDialog } from './components/edit-category-dialog'
-import { RemoveCategoryDialog } from './components/remove-category-dialog'
-
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
-import { useTransaction } from '@app/hooks/use-transaction'
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+import { EditCategoryDialog } from './components/edit-categories-dialog'
+import { RemoveCategoryDialog } from './components/remove-categories-dialog'
+import { CreateCategoryDialog } from './components/create-categories-dialog'
 
 export function Categories() {
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
-
-	const { currentTab, setCurrentTab, categories } = useCategoriesController()
+	const { currentTab, setCurrentTab, categories } =
+	useCategoriesController()
 
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -43,11 +31,35 @@ export function Categories() {
 		}
 
 		const organized = categories
-			.filter((category) => category.type === 'income' && !category.categoryId)
+			.filter(
+				(category) =>
+					category.type === 'INCOME' && category.subcategoryOf === '',
+			)
 			.flatMap((category) => {
-				const subcategories = categories
-					.filter((sub) => sub.categoryId === category.id)
-					.sort((a, b) => a.categoryName.localeCompare(b.categoryName))
+				const subcategories = categories.filter(
+					(sub) => sub.subcategoryOf === category.name,
+				)
+
+				return [category, ...subcategories]
+			})
+
+		return organized
+	}
+
+	function organizeExpenseCategories(categories: ICategory[]) {
+		if (!categories) {
+			return []
+		}
+
+		const organized = categories
+			.filter(
+				(category) =>
+					category.type === 'EXPENSE' && category.subcategoryOf === '',
+			)
+			.flatMap((category) => {
+				const subcategories = categories.filter(
+					(sub) => sub.subcategoryOf === category.name,
+				)
 
 				return [category, ...subcategories]
 			})
@@ -56,25 +68,6 @@ export function Categories() {
 	}
 
 	const organizedIncomeCategories = organizeIncomeCategories(categories ?? [])
-
-	function organizeExpenseCategories(categories: ICategory[]) {
-		if (!categories || categories.length === 0) {
-			return []
-		}
-
-		const organized = categories
-			.filter((category) => category.type === 'expense' && !category.categoryId)
-			.flatMap((category) => {
-				const subcategories = categories
-					.filter((sub) => sub.categoryId === category.id)
-					.sort((a, b) => a.categoryName.localeCompare(b.categoryName))
-
-				return [category, ...subcategories]
-			})
-
-		return organized
-	}
-
 	const organizedExpenseCategories = organizeExpenseCategories(categories ?? [])
 
 	function openEditModal(category: ICategory) {
@@ -106,7 +99,7 @@ export function Categories() {
 				{currentTab === 'Receitas'
 					? organizedIncomeCategories.length > 0 &&
 						organizedIncomeCategories.map((category: ICategory) => {
-							const isPrimary = !category.categoryId
+							const isPrimary = category.subcategoryOf === ''
 							return (
 								<div
 									key={category.id}
@@ -131,7 +124,7 @@ export function Categories() {
 											)}
 										>
 											{!isPrimary && <span className="mr-2">&bull;</span>}
-											<span className="w-full">{category.categoryName}</span>
+											<span className="w-full">{category.name}</span>
 										</p>
 
 										{isPrimary && (
@@ -161,7 +154,7 @@ export function Categories() {
 						})
 					: organizedExpenseCategories.length > 0 &&
 						organizedExpenseCategories.map((category: ICategory) => {
-							const isPrimary = !category.categoryId
+							const isPrimary = category.subcategoryOf === ''
 							return (
 								<div
 									key={category.id}
@@ -182,7 +175,7 @@ export function Categories() {
 											}`}
 										>
 											{!isPrimary && <span className="mr-2">&bull;</span>}
-											<span className="w-full">{category.categoryName}</span>
+											<span className="w-full">{category.name}</span>
 										</p>
 
 										{isPrimary && (
@@ -228,18 +221,7 @@ export function Categories() {
 				/>
 			)}
 
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
+			<CreateCategoryDialog />
 		</Fragment>
 	)
 }

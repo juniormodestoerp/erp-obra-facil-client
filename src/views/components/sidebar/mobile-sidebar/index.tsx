@@ -36,9 +36,18 @@ export function MobileSidebar() {
 								{/* <MobileOption linkTo="/dashboards" title="Dashboards" /> */}
 								<MobileOption linkTo="/reports" title="Relatórios" />
 								<MobileOption linkTo="/categories" title="Categorias" />
-								<MobileOption linkTo="/bank-accounts" title="Contas bancárias" />
-								<MobileOption linkTo="/cost-and-profit-centers" title="Centros de custo" />
-								<MobileOption linkTo="/payment-methods" title="Métodos de pagamento" />
+								<MobileOption
+									linkTo="/bank-accounts"
+									title="Contas bancárias"
+								/>
+								<MobileOption
+									linkTo="/cost-and-profit-centers"
+									title="Centros de custo"
+								/>
+								<MobileOption
+									linkTo="/payment-methods"
+									title="Métodos de pagamento"
+								/>
 								<MobileOption linkTo="/tags" title="Tags" />
 								<MobileOption linkTo="/transfers" title="Transferências" />
 								<MobileOption linkTo="/settings" title="Configurações" />

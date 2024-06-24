@@ -1,4 +1,4 @@
-import type { ICategory } from '@app/services/categories/fetch'
+import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
 import { Button } from '@views/components/ui/button'
 import {
 	Dialog,
@@ -9,30 +9,28 @@ import {
 	DialogTitle,
 } from '@views/components/ui/dialog'
 
-import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
+import { useCostAndProfitCentersController } from '@views/pages/private/cost-and-profit-centers/use-cost-and-profit-centers-controller'
 
 interface Props {
-	category: ICategory
+	selectedCostAndProfitCenter: ICostAndProfitCenter
 	isDeleteModalOpen: boolean
-	setIsDeleteModalOpen: (value: boolean) => void
+	handleCloseDeleteModal: () => void
 }
 
-export function RemoveCategoryDialog({
-	category,
+export function RemoveCostAndProfitCentersDialog({
+	selectedCostAndProfitCenter,
 	isDeleteModalOpen,
-	setIsDeleteModalOpen,
+	handleCloseDeleteModal,
 }: Props) {
-	const { handleRemoveCategory } = useCategoriesController()
-
-	function handleClose() {
-		setIsDeleteModalOpen(false)
-	}
+	const { handleSubmitRemove } = useCostAndProfitCentersController()
 
 	return (
-		<Dialog open={isDeleteModalOpen} onOpenChange={handleClose}>
+		<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Remover a categoria {category.categoryName}</DialogTitle>
+					<DialogTitle>
+						Remover a categoria {selectedCostAndProfitCenter.name}
+					</DialogTitle>
 					<DialogDescription>
 						Tem certeza de que deseja remover esta categoria? Essa ação poderá
 						ser desfeita.
@@ -44,8 +42,8 @@ export function RemoveCategoryDialog({
 						type="submit"
 						variant="destructive"
 						onClick={() => {
-							handleRemoveCategory(category.id)
-							handleClose()
+							handleSubmitRemove(selectedCostAndProfitCenter)
+							handleCloseDeleteModal()
 						}}
 					>
 						Remover categoria

@@ -37,19 +37,27 @@ export function EntriesByProject() {
 					Lançamentos por projeto
 				</h1>
 				{data?.transactions?.length === 0 ? (
-					<p className="text-center text-gray-500">Nenhum resultado encontrado.</p>
+					<p className="text-center text-gray-500">
+						Nenhum resultado encontrado.
+					</p>
 				) : (
 					Object.entries(
-						data.transactions.reduce((acc, transaction) => {
-							const project = transaction.project || 'Projeto não informado'
-							if (!acc[project]) {
-								acc[project] = []
-							}
-							acc[project].push(transaction)
-							return acc
-						}, {} as Record<string, IEntriesByProject[]>)
+						data.transactions.reduce(
+							(acc, transaction) => {
+								const project = transaction.project || 'Projeto não informado'
+								if (!acc[project]) {
+									acc[project] = []
+								}
+								acc[project].push(transaction)
+								return acc
+							},
+							{} as Record<string, IEntriesByProject[]>,
+						),
 					).map(([project, transactions]) => (
-						<div key={project} className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6">
+						<div
+							key={project}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6 mb-6"
+						>
 							<h2 className="text-xl font-semibold text-gray-800 mb-4">
 								{project}
 							</h2>
@@ -72,7 +80,16 @@ export function EntriesByProject() {
 												<span className="font-medium text-gray-900 mr-1">
 													{transaction.name}
 												</span>
-												no valor de <span className={cn(transaction.totalAmount > 0 ? 'text-green-600' : 'text-red-600')}>{Format.currency(transaction.totalAmount)}</span>
+												no valor de{' '}
+												<span
+													className={cn(
+														transaction.totalAmount > 0
+															? 'text-green-600'
+															: 'text-red-600',
+													)}
+												>
+													{Format.currency(transaction.totalAmount)}
+												</span>
 											</p>
 											<time
 												dateTime={transaction.transactionDate}
@@ -87,7 +104,7 @@ export function EntriesByProject() {
 						</div>
 					))
 				)}
-								<div className="w-full flex justify-end mt-8">
+				<div className="w-full flex justify-end mt-8">
 					<Button
 						type="button"
 						onClick={() => window.print()}

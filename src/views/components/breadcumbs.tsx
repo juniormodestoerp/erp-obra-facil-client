@@ -25,6 +25,10 @@ export function Breadcrumbs() {
 		case '/categories':
 			pages.push({ name: 'Categorias', href: '/categories', current: true })
 			break
+			case '/cost-and-profit-centers':
+				pages.push({ name: 'Centros de custo', href: '/cost-and-profit-centers', current: true })
+				break
+			
 		case '/transactions':
 			pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
 			break

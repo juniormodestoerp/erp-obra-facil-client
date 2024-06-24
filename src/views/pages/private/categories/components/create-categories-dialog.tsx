@@ -15,34 +15,35 @@ import {
 
 import { CheckboxGroup } from '@views/pages/private/categories/components/checkbox'
 import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
+import { Select } from '@views/components/select'
 
 export function CreateCategoryDialog() {
-	const { methods, handleSubmit } = useCategoriesController()
+	const {
+		methods,
+		handleSubmit,
+		categories,
+		isCreateModalOpen,
+		handleCloseCreateModal,
+		handleOpenCreateModal,
+	} = useCategoriesController()
 
 	const {
 		register,
 		setValue,
+		control,
 		formState: { errors },
 	} = methods
 
-	const [isOpen, setIsOpen] = useState(false)
 	const [selectedModelOption, setSelectedModelOption] = useState('category')
-	const [selectedTypeOption, setSelectedTypeOption] = useState('income')
-
-	function handleClose() {
-		setIsOpen(!isOpen)
-	}
-	function handleOpen() {
-		setIsOpen(!isOpen)
-	}
+	const [selectedTypeOption, setSelectedTypeOption] = useState('income') // type
 
 	function handleModelCheckboxChange(id: string) {
 		setSelectedModelOption(id)
-		setValue('model', id)
 		if (id === 'category') {
-			setValue('categoryName', '')
+			setValue('name', '')
 		}
 	}
+
 	function handleTypeCheckboxChange(id: string) {
 		setSelectedTypeOption(id)
 		setValue('type', id)
@@ -59,21 +60,29 @@ export function CreateCategoryDialog() {
 
 	useEffect(() => {
 		if (selectedModelOption === 'category') {
-			setValue('categoryName', '')
-			setValue('subcategoryName', '')
+			setValue('name', '')
+			setValue('subcategoryOf', '')
 		}
 	}, [selectedModelOption, setValue])
 
+	const mappedCategories = categories
+		?.filter((category) => category.subcategoryOf === '')
+		.map((category) => {
+			return {
+				field: category.name,
+				value: category.name,
+			}
+		})
+
 	return (
-		<Dialog open={isOpen} onOpenChange={handleClose}>
+		<Dialog open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
 			<DialogTrigger asChild>
 				<button
 					type="button"
-					onClick={handleOpen}
-					className="absolute bottom-0 right-0 flex h-full items-center justify-center gap-1 border-b-2 border-primary pr-1 text-sm font-medium text-primary"
+					onClick={handleOpenCreateModal}
+					className="absolute bottom-8 right-12 flex justify-center hover:bg-primary/90 size-10 items-center gap-1 border-2 bg-primary rounded-full border-primary pr-1 text-sm font-medium text-primary"
 				>
-					<Plus className="h-5 w-5" strokeWidth={2.5} />
-					<span>Cadastrar</span>
+					<Plus className="size-5 text-white ml-1" strokeWidth={2.5} />
 				</button>
 			</DialogTrigger>
 
@@ -91,57 +100,45 @@ export function CreateCategoryDialog() {
 					className="grid gap-4 py-2 pb-4"
 				>
 					<CheckboxGroup
-						title="Escolha o modelo de categoria"
-						options={modelOptions}
-						selectedOption={selectedModelOption}
-						onOptionChange={handleModelCheckboxChange}
-					/>
-
-					{selectedModelOption === 'subcategory' && (
-						<Input
-							label="Categoria principal:"
-							placeholder="Digite o nome da categoria principal"
-							error={errors?.categoryName?.message}
-							{...register('categoryName')}
-						/>
-					)}
-
-					<CheckboxGroup
 						title="Escolha o tipo"
 						options={typeOptions}
 						selectedOption={selectedTypeOption}
 						onOptionChange={handleTypeCheckboxChange}
 					/>
 
-					<Input
-						label={
-							selectedModelOption === 'category'
-								? 'Nome da categoria:'
-								: 'Nome da subcategoria:'
-						}
-						placeholder={
-							selectedModelOption === 'category'
-								? 'Digite o nome da categoria'
-								: 'Digite o nome da subcategoria'
-						}
-						error={
-							selectedModelOption === 'category'
-								? errors?.categoryName?.message
-								: errors?.subcategoryName?.message
-						}
-						{...register(
-							selectedModelOption === 'category'
-								? 'categoryName'
-								: 'subcategoryName',
-						)}
+					<CheckboxGroup
+						title="Escolha o modelo de categoria"
+						options={modelOptions}
+						selectedOption={selectedModelOption}
+						onOptionChange={handleModelCheckboxChange}
 					/>
 
+					{selectedModelOption === 'subcategory' ? (
+						<>
+							<Select
+								label="Categoria principal:"
+								name="subcategoryOf"
+								control={control}
+								data={mappedCategories}
+							/>
+
+							<Input
+								label="Subcategoria:"
+								placeholder="Digite o nome da subcategoria"
+								error={errors?.name?.message}
+								{...register('name')}
+							/>
+						</>
+					) : (
+						<Input
+							label="Categoria:"
+							placeholder="Digite o nome da categoria"
+							error={errors?.name?.message}
+							{...register('name')}
+						/>
+					)}
+
 					{/* Campos ocultos para model e type */}
-					<input
-						type="hidden"
-						{...register('model')}
-						value={selectedModelOption}
-					/>
 					<input
 						type="hidden"
 						{...register('type')}
@@ -150,11 +147,7 @@ export function CreateCategoryDialog() {
 				</form>
 
 				<DialogFooter>
-					<Button
-						form="create-category-form"
-						type="submit"
-						onClick={() => setIsOpen(false)}
-					>
+					<Button form="create-category-form" type="submit">
 						Cadastrar
 					</Button>
 				</DialogFooter>

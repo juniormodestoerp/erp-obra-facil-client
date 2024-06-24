@@ -2,7 +2,6 @@ import { cn } from '@app/utils/cn'
 
 import { ExpenseIcon } from '@/assets/icons/expense'
 import { IncomeIcon } from '@/assets/icons/income'
-import { CreateCategoryDialog } from '@views/pages/private/categories/components/create-category-dialog'
 
 import type { TabProps } from '@views/pages/private/categories/use-categories-controller'
 
@@ -68,7 +67,6 @@ export function Header({ currentTab, setCurrentTab }: Props) {
 					</div>
 				</div>
 			</div>
-			<CreateCategoryDialog />
 		</header>
 	)
 }

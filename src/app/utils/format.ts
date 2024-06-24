@@ -87,9 +87,9 @@ function name(name: string): string {
 }
 
 function capitalizeFirstLetter(str: string): string {
-	if (!str) return str;
+	if (!str) return str
 
-	return str.charAt(0).toUpperCase() + str.slice(1);
+	return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 export const Format = {
@@ -100,5 +100,5 @@ export const Format = {
 	name,
 	currency,
 	parseIsoBack,
-	capitalizeFirstLetter
+	capitalizeFirstLetter,
 }

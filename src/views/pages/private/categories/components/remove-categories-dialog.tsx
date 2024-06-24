@@ -32,7 +32,7 @@ export function RemoveCategoryDialog({
 		<Dialog open={isDeleteModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Remover a categoria {category.categoryName}</DialogTitle>
+					<DialogTitle>Remover a categoria {category.name}</DialogTitle>
 					<DialogDescription>
 						Tem certeza de que deseja remover esta categoria? Essa ação poderá
 						ser desfeita.

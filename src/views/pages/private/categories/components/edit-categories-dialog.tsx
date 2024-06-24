@@ -16,6 +16,7 @@ import {
 import type { ICategory } from '@app/services/categories/fetch'
 import { CheckboxGroup } from '@views/pages/private/categories/components/checkbox'
 import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
+import { Select } from '@views/components/select'
 
 interface Props {
 	category: ICategory
@@ -28,11 +29,12 @@ export function EditCategoryDialog({
 	isEditModalOpen,
 	setIsEditModalOpen,
 }: Props) {
-	const { methods, handleSubmit } = useCategoriesController()
+	const { methods, categories, handleSubmitUpdate } = useCategoriesController()
 
 	const {
 		register,
 		setValue,
+		control,
 		formState: { errors },
 	} = methods
 
@@ -48,9 +50,8 @@ export function EditCategoryDialog({
 
 	function handleModelCheckboxChange(id: string) {
 		setSelectedModelOption(id)
-		setValue('model', id)
 		if (id === 'category') {
-			setValue('categoryName', '')
+			setValue('name', '')
 		}
 	}
 	function handleTypeCheckboxChange(id: string) {
@@ -69,17 +70,25 @@ export function EditCategoryDialog({
 
 	useEffect(() => {
 		if (selectedModelOption === 'category') {
-			setValue('categoryName', '')
-			setValue('subcategoryName', '')
+			setValue('name', '')
+			setValue('subcategoryOf', '')
 		}
 	}, [selectedModelOption, setValue])
 
 	useEffect(() => {
-		setValue('categoryName', category.categoryName)
-		setValue('subcategoryName', category.subcategoryName ?? '')
+		setValue('name', category.name)
+		setValue('subcategoryOf', category.subcategoryOf ?? '')
 		setValue('type', category.type)
-		setValue('model', category.model)
 	}, [setValue, category])
+
+	const mappedCategories = categories
+	?.filter((category) => category.subcategoryOf === '')
+	.map((category) => {
+		return {
+			field: category.name,
+			value: category.name,
+		}
+	})
 
 	return (
 		<Dialog open={isEditModalOpen} onOpenChange={handleClose}>
@@ -96,33 +105,17 @@ export function EditCategoryDialog({
 
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Editar {category.categoryName}</DialogTitle>
+					<DialogTitle>Editar {category.name}</DialogTitle>
 					<DialogDescription>
 						Defina uma nova categoria ou subcategoria no sistema.
 					</DialogDescription>
 				</DialogHeader>
 
 				<form
-					id="create-category-form"
-					onSubmit={handleSubmit}
+					id="edit-category-form"
+					onSubmit={handleSubmitUpdate}
 					className="grid gap-4 py-2 pb-4"
 				>
-					<CheckboxGroup
-						title="Escolha o modelo de categoria"
-						options={modelOptions}
-						selectedOption={selectedModelOption}
-						onOptionChange={handleModelCheckboxChange}
-					/>
-
-					{selectedModelOption === 'subcategory' && (
-						<Input
-							label="Categoria principal:"
-							placeholder="Digite o nome da categoria principal"
-							error={errors?.categoryName?.message}
-							{...register('categoryName')}
-						/>
-					)}
-
 					<CheckboxGroup
 						title="Escolha o tipo"
 						options={typeOptions}
@@ -130,35 +123,39 @@ export function EditCategoryDialog({
 						onOptionChange={handleTypeCheckboxChange}
 					/>
 
-					<Input
-						label={
-							selectedModelOption === 'category'
-								? 'Nome da categoria:'
-								: 'Nome da subcategoria:'
-						}
-						placeholder={
-							selectedModelOption === 'category'
-								? 'Digite o nome da categoria'
-								: 'Digite o nome da subcategoria'
-						}
-						error={
-							selectedModelOption === 'category'
-								? errors?.categoryName?.message
-								: errors?.subcategoryName?.message
-						}
-						{...register(
-							selectedModelOption === 'category'
-								? 'categoryName'
-								: 'subcategoryName',
-						)}
+					<CheckboxGroup
+						title="Escolha o modelo de categoria"
+						options={modelOptions}
+						selectedOption={selectedModelOption}
+						onOptionChange={handleModelCheckboxChange}
 					/>
 
+					{selectedModelOption === 'subcategory' ? (
+						<>
+							<Select
+								label="Categoria principal:"
+								name="subcategoryOf"
+								control={control}
+								data={mappedCategories}
+							/>
+
+							<Input
+								label="Subcategoria:"
+								placeholder="Digite o nome da subcategoria"
+								error={errors?.name?.message}
+								{...register('name')}
+							/>
+						</>
+					) : (
+						<Input
+							label="Categoria:"
+							placeholder="Digite o nome da categoria"
+							error={errors?.name?.message}
+							{...register('name')}
+						/>
+					)}
+
 					{/* Campos ocultos para model e type */}
-					<input
-						type="hidden"
-						{...register('model')}
-						value={selectedModelOption}
-					/>
 					<input
 						type="hidden"
 						{...register('type')}
@@ -167,7 +164,7 @@ export function EditCategoryDialog({
 				</form>
 
 				<DialogFooter>
-					<Button form="create-category-form" type="submit">
+					<Button form="edit-category-form" type="submit">
 						Cadastrar
 					</Button>
 				</DialogFooter>
