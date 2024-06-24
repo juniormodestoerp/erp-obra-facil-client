@@ -15,6 +15,11 @@ import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
 import { Transactions } from '@views/pages/private/transactions'
 import { Conciliations } from '@views/pages/private/conciliations'
+import { BankAccounts } from '@views/pages/private/bank-accounts'
+import { CostAndProfitCenters } from '@views/pages/private/cost-and-profit-centers'
+import { PaymentMethods } from '@views/pages/private/payment-methods'
+import { Tags } from '@views/pages/private/tags'
+import { Transfers } from '@views/pages/private/transfers'
 
 /* Public Routes */
 import { ForgotPassword } from '@views/pages/authentication/forgot-password'
@@ -62,6 +67,14 @@ export function AppRoutes() {
 						<Route path="/conciliations" element={<Conciliations />} />
 						<Route path="/reports" element={<Reports />} />
 						<Route path="/categories" element={<Categories />} />
+						<Route path="/bank-accounts" element={<BankAccounts />} />
+						<Route
+							path="/cost-and-profit-centers"
+							element={<CostAndProfitCenters />}
+						/>
+						<Route path="/payment-methods" element={<PaymentMethods />} />
+						<Route path="/tags" element={<Tags />} />
+						<Route path="/transfers" element={<Transfers />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/profile" element={<Profile />} />
 					</Route>

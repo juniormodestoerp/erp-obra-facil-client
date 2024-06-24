@@ -124,6 +124,51 @@ export function DesktopOptions({ path, small, balance }: Props) {
 					<Option
 						open={!small}
 						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/bank-accounts"
+						title="Contas bancárias"
+						selected={path.startsWith('/bank-accounts')}
+					/>
+
+					<Option
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/cost-and-profit-centers"
+						title="Centros de custo"
+						selected={path.startsWith('/cost-and-profit-centers')}
+					/>
+
+					<Option
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/payment-methods"
+						title="Métodos de pag."
+						selected={path.startsWith('/payment-methods')}
+					/>
+
+					<Option
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/tags"
+						title="Tags"
+						selected={path.startsWith('/tags')}
+					/>
+
+					<Option
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						linkTo="/transfers"
+						title="Tranferências"
+						selected={path.startsWith('/transfers')}
+					/>
+
+					<Option
+						open={!small}
+						small={small}
 						Icon={<AdjustmentsHorizontalIcon className="h-6 w-6" />}
 						linkTo="/settings"
 						title="Personalização"

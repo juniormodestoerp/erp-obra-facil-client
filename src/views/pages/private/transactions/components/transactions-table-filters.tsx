@@ -4,6 +4,7 @@ import { ChevronDownIcon, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import axios from 'axios'
 
 import type { ITransaction } from '@app/services/transactions/fetch'
 import { numbMessage, strMessage } from '@app/utils/custom-zod-error'
@@ -19,7 +20,7 @@ import {
 
 import { DebouncedInput } from '@views/components/input/debounce'
 import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowUpOnSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
 
 import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
@@ -71,6 +72,27 @@ export function TransactionsTableFilters({
 		}
 	}, [])
 
+	async function exportWorksheet() {
+		try {
+			const response = await axios.get('/conciliations/export-worksheet', {
+				responseType: 'blob', // Para receber o arquivo binário
+			})
+
+			// Criar um link para download
+			const url = window.URL.createObjectURL(
+				new Blob([response.data], { type: 'application/vnd.ms-excel' }),
+			)
+			const link = document.createElement('a')
+			link.href = url
+			link.setAttribute('download', 'lancamentos-obra-facil.xls') // Nome do arquivo a ser baixado
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+		} catch (error) {
+			console.error('Erro ao exportar a planilha:', error)
+		}
+	}
+
 	return (
 		<form className="flex items-center gap-2 p-px">
 			<span className="text-sm font-semibold">Filtros:</span>
@@ -116,6 +138,17 @@ export function TransactionsTableFilters({
 					</DialogTrigger>
 					<NewFundRealeaseContent />
 				</Dialog>
+
+				<Button
+					type="button"
+					variant="outline"
+					size="xs"
+					className="!py-0 text-[13px] font-medium"
+					onClick={exportWorksheet}
+				>
+					<ArrowUpOnSquareIcon className="mr-1.5 size-4" strokeWidth={2} />
+					Exportar
+				</Button>
 
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild className="!py-0">
