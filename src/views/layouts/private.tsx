@@ -46,7 +46,7 @@ export function PrivateLayout() {
 			/>
 
 			<div
-				className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-56')}
+				className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-64')}
 			>
 				<div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:border-zinc-600 dark:bg-zinc-900 sm:gap-x-6 sm:px-6">
 					<div className="flex w-full flex-1 items-center gap-x-2">

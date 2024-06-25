@@ -17,6 +17,8 @@ import { Format } from '@app/utils/format'
 import { EyeIcon } from '@/assets/icons/eye-icon'
 import { EyeSlashIcon } from '@/assets/icons/eye-slash-icon'
 import { Option } from '@views/components/sidebar/option'
+import { GroupOption } from '../group-option'
+import { SubOption } from '../sub-option'
 
 interface Props {
 	path: string
@@ -94,15 +96,6 @@ export function DesktopOptions({ path, small, balance }: Props) {
 						selected={path.startsWith('/conciliations')}
 					/>
 
-					{/* <Option
-						open={!small}
-						small={small}
-						Icon={<PresentationChartLineIcon className="h-6 w-6" />}
-						linkTo="/dashboards"
-						title="Dashboards"
-						selected={path.startsWith('/dashboards')}
-					/> */}
-
 					<Option
 						open={!small}
 						small={small}
@@ -115,104 +108,75 @@ export function DesktopOptions({ path, small, balance }: Props) {
 					<Option
 						open={!small}
 						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/categories"
-						title="Categorias"
-						selected={path.startsWith('/categories')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/bank-accounts"
-						title="Contas bancárias"
-						selected={path.startsWith('/bank-accounts')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/cost-and-profit-centers"
-						title="Centros de custo"
-						selected={path.startsWith('/cost-and-profit-centers')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/payment-methods"
-						title="Métodos de pag."
-						selected={path.startsWith('/payment-methods')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/tags"
-						title="Tags"
-						selected={path.startsWith('/tags')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
-						Icon={<TagIcon className="h-6 w-6" />}
-						linkTo="/transfers"
-						title="Tranferências"
-						selected={path.startsWith('/transfers')}
-					/>
-
-					<Option
-						open={!small}
-						small={small}
 						Icon={<AdjustmentsHorizontalIcon className="h-6 w-6" />}
 						linkTo="/settings"
 						title="Personalização"
 						selected={path.startsWith('/settings')}
 					/>
 
-					{/* <Option
-            open={!small}
-            small={small}
-            Icon={<ScaleIcon className="h-6 w-6" />}
-            linkTo="/contracts"
-            title="Contratos"
-            selected={path.startsWith('/contracts')}
-          /> */}
+					<GroupOption
+						open={!small}
+						small={small}
+						Icon={<TagIcon className="h-6 w-6" />}
+						title="Cadastros"
+					>
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/categories"
+							title="Categorias"
+							selected={path.startsWith('/categories')}
+						/>
 
-					{/* <Option
-            open={!small}
-            small={small}
-            Icon={<LinkIcon className="h-6 w-6" />}
-            linkTo="/public-link"
-            title="Link público"
-            selected={path.startsWith('/public-link')}
-          /> */}
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/cost-and-profit-centers"
+							title="Centros de custo"
+							selected={path.startsWith('/cost-and-profit-centers')}
+						/>
+
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/bank-accounts"
+							title="Contas bancárias"
+							selected={path.startsWith('/bank-accounts')}
+						/>
+
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/payment-methods"
+							title="Métodos de pagamento"
+							selected={path.startsWith('/payment-methods')}
+						/>
+
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/tags"
+							title="Tags"
+							selected={path.startsWith('/tags')}
+						/>
+
+						<SubOption
+							open={!small}
+							small={small}
+							Icon={<TagIcon className="h-6 w-6" />}
+							linkTo="/transfers"
+							title="Tranferências"
+							selected={path.startsWith('/transfers')}
+						/>
+					</GroupOption>
 				</div>
 
 				<div className="mb-5 mt-auto flex flex-col">
-					{/* <Option
-            open={!small}
-            small={small}
-            Icon={<ChatBubbleBottomCenterTextIcon className="h-6 w-6" />}
-            linkTo="/support"
-            title="Suporte"
-            selected={path.startsWith('/support')}
-          /> */}
-
-					{/* <Option
-            open={!small}
-            small={small}
-            Icon={<CreditCardIcon className="h-6 w-6" />}
-            linkTo="/payments"
-            title="Meus pagamentos"
-            selected={path.startsWith('/payment')}
-          /> */}
-
 					<Option
 						open={!small}
 						small={small}

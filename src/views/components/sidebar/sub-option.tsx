@@ -12,7 +12,7 @@ interface Props {
 	small?: boolean
 }
 
-export function Option({
+export function SubOption({
 	Icon,
 	linkTo,
 	title,
@@ -31,9 +31,9 @@ export function Option({
 						data-current={pathname === linkTo}
 						className={cn(
 							selected
-								? 'bg-transparent font-semibold text-yellow-400 drop-shadow-2xl'
+								? 'bg-transparent font-bold text-yellow-400 drop-shadow-2xl'
 								: 'text-white hover:bg-darker-blue',
-							'group ml-0 flex gap-x-3 rounded-md p-2 text-sm font-medium leading-6',
+							'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
 						)}
 					>
 						<span className={cn('hidden sm:block', open && 'block')}>
@@ -48,13 +48,20 @@ export function Option({
 					data-current={pathname === linkTo}
 					className={cn(
 						selected
-							? 'bg-transparent font-semibold text-yellow-400 drop-shadow-2xl'
+							? 'bg-transparent font-bold text-yellow-400 drop-shadow-2xl'
 							: 'text-white hover:bg-darker-blue',
-						'group ml-0 flex gap-x-3 rounded-md p-2 text-sm font-medium leading-6',
+						'group flex gap-x-1.5 rounded-md p-2 pl-9 text-sm font-semibold leading-6 items-center',
 					)}
 				>
-					<span className={cn('hidden sm:block', open && 'block')}>{Icon}</span>
-					<span className={cn('hidden', open && 'block')}>{title}</span>
+					<span
+						className={cn(
+							'hidden sm:block bg-zinc-300 rounded-full size-1 ',
+							open && 'block',
+							pathname === linkTo && 'bg-yellow-400 drop-shadow-2xl',
+						)}
+					/>
+
+					<span className={cn('hidden text-sm font-medium tracking-tight text-zinc-200', open && 'block', pathname === linkTo && 'bg-transparent font-bold text-yellow-400 drop-shadow-2xl')}>{title}</span>
 				</Link>
 			)}
 		</li>
