@@ -66,6 +66,16 @@ function formatIso(dateString: string): string {
 	return date.toISOString()
 }
 
+
+function cleanCurrency(value: number | string): number {
+	if (typeof value === 'string') {
+		return Number(value.replace(',', '')) / 100
+	}
+
+	return value
+}
+
+
 function name(name: string): string {
 	const names = name.trim().split(/\s+/)
 
@@ -98,6 +108,7 @@ export const Format = {
 	document,
 	phone,
 	name,
+	cleanCurrency,
 	currency,
 	parseIsoBack,
 	capitalizeFirstLetter,

@@ -2,6 +2,8 @@ import { IncomeIcon } from '@/assets/icons/income'
 import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Input } from '@views/components/input'
+import { InputCurrency } from '@views/components/input/currency'
+import { InputMask } from '@views/components/input/mask'
 import { PageTitle } from '@views/components/page-title'
 import { Select } from '@views/components/select'
 import { SelectCurrency } from '@views/components/select-currency'
@@ -33,6 +35,8 @@ export function BankAccounts() {
 		hookFormErrorsUpdate,
 		hookFormControlCreate,
 		hookFormControlUpdate,
+		isCreateCreditCard,
+		isUpdateCreditCard,
 		hookFormRegisterCreate,
 		hookFormRegisterUpdate,
 		handleOpenCreateModal,
@@ -48,11 +52,11 @@ export function BankAccounts() {
 
 	return (
 		<Fragment>
-			<Helmet title="Métodos de pagamento" />
+			<Helmet title="Contas" />
 
 			<PageTitle
-				title="Métodos de pagamento"
-				description="Crie e gerencie seus métodos de pagamento."
+				title="Contas"
+				description="Crie e gerencie suas contas."
 			/>
 
 			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
@@ -69,7 +73,7 @@ export function BankAccounts() {
 									<span className="w-full">{bankAccount.name}</span>
 								</p>
 								<div className="flex gap-2">
-									<Tooltip text="Editar método de pagamento">
+									<Tooltip text="Editar conta">
 										<button
 											type="button"
 											onClick={() => handleOpenUpdateModal(bankAccount)}
@@ -77,7 +81,7 @@ export function BankAccounts() {
 											<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
 										</button>
 									</Tooltip>
-									<Tooltip text="Remover método de pagamento">
+									<Tooltip text="Remover conta">
 										<button
 											type="button"
 											onClick={() => handleOpenDeleteModal(bankAccount)}
@@ -109,9 +113,9 @@ export function BankAccounts() {
 
 				<DialogContent className="sm:max-w-[425px]" title="Criar conta">
 					<DialogHeader>
-						<DialogTitle>Cadastrar método de pagamento</DialogTitle>
+						<DialogTitle>Cadastrar conta</DialogTitle>
 						<DialogDescription>
-							Defina um novo método de pagamento no sistema.
+							Defina uma nova conta no sistema.
 						</DialogDescription>
 					</DialogHeader>
 
@@ -135,20 +139,87 @@ export function BankAccounts() {
 						/>
 						<SelectCurrency
 							label="Moeda:"
-							name="accountType"
+							name="currency"
 							control={hookFormControlCreate}
 						/>
+						<div className="flex items-center gap-2">
 							<Input
 								label="Nome da conta:"
-								placeholder="Digite o nome nome da conta"
+								placeholder="Digite o nome da conta"
 								error={hookFormErrorsCreate?.name?.message}
 								{...hookFormRegisterCreate('name')}
 							/>
-							<SelectLogo
-								label="Logo:"
-								name="accountType"
-								control={hookFormControlCreate}
-							/>
+							<div className="w-1/3">
+								<InputCurrency
+									label="Saldo inicial:"
+									control={hookFormControlCreate}
+									error={hookFormErrorsCreate?.initialBalance?.message}
+									{...hookFormRegisterCreate('initialBalance')}
+								/>
+							</div>
+						</div>
+						<SelectLogo
+							label="Logo:"
+							name="logo"
+							control={hookFormControlCreate}
+						/>
+						{isCreateCreditCard && (
+							<>
+								<div className="flex items-center gap-2">
+									<Select
+										label="Tipo do limite:"
+										name="limitType"
+										control={hookFormControlCreate}
+										data={[
+											{ field: 'Total', value: 'Total' },
+											{ field: 'Mensal', value: 'Mensal' },
+										]}
+									/>
+									<div className="w-1/3">
+										<InputCurrency
+											label="Limite:"
+											control={hookFormControlCreate}
+											error={hookFormErrorsCreate?.limit?.message}
+											{...hookFormRegisterCreate('limit')}
+										/>
+									</div>
+								</div>
+
+								<div className="flex items-center gap-2">
+									<Input
+										label="Dia de vencimento:"
+										placeholder="DD"
+										error={hookFormErrorsCreate?.dueDateDay?.message}
+										{...hookFormRegisterCreate('dueDateDay')}
+									/>
+
+									<InputMask
+										mask="99/99/9999"
+										label="Primeira fatura:"
+										placeholder="DD/MM/AAAA"
+										error={hookFormErrorsCreate?.dueDateFirstInvoice?.message}
+										{...hookFormRegisterCreate('dueDateFirstInvoice')}
+									/>
+								</div>
+
+								<div className="flex items-center gap-2">
+									<Input
+										label="Dias antes do vencimento:"
+										placeholder="Qtde. de dias antes do vencto."
+										error={hookFormErrorsCreate?.closingDateInvoice?.message}
+										{...hookFormRegisterCreate('closingDateInvoice')}
+									/>
+									<div className="w-1/3">
+										<InputCurrency
+											label="Valor da fatura:"
+											control={hookFormControlCreate}
+											error={hookFormErrorsCreate?.balanceFirstInvoice?.message}
+											{...hookFormRegisterCreate('balanceFirstInvoice')}
+										/>
+									</div>
+								</div>
+							</>
+						)}
 					</form>
 
 					<DialogFooter>
@@ -161,11 +232,11 @@ export function BankAccounts() {
 
 			{isUpdateModalOpen && (
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
-					<DialogContent className="sm:max-w-[425px]" title='Editar conta'>
+					<DialogContent className="sm:max-w-[425px]" title="Editar conta">
 						<DialogHeader>
 							<DialogTitle>Editar {selectedBankAccount?.name}</DialogTitle>
 							<DialogDescription>
-								Atualize um método de pagamento no sistema.
+								Atualize uma conta no sistema.
 							</DialogDescription>
 						</DialogHeader>
 
@@ -174,19 +245,104 @@ export function BankAccounts() {
 							onSubmit={handleSubmitUpdate}
 							className="grid gap-4 py-2 pb-4"
 						>
-							<input
-								type="text"
-								className="hidden"
-								value={selectedBankAccount.id}
-								{...hookFormRegisterUpdate('id')}
+							<Select
+								label="Tipo da conta:"
+								name="accountType"
+								control={hookFormControlUpdate}
+								data={[
+									{ field: 'Conta corrente', value: 'Conta corrente' },
+									{ field: 'Conta poupança', value: 'Conta poupança' },
+									{ field: 'Cartão de crédito', value: 'Cartão de crédito' },
+									{ field: 'Cartão de débito', value: 'Cartão de débito' },
+									{ field: 'Dinheiro', value: 'Dinheiro' },
+									{ field: 'Outros', value: 'Outros' },
+								]}
 							/>
+							<SelectCurrency
+								label="Moeda:"
+								name="currency"
+								control={hookFormControlUpdate}
+							/>
+							<div className="flex items-center gap-2">
+								<Input
+									label="Nome da conta:"
+									placeholder="Digite o nome da conta"
+									error={hookFormErrorsUpdate?.name?.message}
+									{...hookFormRegisterUpdate('name')}
+								/>
+								<div className="w-1/3">
+									<InputCurrency
+										label="Saldo inicial:"
+										control={hookFormControlUpdate}
+										error={hookFormErrorsUpdate?.initialBalance?.message}
+										{...hookFormRegisterUpdate('initialBalance')}
+									/>
+								</div>
+							</div>
+							<SelectLogo
+								label="Logo:"
+								name="logo"
+								control={hookFormControlUpdate}
+							/>
+							{isUpdateCreditCard && (
+								<>
+									<div className="flex items-center gap-2">
+										<Select
+											label="Tipo do limite:"
+											name="limitType"
+											control={hookFormControlUpdate}
+											data={[
+												{ field: 'Total', value: 'Total' },
+												{ field: 'Mensal', value: 'Mensal' },
+											]}
+										/>
+										<div className="w-1/3">
+											<InputCurrency
+												label="Limite:"
+												control={hookFormControlUpdate}
+												error={hookFormErrorsUpdate?.limit?.message}
+												{...hookFormRegisterUpdate('limit')}
+											/>
+										</div>
+									</div>
 
-							<Input
-								label="Método de pagamento:"
-								placeholder="Digite o método de pagamento"
-								error={hookFormErrorsUpdate?.name?.message}
-								{...hookFormRegisterUpdate('name')}
-							/>
+									<div className="flex items-center gap-2">
+										<Input
+											label="Dia de vencimento:"
+											placeholder="DD"
+											error={hookFormErrorsUpdate?.dueDateDay?.message}
+											{...hookFormRegisterUpdate('dueDateDay')}
+										/>
+
+										<InputMask
+											mask="99/99/9999"
+											label="Primeira fatura:"
+											placeholder="DD/MM/AAAA"
+											error={hookFormErrorsUpdate?.dueDateFirstInvoice?.message}
+											{...hookFormRegisterUpdate('dueDateFirstInvoice')}
+										/>
+									</div>
+
+									<div className="flex items-center gap-2">
+										<Input
+											label="Dias antes do vencimento:"
+											placeholder="Qtde. de dias antes do vencto."
+											error={hookFormErrorsUpdate?.closingDateInvoice?.message}
+											{...hookFormRegisterUpdate('closingDateInvoice')}
+										/>
+										<div className="w-1/3">
+											<InputCurrency
+												label="Valor da fatura:"
+												control={hookFormControlUpdate}
+												error={
+													hookFormErrorsUpdate?.balanceFirstInvoice?.message
+												}
+												{...hookFormRegisterUpdate('balanceFirstInvoice')}
+											/>
+										</div>
+									</div>
+								</>
+							)}
 						</form>
 						<DialogFooter>
 							<Button form="edit-bank-account-form" type="submit">
@@ -199,12 +355,12 @@ export function BankAccounts() {
 
 			{isDeleteModalOpen && (
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title="Remover conta">
 						<DialogHeader>
 							<DialogTitle>Remover {selectedBankAccount.name}</DialogTitle>
 							<DialogDescription>
-								Tem certeza de que deseja remover este método de pagamento? Essa
-								ação poderá ser desfeita.
+								Tem certeza de que deseja remover esta conta? Essa ação
+								poderá ser desfeita.
 							</DialogDescription>
 						</DialogHeader>
 

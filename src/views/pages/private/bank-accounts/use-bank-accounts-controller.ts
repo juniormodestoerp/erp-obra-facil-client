@@ -19,34 +19,82 @@ import {
 	strMessage,
 } from '@app/utils/custom-zod-error'
 import { toast } from 'sonner'
+import { Format } from '@app/utils/format'
 
 const createSchema = z.object({
 	accountType: z
+		.string(strMessage('tipo da conta'))
+		.min(1, 'O tipo da conta é obrigatório!'),
+	type: z
 		.string(strMessage('tipo da conta'))
 		.min(1, 'O tipo da conta é obrigatório!'),
 	name: z
 		.string(strMessage('nome da conta'))
 		.min(1, 'O nome da conta é obrigatório!'),
 	currency: z.string(strMessage('moeda')).min(1, 'A moeda é obrigatória!'),
-	logo: z.string(strMessage('logo da conta')).nullable(),
-	limit: z.number(numbMessage('limit da conta')).nullable(),
-	limitType: z.enum(['FIXED', 'FLEXIBLE']).nullable(),
-	dueDateDay: z.number(numbMessage('dia de vencimento')).nullable(),
+	logo: z.string(strMessage('logo da conta')).nullable().default(null),
+	limit: z
+		.union([
+			z.string(strMessage('limit da conta')),
+			z.number(numbMessage('limit da conta')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
+	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
+	dueDateDay: z
+		.string(strMessage('dia de vencimento'))
+		.nullable()
+		.default(null),
 	dueDateFirstInvoice: z
 		.string(strMessage('data da primeira fatura'))
-		.nullable(),
+		.nullable()
+		.default(null),
 	closingDateInvoice: z
-		.number(numbMessage('dias antes do fechamento da fatura'))
-		.nullable(),
+		.union([
+			z.string(strMessage('dias antes do fechamento da fatura')),
+			z.number(numbMessage('dias antes do fechamento da fatura')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
 	balanceFirstInvoice: z
-		.number(numbMessage('valor da primeira fatura'))
-		.nullable(),
-	isFirstInvoice: z.boolean(boolMessage('primeira fatura')).nullable(),
-	isCreditCard: z.boolean(boolMessage('cartão de crédito')).nullable(),
-	initialBalance: z.number(numbMessage('saldo inicial')),
+		.union([
+			z.string(strMessage('saldo inicial')),
+			z.number(numbMessage('saldo inicial')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
+	isFirstInvoice: z
+		.boolean(boolMessage('primeira fatura'))
+		.nullable()
+		.default(null),
+	isCreditCard: z
+		.boolean(boolMessage('cartão de crédito'))
+		.nullable()
+		.default(null),
+	initialBalance: z
+		.union([
+			z.string(strMessage('saldo inicial')),
+			z.number(numbMessage('saldo inicial')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		}),
 })
 
-type CreateBankAccountFormData = z.infer<typeof updateSchema>
+type CreateBankAccountFormData = z.infer<typeof createSchema>
 
 const updateSchema = z.object({
 	id: z.string(strMessage('identificador da conta')),
@@ -60,22 +108,66 @@ const updateSchema = z.object({
 		.string(strMessage('nome da conta'))
 		.min(1, 'O nome da conta é obrigatório!'),
 	currency: z.string(strMessage('moeda')).min(1, 'A moeda é obrigatória!'),
-	logo: z.string(strMessage('logo da conta')).nullable(),
-	limit: z.number(numbMessage('limit da conta')).nullable(),
-	limitType: z.enum(['FIXED', 'FLEXIBLE']).nullable(),
-	dueDateDay: z.number(numbMessage('dia de vencimento')).nullable(),
+	logo: z.string(strMessage('logo da conta')).nullable().default(null),
+	limit: z
+		.union([
+			z.string(strMessage('limit da conta')),
+			z.number(numbMessage('limit da conta')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
+	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
+	dueDateDay: z
+		.string(strMessage('dia de vencimento'))
+		.nullable()
+		.default(null),
 	dueDateFirstInvoice: z
 		.string(strMessage('data da primeira fatura'))
-		.nullable(),
+		.nullable()
+		.default(null),
 	closingDateInvoice: z
-		.number(numbMessage('dias antes do fechamento da fatura'))
-		.nullable(),
+		.union([
+			z.string(strMessage('dias antes do fechamento da fatura')),
+			z.number(numbMessage('dias antes do fechamento da fatura')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
 	balanceFirstInvoice: z
-		.number(numbMessage('valor da primeira fatura'))
-		.nullable(),
-	isFirstInvoice: z.boolean(boolMessage('primeira fatura')).nullable(),
-	isCreditCard: z.boolean(boolMessage('cartão de crédito')).nullable(),
-	initialBalance: z.number(numbMessage('saldo inicial')),
+		.union([
+			z.string(strMessage('saldo inicial')),
+			z.number(numbMessage('saldo inicial')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		})
+		.nullable()
+		.default(null),
+	isFirstInvoice: z
+		.boolean(boolMessage('primeira fatura'))
+		.nullable()
+		.default(null),
+	isCreditCard: z
+		.boolean(boolMessage('cartão de crédito'))
+		.nullable()
+		.default(null),
+	initialBalance: z
+		.union([
+			z.string(strMessage('saldo inicial')),
+			z.number(numbMessage('saldo inicial')),
+		])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		}),
 })
 
 type UpdateBankAccountFormData = z.infer<typeof updateSchema>
@@ -92,20 +184,30 @@ export function useBankAccountsController() {
 		register: hookFormRegisterCreate,
 		setValue: hookFormSetValueCreate,
 		control: hookFormControlCreate,
+		watch: hookFormWatchCreate,
 		formState: { errors: hookFormErrorsCreate },
 	} = useForm<UpdateBankAccountFormData>({
 		resolver: zodResolver(createSchema),
 	})
+
+	console.log(hookFormWatchCreate('accountType'))
+
+	const isCreateCreditCard =
+		hookFormWatchCreate('accountType') === 'Cartão de crédito'
 
 	const {
 		handleSubmit: hookFormHandleSubmitUpdate,
 		register: hookFormRegisterUpdate,
 		setValue: hookFormSetValueUpdate,
 		control: hookFormControlUpdate,
+		watch: hookFormWatchUpdate,
 		formState: { errors: hookFormErrorsUpdate },
 	} = useForm<UpdateBankAccountFormData>({
 		resolver: zodResolver(updateSchema),
 	})
+
+	const isUpdateCreditCard =
+		hookFormWatchUpdate('accountType') === 'Cartão de crédito'
 
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
@@ -141,6 +243,7 @@ export function useBankAccountsController() {
 
 	const handleSubmit = hookFormHandleSubmitCreate(
 		async ({
+			accountType,
 			name,
 			currency,
 			logo,
@@ -154,6 +257,22 @@ export function useBankAccountsController() {
 			isCreditCard,
 			initialBalance,
 		}: CreateBankAccountFormData) => {
+			console.log('data submit', {
+				accountType,
+				name,
+				currency,
+				logo,
+				limit,
+				limitType,
+				dueDateDay,
+				dueDateFirstInvoice,
+				closingDateInvoice,
+				balanceFirstInvoice,
+				isFirstInvoice,
+				isCreditCard,
+				initialBalance,
+			})
+
 			try {
 				await createBankAccount({
 					accountType,
@@ -178,9 +297,39 @@ export function useBankAccountsController() {
 	)
 
 	const handleSubmitUpdate = hookFormHandleSubmitUpdate(
-		async ({ id, name }: UpdateBankAccountFormData) => {
+		async ({
+			id,
+			accountType,
+			name,
+			currency,
+			logo,
+			limit,
+			limitType,
+			dueDateDay,
+			dueDateFirstInvoice,
+			closingDateInvoice,
+			balanceFirstInvoice,
+			isFirstInvoice,
+			isCreditCard,
+			initialBalance,
+		}: UpdateBankAccountFormData) => {
 			try {
-				await updateBankAccount({ id, name })
+				await updateBankAccount({
+					id,
+					accountType,
+					name,
+					currency,
+					logo,
+					limit,
+					limitType,
+					dueDateDay,
+					dueDateFirstInvoice,
+					closingDateInvoice,
+					balanceFirstInvoice,
+					isFirstInvoice,
+					isCreditCard,
+					initialBalance,
+				})
 				handleCloseUpdateModal()
 			} catch (error) {
 				toast.error(parseError(error as AppError))
@@ -200,7 +349,7 @@ export function useBankAccountsController() {
 				toast.error(parseError(error as AppError))
 				if (
 					error.response.data.message ===
-					'O método de pagamento solicitado não foi encontrado.'
+					'A conta solicitada não foi encontrada.'
 				) {
 					queryClient.setQueryData<IBankAccountDTO[]>(
 						BANK_ACCOUNT_QUERY_KEY,
@@ -220,6 +369,8 @@ export function useBankAccountsController() {
 		hookFormErrorsUpdate,
 		hookFormControlCreate,
 		hookFormControlUpdate,
+		isCreateCreditCard,
+		isUpdateCreditCard,
 		hookFormRegisterCreate,
 		hookFormRegisterUpdate,
 		handleOpenCreateModal,

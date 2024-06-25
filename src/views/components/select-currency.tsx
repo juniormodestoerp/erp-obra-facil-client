@@ -126,7 +126,7 @@ export function SelectCurrency({
 								)}
 								<span
 									className={cn(
-										'text-zinc-400 dark:text-zinc-100',
+										'text-zinc-900 dark:text-zinc-100',
 										value && 'text-zinc-900 dark:text-zinc-100',
 									)}
 								>

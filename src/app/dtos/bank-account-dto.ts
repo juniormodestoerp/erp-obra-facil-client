@@ -1,4 +1,4 @@
-export type ILimitType = 'FIXED' | 'FLEXIBLE'
+export type ILimitType = 'Total' | 'Mensal'
 
 export interface IBankAccountDTO {
 	id: string
@@ -8,7 +8,7 @@ export interface IBankAccountDTO {
 	logo: string | null
 	limit: number | null
 	limitType: ILimitType | null
-	dueDateDay: number | null
+	dueDateDay: string | null
 	dueDateFirstInvoice: string | null
 	closingDateInvoice: number | null
 	balanceFirstInvoice: number | null

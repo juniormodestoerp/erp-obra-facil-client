@@ -23,7 +23,7 @@ export function useBankAccounts() {
 
 				if (
 					appError.response.data.message ===
-					'O método de pagamento solicitado não foi encontrado.'
+					'A conta solicitada não foi encontrada.'
 				) {
 					queryClient.setQueryData<IBankAccountDTO[]>(
 						BANK_ACCOUNT_QUERY_KEY,

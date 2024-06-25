@@ -1,6 +1,10 @@
-export function Transport() {
+interface Props {
+  className?: string
+}
+
+export function Transport({ className }: Props) {
   return (
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="1" y="1" width="42" height="42" rx="21" fill="#FFF9DB"/>
       <path d="M25.1556 23.5562H26.881" stroke="#FCC419" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M16.63 23.5562H18.3554" stroke="#FCC419" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
