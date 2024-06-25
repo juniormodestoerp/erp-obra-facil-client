@@ -143,7 +143,7 @@ export function DesktopOptions({ path, small, balance }: Props) {
 							small={small}
 							Icon={<TagIcon className="h-6 w-6" />}
 							linkTo="/bank-accounts"
-							title="Contas bancárias"
+							title="Contas"
 							selected={path.startsWith('/bank-accounts')}
 						/>
 

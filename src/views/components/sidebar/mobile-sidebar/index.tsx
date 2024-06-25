@@ -38,7 +38,7 @@ export function MobileSidebar() {
 								<MobileOption linkTo="/categories" title="Categorias" />
 								<MobileOption
 									linkTo="/bank-accounts"
-									title="Contas bancárias"
+									title="Contas"
 								/>
 								<MobileOption
 									linkTo="/cost-and-profit-centers"
