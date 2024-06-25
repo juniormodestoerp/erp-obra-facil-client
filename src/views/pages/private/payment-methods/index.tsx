@@ -41,9 +41,6 @@ export function PaymentMethods() {
 		handleSubmitRemove,
 	} = usePaymentMethodsController()
 
-	console.log('selectedPaymentMethod', selectedPaymentMethod);
-	
-
 	return (
 		<Fragment>
 			<Helmet title="Métodos de pagamento" />
@@ -67,7 +64,7 @@ export function PaymentMethods() {
 									<span className="w-full">{paymentMethod.name}</span>
 								</p>
 								<div className="flex gap-2">
-									<Tooltip text="Editar categoria">
+									<Tooltip text="Editar método de pagamento">
 										<button
 											type="button"
 											onClick={() => handleOpenUpdateModal(paymentMethod)}
@@ -75,7 +72,7 @@ export function PaymentMethods() {
 											<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
 										</button>
 									</Tooltip>
-									<Tooltip text="Remover categoria">
+									<Tooltip text="Remover método de pagamento">
 										<button
 											type="button"
 											onClick={() => handleOpenDeleteModal(paymentMethod)}
@@ -107,9 +104,9 @@ export function PaymentMethods() {
 
 				<DialogContent className="sm:max-w-[425px]">
 					<DialogHeader>
-						<DialogTitle>Cadastrar centro de custo</DialogTitle>
+						<DialogTitle>Cadastrar método de pagamento</DialogTitle>
 						<DialogDescription>
-							Defina um novo centro de custo no sistema.
+							Defina um novo método de pagamento no sistema.
 						</DialogDescription>
 					</DialogHeader>
 
@@ -140,7 +137,7 @@ export function PaymentMethods() {
 						<DialogHeader>
 							<DialogTitle>Editar {selectedPaymentMethod?.name}</DialogTitle>
 							<DialogDescription>
-								Defina uma nova categoria ou subcategoria no sistema.
+								Atualize um método de pagamento no sistema.
 							</DialogDescription>
 						</DialogHeader>
 
@@ -176,12 +173,10 @@ export function PaymentMethods() {
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
 					<DialogContent className="sm:max-w-[425px]">
 						<DialogHeader>
-							<DialogTitle>
-								Remover a categoria {selectedPaymentMethod.name}
-							</DialogTitle>
+							<DialogTitle>Remover {selectedPaymentMethod.name}</DialogTitle>
 							<DialogDescription>
-								Tem certeza de que deseja remover esta categoria? Essa ação
-								poderá ser desfeita.
+								Tem certeza de que deseja remover este método de pagamento? Essa
+								ação poderá ser desfeita.
 							</DialogDescription>
 						</DialogHeader>
 
@@ -194,7 +189,7 @@ export function PaymentMethods() {
 									handleCloseDeleteModal()
 								}}
 							>
-								Remover categoria
+								Remover
 							</Button>
 						</DialogFooter>
 					</DialogContent>

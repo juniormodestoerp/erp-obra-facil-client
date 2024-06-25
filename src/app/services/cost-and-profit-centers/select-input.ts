@@ -8,10 +8,8 @@ export interface ICostAndProfitCenterelectInput {
 export async function selectInput(): Promise<ICostAndProfitCenterelectInput[]> {
 	const { data } = await httpClient.get('/cost-and-profit-centers/select-input')
 
-	return (
-		data?.map((costAndProfitCenter: ICostAndProfitCenterelectInput) => ({
-			field: costAndProfitCenter.field,
-			value: costAndProfitCenter.value,
-		})) ?? []
-	)
+	return data?.map((costAndProfitCenter: ICostAndProfitCenterelectInput) => ({
+		field: costAndProfitCenter.field,
+		value: costAndProfitCenter.value,
+	}))
 }

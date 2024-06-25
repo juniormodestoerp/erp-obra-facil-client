@@ -1,245 +1,200 @@
-import { cn } from '@app/utils/cn'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { Tooltip } from '@views/components/tooltip'
-import { useCategoriesController } from '@views/pages/private/categories/use-categories-controller'
-import { Fragment, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
-
-import { ExpenseIcon } from '@/assets/icons/expense'
 import { IncomeIcon } from '@/assets/icons/income'
-import type { ICategory } from '@app/services/categories/fetch'
+import type { ITransferDTO } from '@app/dtos/transfer-dto'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Input } from '@views/components/input'
 import { PageTitle } from '@views/components/page-title'
-import { Header } from '@views/pages/private/categories/components/header'
-import { EditCategoryDialog } from './components/edit-transfer-dialog'
-import { RemoveCategoryDialog } from './components/remove-transfer-dialog'
-
-import { useTransaction } from '@app/hooks/use-transaction'
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
+import { Tooltip } from '@views/components/tooltip'
+import { Button } from '@views/components/ui/button'
 import {
 	Dialog,
-	DialogOverlay,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
 	DialogTrigger,
 } from '@views/components/ui/dialog'
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
+import { useTransfersController } from '@views/pages/private/transfers/use-transfers-controller'
+import { Plus } from 'lucide-react'
+import { Fragment } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 export function Transfers() {
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
-
-	const { currentTab, setCurrentTab, categories } = useCategoriesController()
-
-	const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-
-	const [selectedCategory, setSelectedCategory] = useState<ICategory>(
-		{} as ICategory,
-	)
-
-	function organizeIncomeCategories(categories: ICategory[]) {
-		if (!categories) {
-			return []
-		}
-
-		const organized = categories
-			.filter((category) => category.type === 'income' && !category.categoryId)
-			.flatMap((category) => {
-				const subcategories = categories
-					.filter((sub) => sub.categoryId === category.id)
-					.sort((a, b) => a.categoryName.localeCompare(b.categoryName))
-
-				return [category, ...subcategories]
-			})
-
-		return organized
-	}
-
-	const organizedIncomeCategories = organizeIncomeCategories(categories ?? [])
-
-	function organizeExpenseCategories(categories: ICategory[]) {
-		if (!categories || categories.length === 0) {
-			return []
-		}
-
-		const organized = categories
-			.filter((category) => category.type === 'expense' && !category.categoryId)
-			.flatMap((category) => {
-				const subcategories = categories
-					.filter((sub) => sub.categoryId === category.id)
-					.sort((a, b) => a.categoryName.localeCompare(b.categoryName))
-
-				return [category, ...subcategories]
-			})
-
-		return organized
-	}
-
-	const organizedExpenseCategories = organizeExpenseCategories(categories ?? [])
-
-	function openEditModal(category: ICategory) {
-		if (category) {
-			setSelectedCategory(category)
-			setIsEditModalOpen(true)
-		}
-	}
-
-	function openDeleteModal(category: ICategory) {
-		if (category) {
-			setSelectedCategory(category)
-			setIsDeleteModalOpen(true)
-		}
-	}
+	const {
+		transfers,
+		isCreateModalOpen,
+		isUpdateModalOpen,
+		isDeleteModalOpen,
+		selectedTransfer,
+		hookFormErrorsCreate,
+		hookFormErrorsUpdate,
+		hookFormRegisterCreate,
+		hookFormRegisterUpdate,
+		handleOpenCreateModal,
+		handleCloseCreateModal,
+		handleOpenUpdateModal,
+		handleCloseUpdateModal,
+		handleOpenDeleteModal,
+		handleCloseDeleteModal,
+		handleSubmit,
+		handleSubmitUpdate,
+		handleSubmitRemove,
+	} = useTransfersController()
 
 	return (
 		<Fragment>
-			<Helmet title="Categorias" />
+			<Helmet title="Métodos de pagamento" />
 
 			<PageTitle
-				title="Categorias"
-				description="Crie e gerencie suas categorias de receitas e despesas."
+				title="Métodos de pagamento"
+				description="Crie e gerencie seus métodos de pagamento."
 			/>
 
-			<Header currentTab={currentTab} setCurrentTab={setCurrentTab} />
-
 			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
-				{currentTab === 'Receitas'
-					? organizedIncomeCategories.length > 0 &&
-						organizedIncomeCategories.map((category: ICategory) => {
-							const isPrimary = !category.categoryId
-							return (
-								<div
-									key={category.id}
-									className={cn(
-										'flex items-center justify-start px-3',
-										isPrimary
-											? 'border-collapse border-t border-gy-200 dark:border-slate-400'
-											: 'pl-8',
-									)}
-								>
-									{isPrimary ? (
-										<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
-									) : null}
-
-									<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
-										<p
-											className={cn(
-												'font-medium tracking-tight',
-												isPrimary
-													? ''
-													: 'text-sm text-gray-600 dark:text-zinc-300',
-											)}
+				{transfers.length > 0 ? (
+					transfers.map((transfer: ITransferDTO) => (
+						<div
+							key={transfer.id}
+							className="flex items-center justify-start px-3 border-collapse border-t border-gy-200 dark:border-slate-400"
+						>
+							<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
+							<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
+								<p className="font-medium tracking-tight">
+									<span className="mr-2">&bull;</span>
+									<span className="w-full">{transfer.name}</span>
+								</p>
+								<div className="flex gap-2">
+									<Tooltip text="Editar tipo de transferência">
+										<button
+											type="button"
+											onClick={() => handleOpenUpdateModal(transfer)}
 										>
-											{!isPrimary && <span className="mr-2">&bull;</span>}
-											<span className="w-full">{category.categoryName}</span>
-										</p>
-
-										{isPrimary && (
-											<div className="flex gap-2">
-												<Tooltip text="Editar categoria">
-													<button
-														type="button"
-														onClick={() => openEditModal(category)}
-													>
-														<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
-													</button>
-												</Tooltip>
-
-												<Tooltip text="Remover categoria">
-													<button
-														type="button"
-														onClick={() => openDeleteModal(category)}
-													>
-														<TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
-													</button>
-												</Tooltip>
-											</div>
-										)}
-									</div>
-								</div>
-							)
-						})
-					: organizedExpenseCategories.length > 0 &&
-						organizedExpenseCategories.map((category: ICategory) => {
-							const isPrimary = !category.categoryId
-							return (
-								<div
-									key={category.id}
-									className={`flex items-center justify-start px-3 ${
-										isPrimary ? 'border-t border-gy-200' : 'pl-8'
-									}`}
-								>
-									{isPrimary ? (
-										<ExpenseIcon className="h-5 w-5 text-red-500" />
-									) : null}
-
-									<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
-										<p
-											className={`font-medium tracking-tight ${
-												isPrimary
-													? ''
-													: 'text-sm text-gray-600 dark:text-zinc-300'
-											}`}
+											<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
+										</button>
+									</Tooltip>
+									<Tooltip text="Remover tipo de transferência">
+										<button
+											type="button"
+											onClick={() => handleOpenDeleteModal(transfer)}
 										>
-											{!isPrimary && <span className="mr-2">&bull;</span>}
-											<span className="w-full">{category.categoryName}</span>
-										</p>
-
-										{isPrimary && (
-											<div className="flex gap-2">
-												<Tooltip text="Editar categoria">
-													<button
-														type="button"
-														onClick={() => openEditModal(category)}
-													>
-														<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
-													</button>
-												</Tooltip>
-
-												<Tooltip text="Remover categoria">
-													<button
-														type="button"
-														onClick={() => openDeleteModal(category)}
-													>
-														<TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
-													</button>
-												</Tooltip>
-											</div>
-										)}
-									</div>
+											<TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
+										</button>
+									</Tooltip>
 								</div>
-							)
-						})}
+							</div>
+						</div>
+					))
+				) : (
+					<div className="h-24 text-center flex items-center justify-center">
+						<p>Nenhum resultado encontrado</p>
+					</div>
+				)}
 			</div>
 
-			{isEditModalOpen && (
-				<EditCategoryDialog
-					category={selectedCategory}
-					isEditModalOpen={isEditModalOpen}
-					setIsEditModalOpen={setIsEditModalOpen}
-				/>
+			<Dialog open={isCreateModalOpen} onOpenChange={handleCloseCreateModal}>
+				<DialogTrigger asChild>
+					<button
+						type="button"
+						onClick={handleOpenCreateModal}
+						className="absolute bottom-8 right-12 flex justify-center hover:bg-primary/90 size-10 items-center gap-1 border-2 bg-primary rounded-full border-primary pr-1 text-sm font-medium text-primary"
+					>
+						<Plus className="size-5 text-white ml-1" strokeWidth={2.5} />
+					</button>
+				</DialogTrigger>
+
+				<DialogContent className="sm:max-w-[425px]">
+					<DialogHeader>
+						<DialogTitle>Cadastrar tipo de transferência</DialogTitle>
+						<DialogDescription>
+							Defina um novo tipo de transferência no sistema.
+						</DialogDescription>
+					</DialogHeader>
+
+					<form
+						id="create-transfer-form"
+						onSubmit={handleSubmit}
+						className="grid gap-4 py-2 pb-4"
+					>
+						<Input
+							label="Tipo de transferência:"
+							placeholder="Digite o nome do tipo de transferência"
+							error={hookFormErrorsCreate?.name?.message}
+							{...hookFormRegisterCreate('name')}
+						/>
+					</form>
+
+					<DialogFooter>
+						<Button form="create-transfer-form" type="submit">
+							Cadastrar
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+
+			{isUpdateModalOpen && (
+				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
+					<DialogContent className="sm:max-w-[425px]">
+						<DialogHeader>
+							<DialogTitle>Editar {selectedTransfer?.name}</DialogTitle>
+							<DialogDescription>
+								Atualize um tipo de transferência no sistema.
+							</DialogDescription>
+						</DialogHeader>
+
+						<form
+							id="edit-transfer-form"
+							onSubmit={handleSubmitUpdate}
+							className="grid gap-4 py-2 pb-4"
+						>
+							<input
+								type="text"
+								className="hidden"
+								value={selectedTransfer.id}
+								{...hookFormRegisterUpdate('id')}
+							/>
+
+							<Input
+								label="Tipo de transferência:"
+								placeholder="Digite o tipo de transferência"
+								error={hookFormErrorsUpdate?.name?.message}
+								{...hookFormRegisterUpdate('name')}
+							/>
+						</form>
+						<DialogFooter>
+							<Button form="edit-transfer-form" type="submit">
+								Atualizar
+							</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
 			)}
 
 			{isDeleteModalOpen && (
-				<RemoveCategoryDialog
-					category={selectedCategory}
-					isDeleteModalOpen={isDeleteModalOpen}
-					setIsDeleteModalOpen={setIsDeleteModalOpen}
-				/>
-			)}
+				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
+					<DialogContent className="sm:max-w-[425px]">
+						<DialogHeader>
+							<DialogTitle>Remover {selectedTransfer.name}</DialogTitle>
+							<DialogDescription>
+								Tem certeza de que deseja remover este tipo de transferência? Essa
+								ação poderá ser desfeita.
+							</DialogDescription>
+						</DialogHeader>
 
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
+						<DialogFooter className="mt-4">
+							<Button
+								type="submit"
+								variant="destructive"
+								onClick={() => {
+									handleSubmitRemove(selectedTransfer)
+									handleCloseDeleteModal()
+								}}
+							>
+								Remover
+							</Button>
+						</DialogFooter>
+					</DialogContent>
+				</Dialog>
+			)}
 		</Fragment>
 	)
 }

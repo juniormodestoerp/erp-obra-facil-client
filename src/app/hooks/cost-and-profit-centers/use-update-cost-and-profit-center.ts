@@ -1,66 +1,42 @@
 import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
-import { parseError } from '@app/services/http-client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { COST_AND_PROFIT_CENTERS_QUERY_KEY } from './use-cost-and-profit-centers'
-
-interface ICreateCostAndProfitCenter {
-	id: string
-	name: string
-}
+import {
+	COST_AND_PROFIT_CENTERS_QUERY_KEY,
+	type CostAndProfitCentersQueryData,
+} from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
 
 export function useUpdateCostAndProfitCenter() {
 	const queryClient = useQueryClient()
 
 	const { mutateAsync, isPending } = useMutation({
-		mutationFn: async ({
-			id,
-			name,
-		}: ICreateCostAndProfitCenter): Promise<ICostAndProfitCenter> => {
-			return costAndProfitCentersService.save({ id, name })
-		},
+		mutationFn: costAndProfitCentersService.save,
 		onMutate: (variables) => {
-			const previousCostAndProfitCenters = queryClient.getQueryData<
-				ICostAndProfitCenter[]
-			>(COST_AND_PROFIT_CENTERS_QUERY_KEY)
+			const previousCostAndProfitCenters =
+				queryClient.getQueryData<CostAndProfitCentersQueryData>(
+					COST_AND_PROFIT_CENTERS_QUERY_KEY,
+				)
 
-			if (!Array.isArray(previousCostAndProfitCenters)) {
-				return { previousCostAndProfitCenters: [] }
-			}
-
-			queryClient.setQueryData<ICostAndProfitCenter[]>(
+			queryClient.setQueryData<CostAndProfitCentersQueryData>(
 				COST_AND_PROFIT_CENTERS_QUERY_KEY,
-				(old) => {
-					if (!Array.isArray(old)) {
-						return []
-					}
-					return old.map((costAndProfitCenter) =>
+				(old) =>
+					old?.map((costAndProfitCenter) =>
 						costAndProfitCenter.id === variables.id
 							? { ...costAndProfitCenter, ...variables }
 							: costAndProfitCenter,
-					)
-				},
+					),
 			)
 
 			return { previousCostAndProfitCenters }
 		},
-		onSuccess: (_data, variables) => {
-			toast.success(
-				`Centro de custo ${variables.name.toLowerCase()} atualizado com sucesso!`,
-			)
-		},
-		onError: async (error, _variables, context) => {
+		onError: async (_error, _variables, context) => {
 			await queryClient.cancelQueries({
 				queryKey: COST_AND_PROFIT_CENTERS_QUERY_KEY,
 			})
 
-			queryClient.setQueryData<ICostAndProfitCenter[]>(
+			queryClient.setQueryData<CostAndProfitCentersQueryData>(
 				COST_AND_PROFIT_CENTERS_QUERY_KEY,
 				context?.previousCostAndProfitCenters,
 			)
-
-			toast.error(parseError(error))
 		},
 	})
 

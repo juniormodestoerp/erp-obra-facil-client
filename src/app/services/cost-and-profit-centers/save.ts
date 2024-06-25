@@ -1,8 +1,8 @@
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
+import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
 import { httpClient } from '@app/services/http-client'
 
 type IUpdateCostAndProfitCenterDTO = Partial<
-	Omit<ICostAndProfitCenter, 'id'>
+	Omit<ICostAndProfitCentersDTO, 'id'>
 > & { id: string }
 
 export interface Response {
@@ -14,15 +14,10 @@ export interface Response {
 export async function save({
 	id,
 	name,
-}: IUpdateCostAndProfitCenterDTO): Promise<Response> {
-	console.log('save called with id:', id, 'name:', name)
-
-	const { data } = await httpClient.put<Response>(
-		`/cost-and-profit-centers/${id}`,
-		{ name },
-	)
-
-	console.log('save response data:', data)
+}: IUpdateCostAndProfitCenterDTO): Promise<ICostAndProfitCentersDTO> {
+	const { data } = await httpClient.patch(`/cost-and-profit-centers/${id}`, {
+		name,
+	})
 
 	return {
 		id: data.id,

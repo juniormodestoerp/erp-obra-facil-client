@@ -43,6 +43,7 @@ export function usePaymentMethodsController() {
 	const {
 		handleSubmit: hookFormHandleSubmitCreate,
 		register: hookFormRegisterCreate,
+		setValue: hookFormSetValueCreate,
 		formState: { errors: hookFormErrorsCreate },
 	} = useForm<UpdatePaymentMethodFormData>({
 		resolver: zodResolver(createSchema),
@@ -62,6 +63,7 @@ export function usePaymentMethodsController() {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	function handleOpenCreateModal() {
+		hookFormSetValueCreate('name', '')
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 	function handleCloseCreateModal() {
@@ -120,6 +122,15 @@ export function usePaymentMethodsController() {
 			})
 			.catch((error) => {
 				toast.error(parseError(error as AppError))
+				if (
+					error.response.data.message ===
+					'O método de pagamento solicitado não foi encontrado.'
+				) {
+					queryClient.setQueryData<IPaymentMethodDTO[]>(
+						PAYMENT_METHOD_QUERY_KEY,
+						() => [],
+					)
+				}
 			})
 	}
 

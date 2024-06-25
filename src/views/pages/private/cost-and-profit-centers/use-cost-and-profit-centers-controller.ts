@@ -4,48 +4,84 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { useCostAndProfitCenters } from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
+import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
 import { useCreateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-create-cost-and-profit-center'
+import {
+	COST_AND_PROFIT_CENTERS_QUERY_KEY,
+	useCostAndProfitCenters,
+} from '@app/hooks/cost-and-profit-centers/use-cost-and-profit-centers'
 import { useUpdateCostAndProfitCenter } from '@app/hooks/cost-and-profit-centers/use-update-cost-and-profit-center'
-import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
 import { type AppError, parseError } from '@app/services/http-client'
+import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { toast } from 'sonner'
 
-const schema = z.object({
-	id: z.string(strMessage('identificador do centro de custo')).optional(),
+const createSchema = z.object({
 	name: z
 		.string(strMessage('nome do centro de custo'))
 		.min(1, 'O centro de custo é obrigatório!'),
 })
 
-type FormData = z.infer<typeof schema>
+type CreateCostAndProfitCenterFormData = z.infer<typeof updateSchema>
+
+const updateSchema = z.object({
+	id: z.string(strMessage('identificador do centro de custo')),
+	name: z
+		.string(strMessage('nome do centro de custo'))
+		.min(1, 'O centro de custo é obrigatório!'),
+})
+
+type UpdateCostAndProfitCenterFormData = z.infer<typeof updateSchema>
 
 export function useCostAndProfitCentersController() {
 	const queryClient = useQueryClient()
 
 	const [selectedCostAndProfitCenter, setSelectedCostAndProfitCenter] =
-		useState({} as ICostAndProfitCenter)
+		useState({} as ICostAndProfitCentersDTO)
+
+	const {
+		handleSubmit: hookFormHandleSubmitCreate,
+		register: hookFormRegisterCreate,
+		setValue: hookFormSetValueCreate,
+		formState: { errors: hookFormErrorsCreate },
+	} = useForm<UpdateCostAndProfitCenterFormData>({
+		resolver: zodResolver(createSchema),
+	})
+
+	const {
+		handleSubmit: hookFormHandleSubmitUpdate,
+		register: hookFormRegisterUpdate,
+		setValue: hookFormSetValueUpdate,
+		formState: { errors: hookFormErrorsUpdate },
+	} = useForm<UpdateCostAndProfitCenterFormData>({
+		resolver: zodResolver(updateSchema),
+	})
 
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	function handleOpenCreateModal() {
+		hookFormSetValueCreate('name', '')
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 	function handleCloseCreateModal() {
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
-	function handleOpenUpdateModal(costAndProfitCenter: ICostAndProfitCenter) {
+	function handleOpenUpdateModal(
+		costAndProfitCenter: ICostAndProfitCentersDTO,
+	) {
 		setSelectedCostAndProfitCenter(costAndProfitCenter)
 		setIsUpdateModalOpen(!isUpdateModalOpen)
+		hookFormSetValueUpdate('id', costAndProfitCenter.id)
+		hookFormSetValueUpdate('name', costAndProfitCenter.name)
 	}
 	function handleCloseUpdateModal() {
 		setIsUpdateModalOpen(!isUpdateModalOpen)
 	}
-	function handleOpenDeleteModal(costAndProfitCenter: ICostAndProfitCenter) {
+	function handleOpenDeleteModal(
+		costAndProfitCenter: ICostAndProfitCentersDTO,
+	) {
 		setSelectedCostAndProfitCenter(costAndProfitCenter)
 		setIsDeleteModalOpen(!isDeleteModalOpen)
 	}
@@ -53,84 +89,64 @@ export function useCostAndProfitCentersController() {
 		setIsDeleteModalOpen(!isDeleteModalOpen)
 	}
 
-	const { costAndProfitCenters, refetch } = useCostAndProfitCenters()
-
-	const methods = useForm<FormData>({
-		resolver: zodResolver(schema),
-	})
-
+	const { costAndProfitCenters } = useCostAndProfitCenters()
 	const { createCostAndProfitCenter } = useCreateCostAndProfitCenter()
 	const { updateCostAndProfitCenter } = useUpdateCostAndProfitCenter()
 
-	const handleSubmit = methods.handleSubmit(async ({ name }: FormData) => {
-		try {
-			const { name: costAndProfitCenterName } = await createCostAndProfitCenter(
-				{
-					name,
-				},
-			)
-			toast.success(
-				`Centro de custo ${costAndProfitCenterName.toLowerCase()} criado com sucesso!`,
-			)
-			refetch()
-			handleCloseCreateModal()
-		} catch (error) {
-			toast.error(parseError(error as AppError))
-		}
-	})
-
-	const handleSubmitUpdate = methods.handleSubmit(
-		async ({ id, name }: FormData) => {
-			if (!id || !selectedCostAndProfitCenter) {
-				return
-			}
-
+	const handleSubmit = hookFormHandleSubmitCreate(
+		async ({ name }: CreateCostAndProfitCenterFormData) => {
 			try {
-				await updateCostAndProfitCenter({ id, name })
-				refetch()
-				setIsUpdateModalOpen(false)
+				await createCostAndProfitCenter({ name })
+				handleCloseCreateModal()
 			} catch (error) {
 				toast.error(parseError(error as AppError))
 			}
 		},
 	)
 
-	function handleSubmitRemove(costAndProfitCenter: ICostAndProfitCenter) {
+	const handleSubmitUpdate = hookFormHandleSubmitUpdate(
+		async ({ id, name }: UpdateCostAndProfitCenterFormData) => {
+			try {
+				await updateCostAndProfitCenter({ id, name })
+				handleCloseUpdateModal()
+			} catch (error) {
+				toast.error(parseError(error as AppError))
+			}
+		},
+	)
+
+	function handleSubmitRemove(costAndProfitCenter: ICostAndProfitCentersDTO) {
 		costAndProfitCentersService
 			.remove({ id: costAndProfitCenter.id })
 			.then(() => {
 				queryClient.invalidateQueries({
-					queryKey: ['costAndProfitCenters'],
-				})
-				refetch().then((result) => {
-					if (result.status === 'success') {
-						toast.success(
-							`Centro de custo ${costAndProfitCenter.name.toLowerCase()} removido com sucesso!`,
-						)
-					}
-
-					if (
-						result.error?.response.data.message ===
-						'O centro de custo solicitado não foi encontrado.'
-					) {
-						queryClient.setQueryData(['costAndProfitCenters'], [])
-						window.location.reload()
-					}
+					queryKey: COST_AND_PROFIT_CENTERS_QUERY_KEY,
 				})
 			})
 			.catch((error) => {
 				toast.error(parseError(error as AppError))
+				if (
+					error.response.data.message ===
+					'O centro de custo solicitado não foi encontrado.'
+				) {
+					queryClient.setQueryData<ICostAndProfitCentersDTO[]>(
+						COST_AND_PROFIT_CENTERS_QUERY_KEY,
+						() => [],
+					)
+				}
 			})
 	}
 
 	return {
-		methods,
 		costAndProfitCenters,
 		isCreateModalOpen,
 		isUpdateModalOpen,
 		isDeleteModalOpen,
 		selectedCostAndProfitCenter,
-		setIsUpdateModalOpen,
+		hookFormErrorsCreate,
+		hookFormErrorsUpdate,
+		hookFormRegisterCreate,
+		hookFormRegisterUpdate,
 		handleOpenCreateModal,
 		handleCloseCreateModal,
 		handleOpenUpdateModal,

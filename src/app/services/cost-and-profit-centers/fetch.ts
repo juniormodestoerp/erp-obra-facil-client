@@ -1,25 +1,12 @@
 import { httpClient } from '@app/services/http-client'
+import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
 
-export interface ICostAndProfitCenter {
-	id: string
-	name: string
-	createdAt: string
-}
-
-interface Response {
-	costAndProfitCenters: ICostAndProfitCenter[]
-}
-
-export async function fetch(): Promise<Response> {
+export async function fetch(): Promise<ICostAndProfitCentersDTO[]> {
 	const { data } = await httpClient.get('/cost-and-profit-centers')
 
-	return {
-		costAndProfitCenters: data.map(
-			(costAndProfitCenters: ICostAndProfitCenter) => ({
-				id: costAndProfitCenters.id,
-				name: costAndProfitCenters.name,
-				createdAt: costAndProfitCenters.createdAt,
-			}),
-		),
-	}
+	return data.map((costAndProfitCenters: ICostAndProfitCentersDTO) => ({
+		id: costAndProfitCenters.id,
+		name: costAndProfitCenters.name,
+		createdAt: costAndProfitCenters.createdAt,
+	}))
 }

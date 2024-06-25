@@ -1,26 +1,42 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
-import type { ICostAndProfitCenter } from '@app/services/cost-and-profit-centers/fetch'
+import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
 import type { WithStatus } from '@app/utils/with-status'
+import type { AppError } from '@app/services/http-client'
 
-export const COST_AND_PROFIT_CENTERS_QUERY_KEY = ['']
+export const COST_AND_PROFIT_CENTERS_QUERY_KEY = ['costAndProfitCenters']
 
-export type CostAndProfitCentersQueryData = WithStatus<ICostAndProfitCenter>[]
+export type CostAndProfitCentersQueryData =
+	WithStatus<ICostAndProfitCentersDTO>[]
 
 export function useCostAndProfitCenters() {
-	const { data, isLoading, refetch } = useQuery({
+	const queryClient = useQueryClient()
+
+	const { data, isLoading } = useQuery({
 		staleTime: Number.POSITIVE_INFINITY,
 		queryKey: COST_AND_PROFIT_CENTERS_QUERY_KEY,
 		queryFn: async () => {
-			const costAndProfitCenters = await costAndProfitCentersService.fetch()
-			return costAndProfitCenters
+			try {
+				return await costAndProfitCentersService.fetch()
+			} catch (error) {
+				const appError = error as AppError
+
+				if (
+					appError.response.data.message ===
+					'O centro de custo solicitado não foi encontrado.'
+				) {
+					queryClient.setQueryData<ICostAndProfitCentersDTO[]>(
+						COST_AND_PROFIT_CENTERS_QUERY_KEY,
+						() => [],
+					)
+				}
+			}
 		},
 	})
 
 	return {
-		costAndProfitCenters: data?.costAndProfitCenters ?? [],
+		costAndProfitCenters: data ?? [],
 		isLoading,
-		refetch,
 	}
 }

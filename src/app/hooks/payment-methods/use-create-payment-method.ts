@@ -12,38 +12,21 @@ export function useCreatePaymentMethod() {
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: paymentMethodsService.create,
 		onMutate: (variables) => {
-			const tmpUserId = String(Math.random())
-			console.log('tmpUserId', tmpUserId)
-
-			console.log('variables', variables)
+			const tmpPaymentMethodId = String(Math.random())
 
 			queryClient.setQueryData<PaymentMethodsQueryData>(
 				PAYMENT_METHOD_QUERY_KEY,
 				(old) => {
-					console.log('old', old)
-
-					console.log(
-						'setQueryData',
-						old?.concat({
-							...variables,
-							id: tmpUserId,
-							status: 'pending',
-							createdAt: new Date().toISOString(),
-						}),
-					)
-
 					return old?.concat({
 						...variables,
-						id: tmpUserId,
+						id: tmpPaymentMethodId,
 						status: 'pending',
 						createdAt: new Date().toISOString(),
 					})
 				},
 			)
 
-			console.log('tmpUserId', tmpUserId)
-
-			return { tmpUserId }
+			return { tmpPaymentMethodId }
 		},
 		onSuccess: async (data, _variables, context) => {
 			await queryClient.cancelQueries({ queryKey: PAYMENT_METHOD_QUERY_KEY })
@@ -52,7 +35,7 @@ export function useCreatePaymentMethod() {
 				PAYMENT_METHOD_QUERY_KEY,
 				(old) =>
 					old?.map((paymentMethod) =>
-						paymentMethod.id === context.tmpUserId ? data : paymentMethod,
+						paymentMethod.id === context.tmpPaymentMethodId ? data : paymentMethod,
 					),
 			)
 		},
@@ -63,7 +46,7 @@ export function useCreatePaymentMethod() {
 				PAYMENT_METHOD_QUERY_KEY,
 				(old) =>
 					old?.map((paymentMethod) =>
-						paymentMethod.id === context?.tmpUserId
+						paymentMethod.id === context?.tmpPaymentMethodId
 							? { ...paymentMethod, status: 'error' }
 							: paymentMethod,
 					),

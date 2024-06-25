@@ -39,6 +39,20 @@ export function Breadcrumbs() {
 				current: true,
 			})
 			break
+		case '/tags':
+			pages.push({
+				name: 'Tags',
+				href: '/tags',
+				current: true,
+			})
+			break
+			case '/transfers':
+				pages.push({
+					name: 'Transferências',
+					href: '/transfers',
+					current: true,
+				})
+				break
 		case '/transactions':
 			pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
 			break
