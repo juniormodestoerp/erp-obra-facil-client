@@ -1,16 +1,15 @@
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
 import { httpClient } from '@app/services/http-client'
+
+type ICreateIPaymentMethodDTO = Omit<IPaymentMethodDTO, 'id' | 'createdAt'>
 
 export interface Params {
 	name: string
 }
 
-export interface Response {
-	id: string
-	name: string
-	createdAt: string
-}
-
-export async function create({ name }: Params): Promise<Response> {
+export async function create({
+	name,
+}: ICreateIPaymentMethodDTO): Promise<IPaymentMethodDTO> {
 	const { data } = await httpClient.post('/payment-methods', {
 		name,
 	})

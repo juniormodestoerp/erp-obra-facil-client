@@ -5,5 +5,5 @@ export interface Params {
 }
 
 export async function remove({ id }: Params): Promise<void> {
-	await httpClient.delete<void>(`/payment-methods/${id}`)
+	await httpClient.delete(`/payment-methods/${id}`)
 }

@@ -4,30 +4,58 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
 import { useCreatePaymentMethod } from '@app/hooks/payment-methods/use-create-payment-method'
-import { usePaymentMethods } from '@app/hooks/payment-methods/use-payment-methods'
-import { useUpdateIPaymentMethodCenter } from '@app/hooks/payment-methods/use-update-payment-method'
+import {
+	PAYMENT_METHOD_QUERY_KEY,
+	usePaymentMethods,
+} from '@app/hooks/payment-methods/use-payment-methods'
+import { useUpdatePaymentMethodCenter } from '@app/hooks/payment-methods/use-update-payment-method'
 import { type AppError, parseError } from '@app/services/http-client'
 import { paymentMethodsService } from '@app/services/payment-methods'
-import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { toast } from 'sonner'
 
-const schema = z.object({
-	id: z.string(strMessage('identificador do método de pagamento')).optional(),
+const createSchema = z.object({
 	name: z
 		.string(strMessage('nome do método de pagamento'))
 		.min(1, 'O método de pagamento é obrigatório!'),
 })
 
-type FormData = z.infer<typeof schema>
+type CreatePaymentMethodFormData = z.infer<typeof updateSchema>
+
+const updateSchema = z.object({
+	id: z.string(strMessage('identificador do método de pagamento')),
+	name: z
+		.string(strMessage('nome do método de pagamento'))
+		.min(1, 'O método de pagamento é obrigatório!'),
+})
+
+type UpdatePaymentMethodFormData = z.infer<typeof updateSchema>
 
 export function usePaymentMethodsController() {
 	const queryClient = useQueryClient()
 
 	const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
-		{} as IPaymentMethod,
+		{} as IPaymentMethodDTO,
 	)
+
+	const {
+		handleSubmit: hookFormHandleSubmitCreate,
+		register: hookFormRegisterCreate,
+		formState: { errors: hookFormErrorsCreate },
+	} = useForm<UpdatePaymentMethodFormData>({
+		resolver: zodResolver(createSchema),
+	})
+
+	const {
+		handleSubmit: hookFormHandleSubmitUpdate,
+		register: hookFormRegisterUpdate,
+		setValue: hookFormSetValueUpdate,
+		formState: { errors: hookFormErrorsUpdate },
+	} = useForm<UpdatePaymentMethodFormData>({
+		resolver: zodResolver(updateSchema),
+	})
 
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
@@ -39,14 +67,16 @@ export function usePaymentMethodsController() {
 	function handleCloseCreateModal() {
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
-	function handleOpenUpdateModal(paymentMethod: IPaymentMethod) {
+	function handleOpenUpdateModal(paymentMethod: IPaymentMethodDTO) {
 		setSelectedPaymentMethod(paymentMethod)
 		setIsUpdateModalOpen(!isUpdateModalOpen)
+		hookFormSetValueUpdate('id', paymentMethod.id)
+		hookFormSetValueUpdate('name', paymentMethod.name)
 	}
 	function handleCloseUpdateModal() {
 		setIsUpdateModalOpen(!isUpdateModalOpen)
 	}
-	function handleOpenDeleteModal(paymentMethod: IPaymentMethod) {
+	function handleOpenDeleteModal(paymentMethod: IPaymentMethodDTO) {
 		setSelectedPaymentMethod(paymentMethod)
 		setIsDeleteModalOpen(!isDeleteModalOpen)
 	}
@@ -54,67 +84,38 @@ export function usePaymentMethodsController() {
 		setIsDeleteModalOpen(!isDeleteModalOpen)
 	}
 
-	const { paymentMethods, refetch } = usePaymentMethods()
-
-	const methods = useForm<FormData>({
-		resolver: zodResolver(schema),
-	})
-
+	const { paymentMethods } = usePaymentMethods()
 	const { createPaymentMethod } = useCreatePaymentMethod()
-	const { updatePaymentMethod } = useUpdateIPaymentMethodCenter()
+	const { updatePaymentMethod } = useUpdatePaymentMethodCenter()
 
-	const handleSubmit = methods.handleSubmit(async ({ name }: FormData) => {
-		try {
-			const { name: paymentMethodName } = await createPaymentMethod({
-				name,
-			})
-			toast.success(
-				`Método de pagamento ${paymentMethodName.toLowerCase()} criado com sucesso!`,
-			)
-			refetch()
-			handleCloseCreateModal()
-		} catch (error) {
-			toast.error(parseError(error as AppError))
-		}
-	})
-
-	const handleSubmitUpdate = methods.handleSubmit(
-		async ({ id, name }: FormData) => {
-			if (!id || !selectedPaymentMethod) {
-				return
-			}
-
+	const handleSubmit = hookFormHandleSubmitCreate(
+		async ({ name }: CreatePaymentMethodFormData) => {
 			try {
-				await updatePaymentMethod({ id, name })
-				refetch()
-				setIsUpdateModalOpen(false)
+				await createPaymentMethod({ name })
+				handleCloseCreateModal()
 			} catch (error) {
 				toast.error(parseError(error as AppError))
 			}
 		},
 	)
 
-	function handleSubmitRemove(paymentMethod: IPaymentMethod) {
+	const handleSubmitUpdate = hookFormHandleSubmitUpdate(
+		async ({ id, name }: UpdatePaymentMethodFormData) => {
+			try {
+				await updatePaymentMethod({ id, name })
+				handleCloseUpdateModal()
+			} catch (error) {
+				toast.error(parseError(error as AppError))
+			}
+		},
+	)
+
+	function handleSubmitRemove(paymentMethod: IPaymentMethodDTO) {
 		paymentMethodsService
 			.remove({ id: paymentMethod.id })
 			.then(() => {
 				queryClient.invalidateQueries({
-					queryKey: ['paymentMethods'],
-				})
-				refetch().then((result) => {
-					if (result.status === 'success') {
-						toast.success(
-							`Método de pagamento ${paymentMethod.name.toLowerCase()} removido com sucesso!`,
-						)
-					}
-
-					if (
-						result.error?.response.data.message ===
-						'O método de pagamento solicitado não foi encontrado.'
-					) {
-						queryClient.setQueryData(['paymentMethods'], [])
-						window.location.reload()
-					}
+					queryKey: PAYMENT_METHOD_QUERY_KEY,
 				})
 			})
 			.catch((error) => {
@@ -123,13 +124,15 @@ export function usePaymentMethodsController() {
 	}
 
 	return {
-		methods,
 		paymentMethods,
 		isCreateModalOpen,
 		isUpdateModalOpen,
 		isDeleteModalOpen,
 		selectedPaymentMethod,
-		setIsUpdateModalOpen,
+		hookFormErrorsCreate,
+		hookFormErrorsUpdate,
+		hookFormRegisterCreate,
+		hookFormRegisterUpdate,
 		handleOpenCreateModal,
 		handleCloseCreateModal,
 		handleOpenUpdateModal,

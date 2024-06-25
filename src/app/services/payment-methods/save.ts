@@ -1,27 +1,19 @@
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
 import { httpClient } from '@app/services/http-client'
-import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 
-type IUpdatePaymentMethodDTO = Partial<Omit<IPaymentMethod, 'id'>> & {
+type IUpdatePaymentMethodDTO = Partial<
+	Omit<IPaymentMethodDTO, 'id' | 'createdAt'>
+> & {
 	id: string
-}
-
-export interface Response {
-	id: string
-	name: string
-	createdAt: string
 }
 
 export async function save({
 	id,
 	name,
-}: IUpdatePaymentMethodDTO): Promise<Response> {
-	console.log('save called with id:', id, 'name:', name)
-
-	const { data } = await httpClient.put<Response>(`/payment-methods/${id}`, {
+}: IUpdatePaymentMethodDTO): Promise<IPaymentMethodDTO> {
+	const { data } = await httpClient.patch(`/payment-methods/${id}`, {
 		name,
 	})
-
-	console.log('save response data:', data)
 
 	return {
 		id: data.id,

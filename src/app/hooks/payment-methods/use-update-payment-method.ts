@@ -1,66 +1,37 @@
-import { parseError } from '@app/services/http-client'
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
+import { PAYMENT_METHOD_QUERY_KEY } from '@app/hooks/payment-methods/use-payment-methods'
 import { paymentMethodsService } from '@app/services/payment-methods'
-import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { PAYMENT_METHOD_QUERY_KEY } from './use-payment-methods'
 
-interface ICreateIPaymentMethodCenter {
-	id: string
-	name: string
-}
-
-export function useUpdateIPaymentMethodCenter() {
+export function useUpdatePaymentMethodCenter() {
 	const queryClient = useQueryClient()
 
 	const { mutateAsync, isPending } = useMutation({
-		mutationFn: async ({
-			id,
-			name,
-		}: ICreateIPaymentMethodCenter): Promise<IPaymentMethod> => {
-			return paymentMethodsService.save({ id, name })
-		},
+		mutationFn: paymentMethodsService.save,
 		onMutate: (variables) => {
-			const previousIPaymentMethodCenters = queryClient.getQueryData<
-				IPaymentMethod[]
+			const previousPaymentMethods = queryClient.getQueryData<
+				IPaymentMethodDTO[]
 			>(PAYMENT_METHOD_QUERY_KEY)
 
-			if (!Array.isArray(previousIPaymentMethodCenters)) {
-				return { previousIPaymentMethodCenters: [] }
-			}
-
-			queryClient.setQueryData<IPaymentMethod[]>(
+			queryClient.setQueryData<IPaymentMethodDTO[]>(
 				PAYMENT_METHOD_QUERY_KEY,
-				(old) => {
-					if (!Array.isArray(old)) {
-						return []
-					}
-					return old.map((paymentMethod) =>
+				(old) =>
+					old?.map((paymentMethod) =>
 						paymentMethod.id === variables.id
 							? { ...paymentMethod, ...variables }
 							: paymentMethod,
-					)
-				},
+					),
 			)
 
-			return { previousIPaymentMethodCenters }
+			return { previousPaymentMethods }
 		},
-		onSuccess: (_data, variables) => {
-			toast.success(
-				`Método de pagamento ${variables.name.toLowerCase()} atualizado com sucesso!`,
-			)
-		},
-		onError: async (error, _variables, context) => {
-			await queryClient.cancelQueries({
-				queryKey: PAYMENT_METHOD_QUERY_KEY,
-			})
+		onError: async (_error, _variables, context) => {
+			await queryClient.cancelQueries({ queryKey: PAYMENT_METHOD_QUERY_KEY })
 
-			queryClient.setQueryData<IPaymentMethod[]>(
+			queryClient.setQueryData<IPaymentMethodDTO[]>(
 				PAYMENT_METHOD_QUERY_KEY,
-				context?.previousIPaymentMethodCenters,
+				context?.previousPaymentMethods,
 			)
-
-			toast.error(parseError(error))
 		},
 	})
 

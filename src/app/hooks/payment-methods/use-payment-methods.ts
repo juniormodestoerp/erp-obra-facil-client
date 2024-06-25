@@ -1,26 +1,24 @@
 import { useQuery } from '@tanstack/react-query'
 
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
 import { paymentMethodsService } from '@app/services/payment-methods'
-import type { IPaymentMethod } from '@app/services/payment-methods/fetch'
 import type { WithStatus } from '@app/utils/with-status'
+
+export type PaymentMethodsQueryData = WithStatus<IPaymentMethodDTO>[]
 
 export const PAYMENT_METHOD_QUERY_KEY = ['paymentMethods']
 
-export type PaymentMethodsQueryData = WithStatus<IPaymentMethod>[]
-
 export function usePaymentMethods() {
-	const { data, isLoading, refetch } = useQuery({
+	const { data, isLoading } = useQuery({
 		staleTime: Number.POSITIVE_INFINITY,
 		queryKey: PAYMENT_METHOD_QUERY_KEY,
 		queryFn: async () => {
-			const paymentMethods = await paymentMethodsService.fetch()
-			return paymentMethods
+			return await paymentMethodsService.fetch()
 		},
 	})
 
 	return {
-		paymentMethods: data?.paymentMethods ?? [],
+		paymentMethods: data ?? [],
 		isLoading,
-		refetch,
 	}
 }

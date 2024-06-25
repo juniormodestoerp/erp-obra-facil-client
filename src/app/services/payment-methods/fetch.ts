@@ -1,23 +1,12 @@
+import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
 import { httpClient } from '@app/services/http-client'
 
-export interface IPaymentMethod {
-	id: string
-	name: string
-	createdAt: string
-}
-
-interface Response {
-	paymentMethods: IPaymentMethod[]
-}
-
-export async function fetch(): Promise<Response> {
+export async function fetch(): Promise<IPaymentMethodDTO[]> {
 	const { data } = await httpClient.get('/payment-methods')
 
-	return {
-		paymentMethods: data.map((paymentMethods: IPaymentMethod) => ({
-			id: paymentMethods.id,
-			name: paymentMethods.name,
-			createdAt: paymentMethods.createdAt,
-		})),
-	}
+	return data.map((paymentMethod: IPaymentMethodDTO) => ({
+		id: paymentMethod.id,
+		name: paymentMethod.name,
+		createdAt: paymentMethod.createdAt,
+	}))
 }
