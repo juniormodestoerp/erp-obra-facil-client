@@ -2,11 +2,11 @@ import { useSidebar } from '@app/hooks/use-sidebar'
 import { cn } from '@app/utils/cn'
 import { PageTitle } from '@views/components/page-title'
 import { Button } from '@views/components/ui/button'
-import { Fragment } from 'react'
-import { Helmet } from 'react-helmet-async'
 import { Caption } from '@views/pages/private/conciliations/components/caption'
 import { DataTable } from '@views/pages/private/conciliations/components/data-table'
 import { useConciliationsController } from '@views/pages/private/conciliations/use-conciliations-controller'
+import { Fragment } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 export function Conciliations() {
 	const { handleFileUpload, excelData } = useConciliationsController()

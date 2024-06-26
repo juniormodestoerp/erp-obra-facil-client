@@ -1,18 +1,8 @@
+import type { ICategoryDTO } from '@app/dtos/category-dto'
 import { httpClient } from '@app/services/http-client'
 
-export interface Params {
-	id?: string
-	type: string
-	name: string
-	subcategoryOf: string
-}
-
-export interface Response {
+type IUpdateCategoryDTO = Partial<Omit<ICategoryDTO, 'id' | 'createdAt'>> & {
 	id: string
-	type: string
-	name: string
-	subcategoryOf: string | null
-	createdAt: string
 }
 
 export async function save({
@@ -20,11 +10,11 @@ export async function save({
 	type,
 	name,
 	subcategoryOf,
-}: Params): Promise<Response> {
-	const { data } = await httpClient.put<Response>(`/categories/${id}`, {
+}: IUpdateCategoryDTO): Promise<ICategoryDTO> {
+	const { data } = await httpClient.patch(`/categories/${id}`, {
 		type,
 		name,
-		subcategoryOf: subcategoryOf || null,
+		subcategoryOf,
 	})
 
 	return {

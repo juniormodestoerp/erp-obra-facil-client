@@ -1,8 +1,13 @@
+import type { IVerifiedTransaction } from '@app/services/conciliations/verify-xlsx'
+import {
+	ChevronDoubleLeftIcon,
+	ChevronDoubleRightIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
+} from '@heroicons/react/20/solid'
 import type { Table } from '@tanstack/react-table'
 import { Button } from '@views/components/ui/button'
 import { Input } from '@views/components/ui/input'
-import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-import type { IVerifiedTransaction } from '@app/services/conciliations/verify-xlsx'
 
 interface Props {
 	table: Table<IVerifiedTransaction>
@@ -14,7 +19,7 @@ export function PaginationControls({ table }: Props) {
 			<span className="text-sm text-zinc-800">
 				Total de {table.getCoreRowModel().rows.length} item(s)
 			</span>
-			<div className='flex items-center justify-end gap-4'>
+			<div className="flex items-center justify-end gap-4">
 				<div className="flex items-center gap-6 lg:gap-8">
 					<div className="flex items-center text-sm font-medium">
 						Página
@@ -48,7 +53,7 @@ export function PaginationControls({ table }: Props) {
 						variant="outline"
 						className="h-8 w-8 p-0"
 					>
-						<ChevronLeftIcon className="size-5" strokeWidth={3}/>
+						<ChevronLeftIcon className="size-5" strokeWidth={3} />
 						<span className="sr-only">Página anterior</span>
 					</Button>
 					<Button

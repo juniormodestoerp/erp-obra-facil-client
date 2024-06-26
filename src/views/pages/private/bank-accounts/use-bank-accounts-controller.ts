@@ -44,6 +44,7 @@ const createSchema = z.object({
 	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
 	dueDateDay: z
 		.string(strMessage('dia de vencimento'))
+		.transform((value) => +value)
 		.nullable()
 		.default(null),
 	dueDateFirstInvoice: z
@@ -51,14 +52,8 @@ const createSchema = z.object({
 		.nullable()
 		.default(null),
 	closingDateInvoice: z
-		.union([
-			z.string(strMessage('dias antes do fechamento da fatura')),
-			z.number(numbMessage('dias antes do fechamento da fatura')),
-		])
-		.transform((value: string | number) => {
-			const fmtValue = Format.cleanCurrency(value)
-			return fmtValue
-		})
+		.string(strMessage('dias antes do fechamento da fatura'))
+		.transform((value) => +value)
 		.nullable()
 		.default(null),
 	balanceFirstInvoice: z
@@ -117,6 +112,7 @@ const updateSchema = z.object({
 	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
 	dueDateDay: z
 		.string(strMessage('dia de vencimento'))
+		.transform((value) => +value)
 		.nullable()
 		.default(null),
 	dueDateFirstInvoice: z
@@ -124,14 +120,8 @@ const updateSchema = z.object({
 		.nullable()
 		.default(null),
 	closingDateInvoice: z
-		.union([
-			z.string(strMessage('dias antes do fechamento da fatura')),
-			z.number(numbMessage('dias antes do fechamento da fatura')),
-		])
-		.transform((value: string | number) => {
-			const fmtValue = Format.cleanCurrency(value)
-			return fmtValue
-		})
+		.string(strMessage('dias antes do fechamento da fatura'))
+		.transform((value) => +value)
 		.nullable()
 		.default(null),
 	balanceFirstInvoice: z
@@ -212,8 +202,8 @@ export function useBankAccountsController() {
 		hookFormSetValueCreate('logo', '')
 		hookFormSetValueCreate('limit', 0)
 		hookFormSetValueCreate('initialBalance', 0)
-		hookFormSetValueCreate('limitType', 'Mensal')
-		hookFormSetValueCreate('dueDateDay', '')
+		hookFormSetValueCreate('limitType', null)
+		hookFormSetValueCreate('dueDateDay', 0)
 		hookFormSetValueCreate('dueDateFirstInvoice', '')
 		hookFormSetValueCreate('closingDateInvoice', 0)
 		hookFormSetValueCreate('balanceFirstInvoice', 0)
@@ -226,7 +216,28 @@ export function useBankAccountsController() {
 		setSelectedBankAccount(bankAccount)
 		setIsUpdateModalOpen(!isUpdateModalOpen)
 		hookFormSetValueUpdate('id', bankAccount.id)
+		hookFormSetValueUpdate('accountType', bankAccount.accountType)
 		hookFormSetValueUpdate('name', bankAccount.name)
+		hookFormSetValueUpdate('currency', bankAccount.currency)
+		hookFormSetValueUpdate('logo', bankAccount.logo)
+		hookFormSetValueUpdate('limit', bankAccount.limit)
+		hookFormSetValueUpdate('limitType', bankAccount.limitType)
+		hookFormSetValueUpdate(
+			'dueDateDay',
+			bankAccount.dueDateDay !== null ? +bankAccount.dueDateDay : 0,
+		)
+		hookFormSetValueUpdate(
+			'dueDateFirstInvoice',
+			bankAccount.dueDateFirstInvoice,
+		)
+		hookFormSetValueUpdate('closingDateInvoice', bankAccount.closingDateInvoice)
+		hookFormSetValueUpdate(
+			'balanceFirstInvoice',
+			bankAccount.balanceFirstInvoice,
+		)
+		hookFormSetValueUpdate('isFirstInvoice', bankAccount.isFirstInvoice)
+		hookFormSetValueUpdate('isCreditCard', bankAccount.isCreditCard)
+		hookFormSetValueUpdate('initialBalance', bankAccount.initialBalance)
 	}
 	function handleCloseUpdateModal() {
 		setIsUpdateModalOpen(!isUpdateModalOpen)
@@ -242,6 +253,21 @@ export function useBankAccountsController() {
 	const { bankAccounts } = useBankAccounts()
 	const { createBankAccount } = useCreateBankAccount()
 	const { updateBankAccount } = useUpdateBankAccountCenter()
+
+	function getDueDate(day: number): string {
+		const today = new Date()
+		const currentYear = today.getFullYear()
+		const currentMonth = today.getMonth()
+		let dueDate = new Date(currentYear, currentMonth, day)
+		if (dueDate < today) {
+			dueDate = new Date(currentYear, currentMonth + 1, day)
+		}
+		const formattedDay = dueDate.getDate().toString().padStart(2, '0')
+		const formattedMonth = (dueDate.getMonth() + 1).toString().padStart(2, '0') // Mês é zero-indexado
+		const formattedYear = dueDate.getFullYear()
+
+		return `${formattedDay}/${formattedMonth}/${formattedYear}`
+	}
 
 	const handleSubmit = hookFormHandleSubmitCreate(
 		async ({
@@ -259,13 +285,6 @@ export function useBankAccountsController() {
 			isCreditCard,
 			initialBalance,
 		}: CreateBankAccountFormData) => {
-			console.log('CHAMOU', {
-				accountType,
-				name,
-				currency,
-				logo,
-			})
-
 			try {
 				await createBankAccount({
 					accountType,
@@ -274,8 +293,8 @@ export function useBankAccountsController() {
 					logo,
 					limit,
 					limitType,
-					dueDateDay,
-					dueDateFirstInvoice,
+					dueDateDay: dueDateDay ? getDueDate(+dueDateDay) : null,
+					dueDateFirstInvoice: dueDateFirstInvoice ? dueDateFirstInvoice : null,
 					closingDateInvoice,
 					balanceFirstInvoice,
 					isFirstInvoice,
@@ -315,7 +334,7 @@ export function useBankAccountsController() {
 					logo,
 					limit,
 					limitType,
-					dueDateDay,
+					dueDateDay: dueDateDay as any,
 					dueDateFirstInvoice,
 					closingDateInvoice,
 					balanceFirstInvoice,
@@ -353,6 +372,12 @@ export function useBankAccountsController() {
 			})
 	}
 
+	function extractPath(input: string): string {
+		const regex = /\/src\/.*?\.jpg/
+		const match = input.match(regex)
+		return match ? match[0] : ''
+	}
+
 	return {
 		bankAccounts,
 		isCreateModalOpen,
@@ -365,6 +390,7 @@ export function useBankAccountsController() {
 		hookFormControlUpdate,
 		isCreateCreditCard,
 		isUpdateCreditCard,
+		extractPath,
 		hookFormRegisterCreate,
 		hookFormRegisterUpdate,
 		handleOpenCreateModal,

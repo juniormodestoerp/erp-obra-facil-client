@@ -32,7 +32,10 @@ export function DesktopOptions({ path, small, balance }: Props) {
 		<nav className={cn('flex flex-1 flex-col', small && 'mx-auto')}>
 			<ul
 				role="list"
-				className={cn('-mx-2 flex flex-1 flex-col gap-y-7 ml-px', small && '-mx-0')}
+				className={cn(
+					'-mx-2 flex flex-1 flex-col gap-y-7 ml-px',
+					small && '-mx-0',
+				)}
 			>
 				{!small && (
 					<div className="flex flex-col">

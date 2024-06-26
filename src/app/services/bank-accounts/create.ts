@@ -1,5 +1,6 @@
 import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
 import { httpClient } from '@app/services/http-client'
+import { Format } from '@app/utils/format'
 
 type ICreateBankAccountDTO = Omit<IBankAccountDTO, 'id' | 'createdAt'>
 
@@ -30,7 +31,7 @@ export async function create({
 		limit,
 		limitType: limitType === 'Mensal' ? 'MONTHLY' : 'TOTAL',
 		dueDateDay,
-		dueDateFirstInvoice,
+		dueDateFirstInvoice: dueDateFirstInvoice ? Format.formatIso(dueDateFirstInvoice) : null,
 		closingDateInvoice,
 		balanceFirstInvoice,
 		isFirstInvoice,

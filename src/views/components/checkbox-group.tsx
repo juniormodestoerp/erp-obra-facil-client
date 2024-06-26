@@ -1,4 +1,5 @@
 import { Checkbox } from '@views/components/ui/checkbox'
+import type { ICategoryType } from '@views/pages/private/categories/use-categories-controller'
 
 interface CheckboxOption {
 	id: string
@@ -9,7 +10,7 @@ interface Props {
 	title: string
 	options: CheckboxOption[]
 	selectedOption: string
-	onOptionChange: (id: string) => void
+	onOptionChange: (id: ICategoryType) => void
 }
 
 export function CheckboxGroup({
@@ -28,7 +29,9 @@ export function CheckboxGroup({
 							<Checkbox
 								id={option.id}
 								checked={selectedOption === option.id}
-								onCheckedChange={() => onOptionChange(option.id)}
+								onCheckedChange={() =>
+									onOptionChange(option.id as ICategoryType)
+								}
 							/>
 						</div>
 						<label

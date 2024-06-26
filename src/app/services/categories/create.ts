@@ -1,28 +1,23 @@
+import type { ICategoryDTO, ICategoryType } from '@app/dtos/category-dto'
 import { httpClient } from '@app/services/http-client'
 
-export interface Params {
-	type: string
-	name: string
-	subcategoryOf: string
-}
+type ICreateCategoryDTO = Omit<ICategoryDTO, 'id' | 'createdAt'>
 
-export interface Response {
-	id: string
-	type: string
+export interface Params {
+	type: ICategoryType
 	name: string
 	subcategoryOf: string | null
-	createdAt: string
 }
 
 export async function create({
 	type,
 	name,
 	subcategoryOf,
-}: Params): Promise<Response> {
+}: ICreateCategoryDTO): Promise<ICategoryDTO> {
 	const { data } = await httpClient.post('/categories', {
 		type,
 		name,
-		subcategoryOf: subcategoryOf || null,
+		subcategoryOf,
 	})
 
 	return {

@@ -129,10 +129,32 @@ function dateToExcelSerial(date: string): number {
 	return Math.floor(diffInTime / (24 * 60 * 60 * 1000)) + 1
 }
 
+// function addDaysToDate(dateString: string, days: number): string {
+// 	const [day, month, year] = dateString.split('/').map(Number)
+// 	const date = new Date(year, month - 1, day)
+// 	date.setDate(date.getDate() + days)
+// 	const newDay = date.getDate().toString().padStart(2, '0')
+// 	const newMonth = (date.getMonth() + 1).toString().padStart(2, '0')
+// 	const newYear = date.getFullYear()
+// 	return `${newDay}/${newMonth}/${newYear}`
+// }
+
+function formatDateString(isoDateString: string): string {
+	const date = new Date(isoDateString);
+
+	const day = date.getDate().toString().padStart(2, '0');
+	const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mês é zero-indexado
+	const year = date.getFullYear();
+
+	return `${day}/${month}/${year}`;
+}
+
+
 export const Format = {
 	parseIso,
 	formatIso,
 	document,
+	formatDateString,
 	phone,
 	name,
 	excelSerialToDate,
