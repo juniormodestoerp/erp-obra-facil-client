@@ -25,15 +25,15 @@ export interface IVerifiedTransaction {
 	date: string
 	amount: number
 	description: string
-	account: string
+	account: string | null
 	transferAccount: string | null
 	card: string | null
-	category: string
+	category: string | null
 	subcategory: string | null
 	contact: string | null
 	center: string | null
 	project: string | null
-	method: string
+	method: string | null
 	documentNumber: string | null
 	notes: string | null
 	competenceDate: string | null
