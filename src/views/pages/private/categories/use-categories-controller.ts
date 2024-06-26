@@ -112,8 +112,6 @@ export function useCategoriesController() {
 	const { createCategory } = useCreateCategory()
 	const { updateCategory } = useUpdateCategoryCenter()
 
-	console.log(categories, 'categories')
-
 	const handleSubmit = hookFormHandleSubmitCreate(
 		async ({ type, name, subcategoryOf }: CreateCategoryFormData) => {
 			try {

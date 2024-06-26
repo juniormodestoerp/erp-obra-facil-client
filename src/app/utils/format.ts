@@ -117,15 +117,15 @@ function excelSerialToDate(serialNumber: number): string {
 }
 
 function formatOfxDate(ofxDate: string): string {
-  if (ofxDate.length !== 8) {
-    throw new Error('Invalid date format');
-  }
+	if (ofxDate.length !== 8) {
+		throw new Error('Invalid date format')
+	}
 
-  const year = ofxDate.slice(0, 4);
-  const month = ofxDate.slice(4, 6);
-  const day = ofxDate.slice(6, 8);
+	const year = ofxDate.slice(0, 4)
+	const month = ofxDate.slice(4, 6)
+	const day = ofxDate.slice(6, 8)
 
-  return `${day}/${month}/${year}`;
+	return `${day}/${month}/${year}`
 }
 
 /**
@@ -152,60 +152,59 @@ function dateToExcelSerial(date: string): number {
 // }
 
 function formatDateString(isoDateString: string): string {
-	const date = new Date(isoDateString);
+	const date = new Date(isoDateString)
 
-	const day = date.getDate().toString().padStart(2, '0');
-	const month = (date.getMonth() + 1).toString().padStart(2, '0');
-	const year = date.getFullYear();
+	const day = date.getDate().toString().padStart(2, '0')
+	const month = (date.getMonth() + 1).toString().padStart(2, '0')
+	const year = date.getFullYear()
 
-	return `${day}/${month}/${year}`;
+	return `${day}/${month}/${year}`
 }
 
 function capitalizeName(name: string): string {
-  return name
-    .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+	return name
+		.toLowerCase()
+		.split(' ')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ')
 }
 
 function formatDescription(description: string): string {
-  // Regex para capturar descrição com "Cp"
-  const regexWithCp = /^PIX (ENVIADO|RECEBIDO) - Cp :(\d+)-(.+)$/;
-  const matchWithCp = description.match(regexWithCp);
+	// Regex para capturar descrição com "Cp"
+	const regexWithCp = /^PIX (ENVIADO|RECEBIDO) - Cp :(\d+)-(.+)$/
+	const matchWithCp = description.match(regexWithCp)
 
-  if (matchWithCp) {
-    const type = matchWithCp[1];
-    const beneficiary = capitalizeName(matchWithCp[3]);
+	if (matchWithCp) {
+		const type = matchWithCp[1]
+		const beneficiary = capitalizeName(matchWithCp[3])
 
-    return `PIX ${capitalizeName(type)}\nBeneficiário: ${beneficiary}`;
-  }
+		return `PIX ${capitalizeName(type)}\nBeneficiário: ${beneficiary}`
+	}
 
-  // Regex para capturar descrição sem "Cp"
-  const regexWithoutCp = /^PIX (ENVIADO|RECEBIDO) - (.+)$/;
-  const matchWithoutCp = description.match(regexWithoutCp);
+	// Regex para capturar descrição sem "Cp"
+	const regexWithoutCp = /^PIX (ENVIADO|RECEBIDO) - (.+)$/
+	const matchWithoutCp = description.match(regexWithoutCp)
 
-  if (matchWithoutCp) {
-    const type = matchWithoutCp[1];
-    const beneficiary = capitalizeName(matchWithoutCp[2]);
+	if (matchWithoutCp) {
+		const type = matchWithoutCp[1]
+		const beneficiary = capitalizeName(matchWithoutCp[2])
 
-    return `PIX ${type}\nBeneficiário: ${beneficiary}`;
-  }
+		return `PIX ${type}\nBeneficiário: ${beneficiary}`
+	}
 
-  return description; // Retorna a descrição original se não corresponder a nenhum formato esperado
+	return description // Retorna a descrição original se não corresponder a nenhum formato esperado
 }
 
 function translateAndCapitalize(type: string): string {
-  switch (type.toUpperCase()) {
-    case 'CREDIT':
-      return 'Crédito';
-    case 'PAYMENT':
-      return 'Pagamento';
-    default:
-      return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
-  }
+	switch (type.toUpperCase()) {
+		case 'CREDIT':
+			return 'Crédito'
+		case 'PAYMENT':
+			return 'Pagamento'
+		default:
+			return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()
+	}
 }
-
 
 export const Format = {
 	parseIso,

@@ -11,18 +11,18 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import { cn } from '@app/utils/cn'
 
-import type { FormData } from '@views/pages/private/settings/use-settings-controller'
+import type { SettingsData } from '@views/pages/private/settings/use-settings-controller'
 
 interface Props {
 	name: any
-	handleToggle: Dispatch<SetStateAction<FormData>>
+	handleToggle: Dispatch<SetStateAction<SettingsData>>
 }
 
 export const Switch = forwardRef<
 	ElementRef<typeof Root>,
 	ComponentPropsWithoutRef<typeof Root> & Props
 >(({ name, className, handleToggle, ...props }, ref) => {
-	const { control, getValues, setValue } = useFormContext<FormData>()
+	const { control } = useFormContext<SettingsData>()
 
 	const [isRequired, setIsRequired] = useState(true)
 

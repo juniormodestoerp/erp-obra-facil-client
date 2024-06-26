@@ -31,7 +31,7 @@ const CommandItemOption = forwardRef<
 	<CommandItem
 		ref={ref}
 		className={cn(
-			'relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground',
+			'relative flex cursor-default items-center rounded-md px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground',
 			className,
 		)}
 		{...props}
@@ -126,7 +126,7 @@ export function SelectLogo({
 							type="button"
 							onClick={handleButtonClick}
 							className={cn(
-								'relative block min-h-8 w-full rounded border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 hover:border-primary focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100',
+								'relative block min-h-8 w-full rounded-md border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 hover:border-primary focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100',
 								error && '!border-red-600',
 							)}
 						>
