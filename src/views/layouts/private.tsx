@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import { authService } from '@app/services/authenticate'
 import { cn } from '@app/utils/cn'
 
+import { useSidebar } from '@app/hooks/use-sidebar'
 import { Breadcrumbs } from '@views/components/breadcumbs'
 import { DesktopSidebar } from '@views/components/sidebar/desktop-sidebar'
 import { MobileSidebar } from '@views/components/sidebar/mobile-sidebar'
@@ -13,7 +14,7 @@ import { ComboboxDropdownMenu } from '@views/components/user-widget'
 
 export function PrivateLayout() {
 	const route = useLocation()
-	const [small, setSmall] = useState(true)
+	const { isSidebarSmall: small, setIsSidebarSmall: setSmall } = useSidebar()
 
 	const pagePaths = route.pathname.split('/')
 	pagePaths.shift()
@@ -33,7 +34,7 @@ export function PrivateLayout() {
 
 	useEffect(() => {
 		setSmall(true)
-	}, [])
+	}, [setSmall])
 
 	return (
 		<div className="flex h-full min-h-screen flex-1 bg-zinc-50 dark:bg-zinc-950">
@@ -46,7 +47,7 @@ export function PrivateLayout() {
 			/>
 
 			<div
-				className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-64')}
+				className={cn('flex w-full flex-col', small ? 'lg:ml-20' : 'lg:ml-56')}
 			>
 				<div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm dark:border-zinc-600 dark:bg-zinc-900 sm:gap-x-6 sm:px-6">
 					<div className="flex w-full flex-1 items-center gap-x-2">

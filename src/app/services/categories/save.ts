@@ -21,8 +21,6 @@ export async function save({
 	name,
 	subcategoryOf,
 }: Params): Promise<Response> {
-	console.log(id)
-
 	const { data } = await httpClient.put<Response>(`/categories/${id}`, {
 		type,
 		name,

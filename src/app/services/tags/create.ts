@@ -7,9 +7,7 @@ export interface Params {
 	name: string
 }
 
-export async function create({
-	name,
-}: ICreateTagDTO): Promise<ITagDTO> {
+export async function create({ name }: ICreateTagDTO): Promise<ITagDTO> {
 	const { data } = await httpClient.post('/tags', {
 		name,
 	})

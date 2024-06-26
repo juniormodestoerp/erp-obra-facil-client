@@ -50,7 +50,7 @@ export function SubOption({
 						selected
 							? 'bg-transparent font-bold text-yellow-400 drop-shadow-2xl'
 							: 'text-white hover:bg-darker-blue',
-						'group flex gap-x-1.5 rounded-md p-2 pl-9 text-sm font-semibold leading-6 items-center',
+						'group flex gap-x-1.5 rounded-md p-2 pl-[35px] text-sm font-semibold leading-6 items-center',
 					)}
 				>
 					<span
@@ -61,7 +61,16 @@ export function SubOption({
 						)}
 					/>
 
-					<span className={cn('hidden text-sm font-medium tracking-tight text-zinc-200', open && 'block', pathname === linkTo && 'bg-transparent font-bold text-yellow-400 drop-shadow-2xl')}>{title}</span>
+					<span
+						className={cn(
+							'hidden text-sm font-medium tracking-tight text-zinc-200',
+							open && 'block',
+							pathname === linkTo &&
+								'bg-transparent font-bold text-yellow-400 drop-shadow-2xl',
+						)}
+					>
+						{title}
+					</span>
 				</Link>
 			)}
 		</li>

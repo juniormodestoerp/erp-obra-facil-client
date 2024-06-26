@@ -1,5 +1,5 @@
-import { httpClient } from '@app/services/http-client'
 import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
+import { httpClient } from '@app/services/http-client'
 
 export async function fetch(): Promise<ICostAndProfitCentersDTO[]> {
 	const { data } = await httpClient.get('/cost-and-profit-centers')

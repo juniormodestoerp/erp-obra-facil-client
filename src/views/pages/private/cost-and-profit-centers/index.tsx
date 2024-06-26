@@ -52,38 +52,44 @@ export function CostAndProfitCenters() {
 
 			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
 				{costAndProfitCenters.length > 0 ? (
-					costAndProfitCenters.map((costAndProfitCenter: ICostAndProfitCentersDTO) => (
-						<div
-							key={costAndProfitCenter.id}
-							className="flex items-center justify-start px-3 border-collapse border-t border-gy-200 dark:border-slate-400"
-						>
-							<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
-							<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
-								<p className="font-medium tracking-tight">
-									<span className="mr-2">&bull;</span>
-									<span className="w-full">{costAndProfitCenter.name}</span>
-								</p>
-								<div className="flex gap-2">
-									<Tooltip text="Editar centro de custo">
-										<button
-											type="button"
-											onClick={() => handleOpenUpdateModal(costAndProfitCenter)}
-										>
-											<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
-										</button>
-									</Tooltip>
-									<Tooltip text="Remover centro de custo">
-										<button
-											type="button"
-											onClick={() => handleOpenDeleteModal(costAndProfitCenter)}
-										>
-											<TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
-										</button>
-									</Tooltip>
+					costAndProfitCenters.map(
+						(costAndProfitCenter: ICostAndProfitCentersDTO) => (
+							<div
+								key={costAndProfitCenter.id}
+								className="flex items-center justify-start px-3 border-collapse border-t border-gy-200 dark:border-slate-400"
+							>
+								<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
+								<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
+									<p className="font-medium tracking-tight">
+										<span className="mr-2">&bull;</span>
+										<span className="w-full">{costAndProfitCenter.name}</span>
+									</p>
+									<div className="flex gap-2">
+										<Tooltip text="Editar centro de custo">
+											<button
+												type="button"
+												onClick={() =>
+													handleOpenUpdateModal(costAndProfitCenter)
+												}
+											>
+												<PencilSquareIcon className="mt-0.5 h-5 w-5 text-yellow-500" />
+											</button>
+										</Tooltip>
+										<Tooltip text="Remover centro de custo">
+											<button
+												type="button"
+												onClick={() =>
+													handleOpenDeleteModal(costAndProfitCenter)
+												}
+											>
+												<TrashIcon className="mt-0.5 h-5 w-5 text-red-500" />
+											</button>
+										</Tooltip>
+									</div>
 								</div>
 							</div>
-						</div>
-					))
+						),
+					)
 				) : (
 					<div className="h-24 text-center flex items-center justify-center">
 						<p>Nenhum resultado encontrado</p>
@@ -135,7 +141,9 @@ export function CostAndProfitCenters() {
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
 					<DialogContent className="sm:max-w-[425px]">
 						<DialogHeader>
-							<DialogTitle>Editar {selectedCostAndProfitCenter?.name}</DialogTitle>
+							<DialogTitle>
+								Editar {selectedCostAndProfitCenter?.name}
+							</DialogTitle>
 							<DialogDescription>
 								Atualize um centro de custo no sistema.
 							</DialogDescription>
@@ -173,7 +181,9 @@ export function CostAndProfitCenters() {
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
 					<DialogContent className="sm:max-w-[425px]">
 						<DialogHeader>
-							<DialogTitle>Remover {selectedCostAndProfitCenter.name}</DialogTitle>
+							<DialogTitle>
+								Remover {selectedCostAndProfitCenter.name}
+							</DialogTitle>
 							<DialogDescription>
 								Tem certeza de que deseja remover este centro de custo? Essa
 								ação poderá ser desfeita.

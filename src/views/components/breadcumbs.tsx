@@ -46,17 +46,17 @@ export function Breadcrumbs() {
 				current: true,
 			})
 			break
-			case '/transfers':
-				pages.push({
-					name: 'Transferências',
-					href: '/transfers',
-					current: true,
-				})
-				break
-				case '/bank-accounts':
-					pages.push({ name: 'Contas', href: '/bank-accounts', current: true })
-					break
-				
+		case '/transfers':
+			pages.push({
+				name: 'Transferências',
+				href: '/transfers',
+				current: true,
+			})
+			break
+		case '/bank-accounts':
+			pages.push({ name: 'Contas', href: '/bank-accounts', current: true })
+			break
+
 		case '/transactions':
 			pages.push({ name: 'Lançamentos', href: '/transactions', current: true })
 			break

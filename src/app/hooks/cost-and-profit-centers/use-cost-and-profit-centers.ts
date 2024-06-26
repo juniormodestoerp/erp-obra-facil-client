@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
 import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
-import type { WithStatus } from '@app/utils/with-status'
+import { costAndProfitCentersService } from '@app/services/cost-and-profit-centers'
 import type { AppError } from '@app/services/http-client'
+import type { WithStatus } from '@app/utils/with-status'
 
 export const COST_AND_PROFIT_CENTERS_QUERY_KEY = ['costAndProfitCenters']
 

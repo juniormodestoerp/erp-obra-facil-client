@@ -9,18 +9,12 @@ export function useUpdateTagCenter() {
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: tagsService.save,
 		onMutate: (variables) => {
-			const previousTags = queryClient.getQueryData<
-				ITagDTO[]
-			>(TAG_QUERY_KEY)
+			const previousTags = queryClient.getQueryData<ITagDTO[]>(TAG_QUERY_KEY)
 
-			queryClient.setQueryData<ITagDTO[]>(
-				TAG_QUERY_KEY,
-				(old) =>
-					old?.map((tag) =>
-						tag.id === variables.id
-							? { ...tag, ...variables }
-							: tag,
-					),
+			queryClient.setQueryData<ITagDTO[]>(TAG_QUERY_KEY, (old) =>
+				old?.map((tag) =>
+					tag.id === variables.id ? { ...tag, ...variables } : tag,
+				),
 			)
 
 			return { previousTags }
@@ -28,10 +22,7 @@ export function useUpdateTagCenter() {
 		onError: async (_error, _variables, context) => {
 			await queryClient.cancelQueries({ queryKey: TAG_QUERY_KEY })
 
-			queryClient.setQueryData<ITagDTO[]>(
-				TAG_QUERY_KEY,
-				context?.previousTags,
-			)
+			queryClient.setQueryData<ITagDTO[]>(TAG_QUERY_KEY, context?.previousTags)
 		},
 	})
 

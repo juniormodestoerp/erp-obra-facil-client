@@ -66,7 +66,6 @@ function formatIso(dateString: string): string {
 	return date.toISOString()
 }
 
-
 function cleanCurrency(value: number | string): number {
 	if (typeof value === 'string') {
 		return Number(value.replace(',', '')) / 100
@@ -74,7 +73,6 @@ function cleanCurrency(value: number | string): number {
 
 	return value
 }
-
 
 function name(name: string): string {
 	const names = name.trim().split(/\s+/)
@@ -102,12 +100,43 @@ function capitalizeFirstLetter(str: string): string {
 	return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+/**
+ * Converte um número de série do Excel para uma data legível.
+ * @param serialNumber Número de série do Excel.
+ * @returns Data no formato 'DD/MM/YYYY'.
+ */
+function excelSerialToDate(serialNumber: number): string {
+	const baseDate = new Date(1900, 0, 1)
+	const excelDate = new Date(
+		baseDate.getTime() + (serialNumber - 1) * 24 * 60 * 60 * 1000,
+	)
+	const day = String(excelDate.getDate()).padStart(2, '0')
+	const month = String(excelDate.getMonth() + 1).padStart(2, '0')
+	const year = excelDate.getFullYear()
+	return `${day}/${month}/${year}`
+}
+
+/**
+ * Converte uma data no formato 'DD/MM/YYYY' para um número de série do Excel.
+ * @param date Data no formato 'DD/MM/YYYY'.
+ * @returns Número de série do Excel.
+ */
+function dateToExcelSerial(date: string): number {
+	const [day, month, year] = date.split('/').map(Number)
+	const baseDate = new Date(1900, 0, 1)
+	const targetDate = new Date(year, month - 1, day)
+	const diffInTime = targetDate.getTime() - baseDate.getTime()
+	return Math.floor(diffInTime / (24 * 60 * 60 * 1000)) + 1
+}
+
 export const Format = {
 	parseIso,
 	formatIso,
 	document,
 	phone,
 	name,
+	excelSerialToDate,
+	dateToExcelSerial,
 	cleanCurrency,
 	currency,
 	parseIsoBack,

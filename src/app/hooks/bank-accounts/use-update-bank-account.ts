@@ -9,9 +9,9 @@ export function useUpdateBankAccountCenter() {
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: bankAccountsService.save,
 		onMutate: (variables) => {
-			const previousBankAccounts = queryClient.getQueryData<
-				IBankAccountDTO[]
-			>(BANK_ACCOUNT_QUERY_KEY)
+			const previousBankAccounts = queryClient.getQueryData<IBankAccountDTO[]>(
+				BANK_ACCOUNT_QUERY_KEY,
+			)
 
 			queryClient.setQueryData<IBankAccountDTO[]>(
 				BANK_ACCOUNT_QUERY_KEY,

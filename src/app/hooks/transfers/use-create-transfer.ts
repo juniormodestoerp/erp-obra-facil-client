@@ -31,25 +31,21 @@ export function useCreateTransfer() {
 		onSuccess: async (data, _variables, context) => {
 			await queryClient.cancelQueries({ queryKey: TRANSFER_QUERY_KEY })
 
-			queryClient.setQueryData<TransfersQueryData>(
-				TRANSFER_QUERY_KEY,
-				(old) =>
-					old?.map((transfer) =>
-						transfer.id === context.tmpTransferId ? data : transfer,
-					),
+			queryClient.setQueryData<TransfersQueryData>(TRANSFER_QUERY_KEY, (old) =>
+				old?.map((transfer) =>
+					transfer.id === context.tmpTransferId ? data : transfer,
+				),
 			)
 		},
 		onError: async (_error, _variables, context) => {
 			await queryClient.cancelQueries({ queryKey: TRANSFER_QUERY_KEY })
 
-			queryClient.setQueryData<TransfersQueryData>(
-				TRANSFER_QUERY_KEY,
-				(old) =>
-					old?.map((transfer) =>
-						transfer.id === context?.tmpTransferId
-							? { ...transfer, status: 'error' }
-							: transfer,
-					),
+			queryClient.setQueryData<TransfersQueryData>(TRANSFER_QUERY_KEY, (old) =>
+				old?.map((transfer) =>
+					transfer.id === context?.tmpTransferId
+						? { ...transfer, status: 'error' }
+						: transfer,
+				),
 			)
 		},
 	})

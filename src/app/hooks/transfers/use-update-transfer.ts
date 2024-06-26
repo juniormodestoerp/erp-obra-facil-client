@@ -9,18 +9,15 @@ export function useUpdateTransferCenter() {
 	const { mutateAsync, isPending } = useMutation({
 		mutationFn: transfersService.save,
 		onMutate: (variables) => {
-			const previousTransfers = queryClient.getQueryData<
-				ITransferDTO[]
-			>(TRANSFER_QUERY_KEY)
+			const previousTransfers =
+				queryClient.getQueryData<ITransferDTO[]>(TRANSFER_QUERY_KEY)
 
-			queryClient.setQueryData<ITransferDTO[]>(
-				TRANSFER_QUERY_KEY,
-				(old) =>
-					old?.map((transfer) =>
-						transfer.id === variables.id
-							? { ...transfer, ...variables }
-							: transfer,
-					),
+			queryClient.setQueryData<ITransferDTO[]>(TRANSFER_QUERY_KEY, (old) =>
+				old?.map((transfer) =>
+					transfer.id === variables.id
+						? { ...transfer, ...variables }
+						: transfer,
+				),
 			)
 
 			return { previousTransfers }

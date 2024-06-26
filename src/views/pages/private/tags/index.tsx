@@ -41,17 +41,11 @@ export function Tags() {
 		handleSubmitRemove,
 	} = useTagsController()
 
-	console.log(tags, 'tags');
-	
-
 	return (
 		<Fragment>
 			<Helmet title="Tags" />
 
-			<PageTitle
-				title="Tags"
-				description="Crie e gerencie suas tags."
-			/>
+			<PageTitle title="Tags" description="Crie e gerencie suas tags." />
 
 			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
 				{tags.length > 0 ? (
@@ -178,8 +172,8 @@ export function Tags() {
 						<DialogHeader>
 							<DialogTitle>Remover {selectedTag.name}</DialogTitle>
 							<DialogDescription>
-								Tem certeza de que deseja remover esta tag? Essa
-								ação poderá ser desfeita.
+								Tem certeza de que deseja remover esta tag? Essa ação poderá ser
+								desfeita.
 							</DialogDescription>
 						</DialogHeader>
 

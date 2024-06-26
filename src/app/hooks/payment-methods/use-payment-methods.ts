@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { IPaymentMethodDTO } from '@app/dtos/payment-method-dto'
+import type { AppError } from '@app/services/http-client'
 import { paymentMethodsService } from '@app/services/payment-methods'
 import type { WithStatus } from '@app/utils/with-status'
-import type { AppError } from '@app/services/http-client'
 
 export type PaymentMethodsQueryData = WithStatus<IPaymentMethodDTO>[]
 

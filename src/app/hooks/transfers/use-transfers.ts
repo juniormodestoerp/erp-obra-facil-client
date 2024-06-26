@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { ITransferDTO } from '@app/dtos/transfer-dto'
+import type { AppError } from '@app/services/http-client'
 import { transfersService } from '@app/services/transfers'
 import type { WithStatus } from '@app/utils/with-status'
-import type { AppError } from '@app/services/http-client'
 
 export type TransfersQueryData = WithStatus<ITransferDTO>[]
 

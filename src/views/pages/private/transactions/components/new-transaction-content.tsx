@@ -40,10 +40,7 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 		control,
 		formState: { errors },
 		setValue,
-		watch,
 	} = methods
-
-	console.log('accountType', watch('accountType'))
 
 	const getDefaultValue = (value: any) =>
 		value === null || value === '' ? 'Não informado' : value

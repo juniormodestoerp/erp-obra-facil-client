@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { ITagDTO } from '@app/dtos/tag-dto'
+import type { AppError } from '@app/services/http-client'
 import { tagsService } from '@app/services/tags'
 import type { WithStatus } from '@app/utils/with-status'
-import type { AppError } from '@app/services/http-client'
 
 export type TagsQueryData = WithStatus<ITagDTO>[]
 

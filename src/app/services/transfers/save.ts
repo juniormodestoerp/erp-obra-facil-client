@@ -1,9 +1,7 @@
 import type { ITransferDTO } from '@app/dtos/transfer-dto'
 import { httpClient } from '@app/services/http-client'
 
-type IUpdateTransferDTO = Partial<
-	Omit<ITransferDTO, 'id' | 'createdAt'>
-> & {
+type IUpdateTransferDTO = Partial<Omit<ITransferDTO, 'id' | 'createdAt'>> & {
 	id: string
 }
 

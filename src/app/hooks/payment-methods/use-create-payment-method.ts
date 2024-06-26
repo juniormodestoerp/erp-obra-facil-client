@@ -35,7 +35,9 @@ export function useCreatePaymentMethod() {
 				PAYMENT_METHOD_QUERY_KEY,
 				(old) =>
 					old?.map((paymentMethod) =>
-						paymentMethod.id === context.tmpPaymentMethodId ? data : paymentMethod,
+						paymentMethod.id === context.tmpPaymentMethodId
+							? data
+							: paymentMethod,
 					),
 			)
 		},

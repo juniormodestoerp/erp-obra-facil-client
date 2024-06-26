@@ -175,8 +175,8 @@ export function Transfers() {
 						<DialogHeader>
 							<DialogTitle>Remover {selectedTransfer.name}</DialogTitle>
 							<DialogDescription>
-								Tem certeza de que deseja remover este tipo de transferência? Essa
-								ação poderá ser desfeita.
+								Tem certeza de que deseja remover este tipo de transferência?
+								Essa ação poderá ser desfeita.
 							</DialogDescription>
 						</DialogHeader>
 

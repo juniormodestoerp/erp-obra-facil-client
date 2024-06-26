@@ -54,10 +54,7 @@ export function BankAccounts() {
 		<Fragment>
 			<Helmet title="Contas" />
 
-			<PageTitle
-				title="Contas"
-				description="Crie e gerencie suas contas."
-			/>
+			<PageTitle title="Contas" description="Crie e gerencie suas contas." />
 
 			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
 				{bankAccounts.length > 0 ? (
@@ -359,8 +356,8 @@ export function BankAccounts() {
 						<DialogHeader>
 							<DialogTitle>Remover {selectedBankAccount.name}</DialogTitle>
 							<DialogDescription>
-								Tem certeza de que deseja remover esta conta? Essa ação
-								poderá ser desfeita.
+								Tem certeza de que deseja remover esta conta? Essa ação poderá
+								ser desfeita.
 							</DialogDescription>
 						</DialogHeader>
 

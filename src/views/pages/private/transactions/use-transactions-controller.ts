@@ -128,8 +128,6 @@ export function useTransactionsController() {
 	})
 
 	const handleSubmit = methods.handleSubmit(async (data: FormData) => {
-		console.log('data', data, 'executou a transação')
-
 		await createTransaction(data)
 		setOpenCreateDialog(false)
 	})
@@ -262,7 +260,6 @@ export function useTransactionsController() {
 
 	function handleRowDoubleClick(transaction: ITransaction) {
 		setSelectedTransaction(transaction)
-		console.log('transaction 2', transaction)
 
 		openTransaction()
 		setOpenCreateDialog(true)
@@ -273,14 +270,6 @@ export function useTransactionsController() {
 	}, [])
 
 	useGlobalShortcut('Ctrl+a', openModal)
-
-	const {
-		formState: { errors },
-		watch,
-	} = methods
-
-	console.log('errors', errors)
-	console.log(watch('accountType'))
 
 	return {
 		table,

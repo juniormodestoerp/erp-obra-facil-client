@@ -2,8 +2,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
 import { bankAccountsService } from '@app/services/bank-accounts'
-import type { WithStatus } from '@app/utils/with-status'
 import type { AppError } from '@app/services/http-client'
+import type { WithStatus } from '@app/utils/with-status'
 
 export type BankAccountsQueryData = WithStatus<IBankAccountDTO>[]
 

@@ -1,14 +1,6 @@
-import { ChevronUpDownIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import {
-	type MouseEvent,
-	useEffect,
-	useState,
-	forwardRef,
-	type ElementRef,
-	type ComponentPropsWithoutRef,
-} from 'react'
-import { Controller } from 'react-hook-form'
+import { currencyData } from '@/assets/data/currency-data'
 import { cn } from '@app/utils/cn'
+import { ChevronUpDownIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -16,9 +8,17 @@ import {
 	CommandInput,
 	CommandList,
 } from '@views/components/ui/command'
-import { CommandItem } from 'cmdk'
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
-import { currencyData } from '@/assets/data/currency-data'
+import { CommandItem } from 'cmdk'
+import {
+	type ComponentPropsWithoutRef,
+	type ElementRef,
+	type MouseEvent,
+	forwardRef,
+	useEffect,
+	useState,
+} from 'react'
+import { Controller } from 'react-hook-form'
 
 const CommandItemOption = forwardRef<
 	ElementRef<typeof CommandItem>,

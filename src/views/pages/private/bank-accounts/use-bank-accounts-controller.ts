@@ -5,27 +5,24 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
-import { useCreateBankAccount } from '@app/hooks/bank-accounts/use-create-bank-account'
 import {
 	BANK_ACCOUNT_QUERY_KEY,
 	useBankAccounts,
 } from '@app/hooks/bank-accounts/use-bank-accounts'
+import { useCreateBankAccount } from '@app/hooks/bank-accounts/use-create-bank-account'
 import { useUpdateBankAccountCenter } from '@app/hooks/bank-accounts/use-update-bank-account'
-import { type AppError, parseError } from '@app/services/http-client'
 import { bankAccountsService } from '@app/services/bank-accounts'
+import { type AppError, parseError } from '@app/services/http-client'
 import {
 	boolMessage,
 	numbMessage,
 	strMessage,
 } from '@app/utils/custom-zod-error'
-import { toast } from 'sonner'
 import { Format } from '@app/utils/format'
+import { toast } from 'sonner'
 
 const createSchema = z.object({
 	accountType: z
-		.string(strMessage('tipo da conta'))
-		.min(1, 'O tipo da conta é obrigatório!'),
-	type: z
 		.string(strMessage('tipo da conta'))
 		.min(1, 'O tipo da conta é obrigatório!'),
 	name: z
@@ -99,9 +96,6 @@ type CreateBankAccountFormData = z.infer<typeof createSchema>
 const updateSchema = z.object({
 	id: z.string(strMessage('identificador da conta')),
 	accountType: z
-		.string(strMessage('tipo da conta'))
-		.min(1, 'O tipo da conta é obrigatório!'),
-	type: z
 		.string(strMessage('tipo da conta'))
 		.min(1, 'O tipo da conta é obrigatório!'),
 	name: z
@@ -186,11 +180,9 @@ export function useBankAccountsController() {
 		control: hookFormControlCreate,
 		watch: hookFormWatchCreate,
 		formState: { errors: hookFormErrorsCreate },
-	} = useForm<UpdateBankAccountFormData>({
+	} = useForm<CreateBankAccountFormData>({
 		resolver: zodResolver(createSchema),
 	})
-
-	console.log(hookFormWatchCreate('accountType'))
 
 	const isCreateCreditCard =
 		hookFormWatchCreate('accountType') === 'Cartão de crédito'
@@ -214,7 +206,17 @@ export function useBankAccountsController() {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
 	function handleOpenCreateModal() {
+		hookFormSetValueCreate('accountType', '')
 		hookFormSetValueCreate('name', '')
+		hookFormSetValueCreate('currency', '')
+		hookFormSetValueCreate('logo', '')
+		hookFormSetValueCreate('limit', 0)
+		hookFormSetValueCreate('initialBalance', 0)
+		hookFormSetValueCreate('limitType', 'Mensal')
+		hookFormSetValueCreate('dueDateDay', '')
+		hookFormSetValueCreate('dueDateFirstInvoice', '')
+		hookFormSetValueCreate('closingDateInvoice', 0)
+		hookFormSetValueCreate('balanceFirstInvoice', 0)
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 	function handleCloseCreateModal() {
@@ -257,20 +259,11 @@ export function useBankAccountsController() {
 			isCreditCard,
 			initialBalance,
 		}: CreateBankAccountFormData) => {
-			console.log('data submit', {
+			console.log('CHAMOU', {
 				accountType,
 				name,
 				currency,
 				logo,
-				limit,
-				limitType,
-				dueDateDay,
-				dueDateFirstInvoice,
-				closingDateInvoice,
-				balanceFirstInvoice,
-				isFirstInvoice,
-				isCreditCard,
-				initialBalance,
 			})
 
 			try {
@@ -346,6 +339,7 @@ export function useBankAccountsController() {
 				})
 			})
 			.catch((error) => {
+				console.error('Error removing account:', error)
 				toast.error(parseError(error as AppError))
 				if (
 					error.response.data.message ===
