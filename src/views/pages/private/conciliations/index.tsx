@@ -376,7 +376,7 @@ export function Conciliations() {
 				<Caption />
 			</div>
 
-			<div className="flex items-center justify-between gap-4">
+			<div className="flex items-start justify-between gap-4">
 				<div className={containerClassName}>
 					<div className="w-full">
 						<div className="flex items-center py-4 justify-end">
@@ -517,10 +517,10 @@ export function Conciliations() {
 				{combinedData.length > 0 && (
 					<form
 						onSubmit={handleSubmit}
-						className="border border-zinc-300 flex flex-col w-full rounded-md h-auto max-h-[calc(100vh-400px)] px-3 pt-1 pb-3 space-y-1.5"
+						className="border border-zinc-300 mt-4 flex flex-col w-full rounded-md h-full p-4 pb-4 pt-3 space-y-1.5"
 					>
 						<h1 className="text-xl font-medium text-dark-blue">
-							Dados do lançamento
+							{isSingleImport ? 'Dados do lançamento' : 'Dados dos lançamentos'}
 						</h1>
 						{isSingleImport && (
 							<>
@@ -602,7 +602,7 @@ export function Conciliations() {
 								{...createRegister('notes')}
 							/>
 						</div>
-						<div className="flex gap-x-4">
+						<div className="flex gap-x-4 pb-4">
 							<Select
 								label="Tags:"
 								name="tags"
@@ -610,7 +610,7 @@ export function Conciliations() {
 								data={transformedTags}
 							/>
 						</div>
-						<Button type="submit" className="w-full">
+						<Button type="submit" className="w-full bg-dark-blue hover:bg-dark-blue/90">
 							Salvar
 						</Button>
 					</form>
