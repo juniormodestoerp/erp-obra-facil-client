@@ -11,7 +11,6 @@ import { AuthenticateProvider } from '@app/contexts/authenticate'
 import { BalanceProvider } from '@app/contexts/balance'
 import { SidebarProvider } from '@app/contexts/sidebar'
 import { ThemeProvider } from '@app/contexts/theme'
-import { TransactionProvider } from '@app/contexts/transaction'
 import { queryClient } from '@app/services/query-client'
 
 export function App() {
@@ -20,7 +19,6 @@ export function App() {
 			<AuthenticateProvider>
 				<SidebarProvider>
 					<BalanceProvider>
-						<TransactionProvider>
 							<HelmetProvider>
 								<ThemeProvider
 									defaultTheme="light"
@@ -37,7 +35,6 @@ export function App() {
 									<AppRoutes />
 								</ThemeProvider>
 							</HelmetProvider>
-						</TransactionProvider>
 					</BalanceProvider>
 				</SidebarProvider>
 			</AuthenticateProvider>

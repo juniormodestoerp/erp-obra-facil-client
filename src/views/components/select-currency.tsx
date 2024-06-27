@@ -8,7 +8,6 @@ import {
 	CommandInput,
 	CommandList,
 } from '@views/components/ui/command'
-import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import { CommandItem } from 'cmdk'
 import {
 	type ComponentPropsWithoutRef,
@@ -18,7 +17,7 @@ import {
 	useEffect,
 	useState,
 } from 'react'
-import { Controller } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 
 const CommandItemOption = forwardRef<
 	ElementRef<typeof CommandItem>,
@@ -52,6 +51,7 @@ interface Props {
 	name: string
 	error?: string
 	control: any
+	setValue?: any
 	optional?: boolean
 }
 
@@ -62,22 +62,34 @@ export function SelectCurrency({
 	name,
 	error,
 	control,
+	setValue,
 	optional,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false)
-	const { methods } = useTransactionsController()
 	const [selectedField, setSelectedField] = useState<IData | null>(null)
 	const inputId = id ?? name
+
+	const fieldValue = useWatch({
+		control,
+		name,
+	})
 
 	useEffect(() => {
 		const defaultOption = currencyData.find(
 			(item: IData) => item.field === 'padrão',
 		)
 		if (defaultOption) {
-			methods.setValue(name as any, defaultOption.value)
+			setValue(name as any, defaultOption.value)
 			setSelectedField(defaultOption)
 		}
-	}, [name, methods])
+	}, [name, setValue])
+
+	useEffect(() => {
+		const selectedOption = currencyData.find((item: IData) => item.value === fieldValue)
+		if (selectedOption) {
+			setSelectedField(selectedOption)
+		}
+	}, [fieldValue])
 
 	function handleSelect({ item, onChange }: IHandleSelect) {
 		onChange(item.value)

@@ -1,10 +1,9 @@
 import { httpClient } from '@app/services/http-client'
-import { toast } from 'sonner'
 
 interface ITotalsByContact {
 	id: string
 	contact: string | null
-	totalAmount: number
+	amount: number
 }
 
 interface Response {
@@ -20,21 +19,11 @@ export async function totalsByContact(): Promise<Response> {
 		}
 	}
 
-	if (response.status === 200) {
-		toast.success(
-			`${
-				response?.data?.length === 1
-					? 'Total por contato carregado'
-					: 'Totais por contato carregados'
-			} com sucesso!`,
-		)
-	}
-
 	return {
 		transactions: response.data.map((transaction: ITotalsByContact) => ({
 			id: transaction.id,
 			contact: transaction.contact,
-			totalAmount: transaction.totalAmount,
+			amount: transaction.amount,
 		})),
 	}
 }

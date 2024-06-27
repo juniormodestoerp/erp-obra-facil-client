@@ -3,11 +3,11 @@ import { toast } from 'sonner'
 
 export interface IAccountsPayable {
 	id: string
-	name: string
-	totalAmount: number
-	transactionDate: string
-	tags: string | null
-	paymentMethod: string
+	description: string
+	amount: number
+	date: string
+	tags: string[]
+	method: string | null
 }
 
 export interface Response {
@@ -34,11 +34,11 @@ export async function accountsPayable(): Promise<Response> {
 	return {
 		transactions: response.data.map((transaction: IAccountsPayable) => ({
 			id: transaction.id,
-			name: transaction.name,
-			totalAmount: transaction.totalAmount,
-			transactionDate: transaction.transactionDate,
-			tags: transaction.tags,
-			paymentMethod: transaction.paymentMethod,
+			description: transaction.description,
+			amount: transaction.amount,
+			date: transaction.date,
+			tags: transaction.tags.map((tag: string) => tag),
+			method: transaction.method,
 		})),
 	}
 }

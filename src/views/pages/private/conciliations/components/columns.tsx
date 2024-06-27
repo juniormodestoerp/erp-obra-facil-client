@@ -38,7 +38,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('date')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -56,7 +56,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('amount')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -92,7 +92,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('account')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -104,38 +104,38 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			</div>
 		),
 	},
-	{
-		accessorKey: 'transferAccount',
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
-			>
-				{getColumnName('transferAccount')}
-				<ArrowUpDown className="ml-2 h-4 w-4" />
-			</Button>
-		),
-		cell: ({ row }) => (
-			<div className="min-h-10 flex items-center  w-fit ">
-				{row.getValue('transferAccount')}
-			</div>
-		),
-	},
+	// {
+	// 	accessorKey: 'transferAccount',
+	// 	header: ({ column }) => (
+	// 		<Button
+	// 			variant="ghost"
+	// 			onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+	// 			className="w-fit text-dark-blue hover:text-darker-blue"
+	// 		>
+	// 			{getColumnName('transferAccount')}
+	// 			<ArrowUpDown className="ml-2 h-4 w-4" />
+	// 		</Button>
+	// 	),
+	// 	cell: ({ row }) => (
+	// 		<div className="min-h-10 flex items-center  w-fit ">
+	// 			{row.getValue('transferAccount')}
+	// 		</div>
+	// 	),
+	// },
 	{
 		accessorKey: 'card',
 		header: ({ column }) => (
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('card')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
 			</Button>
 		),
 		cell: ({ row }) => (
-			<div className="min-h-10 flex items-center  w-fit ">
+			<div className="min-h-10 flex items-center w-fit ">
 				{row.getValue('card')}
 			</div>
 		),
@@ -146,7 +146,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('category')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -164,7 +164,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('subcategory')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -182,7 +182,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('contact')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -200,7 +200,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('center')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -218,7 +218,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('project')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -236,7 +236,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('method')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -254,7 +254,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('documentNumber')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -272,7 +272,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('notes')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -290,7 +290,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('competenceDate')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -308,7 +308,7 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			<Button
 				variant="ghost"
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				className="text-zinc-900 w-fit "
+				className="w-fit text-dark-blue hover:text-darker-blue"
 			>
 				{getColumnName('tags')}
 				<ArrowUpDown className="ml-2 h-4 w-4" />

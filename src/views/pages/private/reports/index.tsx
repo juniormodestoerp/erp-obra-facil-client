@@ -5,23 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { type Card, cashFlowCards, reportCards } from '@/assets/data'
 
-import { useTransaction } from '@app/hooks/use-transaction'
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
-
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
-
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
-
 export function Reports() {
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
-
 	return (
 		<Fragment>
 			<Helmet title="Relatórios" />
@@ -73,19 +57,6 @@ export function Reports() {
 					))}
 				</div>
 			</div>
-
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
 		</Fragment>
 	)
 }

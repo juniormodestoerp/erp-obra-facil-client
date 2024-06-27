@@ -10,23 +10,9 @@ import { FormProvider } from 'react-hook-form'
 import { PageTitle } from './components/page-title'
 import { UseSettingsController } from './use-settings-controller'
 
-import { useTransaction } from '@app/hooks/use-transaction'
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
-
 export function Settings() {
 	const { methods, settings, toggleFieldRequired, toggleFieldEnable } =
 		UseSettingsController()
-
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
 
 	return (
 		<Fragment>
@@ -106,19 +92,6 @@ export function Settings() {
 					))}
 				</form>
 			</FormProvider>
-
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
 		</Fragment>
 	)
 }

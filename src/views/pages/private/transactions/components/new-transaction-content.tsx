@@ -78,29 +78,12 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 				className="flex flex-col flex-wrap space-y-2 bg-white pt-6 dark:border-slate-400 dark:bg-slate-800"
 			>
 				<div className="grid grid-cols-3 gap-4 pb-6">
-					<Input
-						label="Nome do lançamento"
-						placeholder="Digite o nome *"
-						defaultValue={getDefaultValue(transaction?.name)}
-						error={errors.name?.message}
-						{...register('name')}
-					/>
-
-					<Input
-						id="description"
-						label="Descrição"
-						placeholder="Digite a descrição *"
-						defaultValue={getDefaultValue(transaction?.description)}
-						error={errors.description?.message}
-						{...register('description')}
-					/>
-
 					<div>
 						<label
-							htmlFor="accountType"
-							className="block text-sm font-medium leading-6 tracking-tight text-zinc-900 dark:text-zinc-100"
+							htmlFor="type"
+							className="block relative text-sm font-medium leading-6 tracking-tight text-zinc-900 dark:text-zinc-100"
 						>
-							Tipo de conta <span className="text-red-600">*</span>
+							Tipo <span className="text-red-600">*</span>
 						</label>
 
 						<SelectRdx
@@ -111,22 +94,14 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 										: value === 'savings'
 											? 'Conta poupança'
 											: 'Cartão de crédito'
-								setValue('accountType', label)
+								setValue('type', label)
 							}}
 						>
 							<SelectTrigger
-								id="accountType"
-								className="relative block h-[38px] w-full rounded border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 focus:border-primary focus:outline-none focus:ring-0 focus:border-zinc-400 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100"
-								{...register('accountType')}
-								value={
-									transaction?.accountType === 'current'
-										? 'Conta corrente'
-										: transaction?.accountType === 'savings'
-											? 'Conta poupança'
-											: transaction?.accountType === 'credit'
-												? 'Cartão de crédito'
-												: ''
-								}
+								id="type"
+								className="relative block h-[38px] w-full rounded border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-400 focus:border-primary focus:outline-none focus-visible:border-primary focus:ring-0 focus:border-zinc-400 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100"
+								{...register('type')}
+								value={transaction?.type === 'Despesa' ? 'Despesa' : 'Receita'}
 							>
 								<SelectValue placeholder="Selecione o tipo de conta" />
 							</SelectTrigger>
@@ -134,25 +109,43 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 								<SelectItem
 									value="current"
 									onClick={() => {
-										setValue('accountType', 'Conta corrente')
+										setValue('type', 'Receita')
 									}}
 								>
-									Conta corrente
+									Receita
 								</SelectItem>
 								<SelectItem
 									value="savings"
-									onClick={() => setValue('accountType', 'Conta poupança')}
+									onClick={() => setValue('type', 'Despesa')}
 								>
-									Conta poupança
-								</SelectItem>
-								<SelectItem
-									value="credit"
-									onClick={() => setValue('accountType', 'Cartão de crédito')}
-								>
-									Cartão de crédito
+									Despesa
 								</SelectItem>
 							</SelectContent>
 						</SelectRdx>
+					</div>
+
+					<div className="flex w-full">
+						<Controller
+							control={control}
+							name="accountType"
+							render={({ field }) => (
+								<DatePicker
+									label="Data"
+									selected={field.value}
+									onChange={(date) => field.onChange(date)}
+									error={errors.transactionDate?.message}
+								/>
+							)}
+						/>
+
+						<Input
+							id="description"
+							label="Descrição:"
+							placeholder="Digite a descrição do lançamento *"
+							defaultValue={getDefaultValue(transaction?.description)}
+							error={errors.description?.message}
+							{...register('description')}
+						/>
 					</div>
 
 					<Select
@@ -165,50 +158,12 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 					/>
 
 					<Input
-						label="Nome do beneficiário"
-						placeholder="Digite o nome do beneficiário"
-						defaultValue={getDefaultValue(transaction?.establishmentName)}
-						error={errors.establishmentName?.message}
-						{...register('establishmentName')}
-					/>
-
-					<Input
-						id="bank-name"
+						id="account"
 						label="Nome do banco"
 						placeholder="Digite o nome do banco *"
 						defaultValue={getDefaultValue(transaction?.bankName)}
 						error={errors.bankName?.message}
 						{...register('bankName')}
-					/>
-
-					<InputCurrency
-						id="previous-balance"
-						label="Saldo anterior"
-						placeholder="Digite o saldo anterior *"
-						defaultValue={transaction?.previousBalance ?? 0}
-						control={control}
-						error={errors.previousBalance?.message}
-						{...register('previousBalance')}
-					/>
-
-					<InputCurrency
-						id="total-amount"
-						label="Valor total"
-						placeholder="Digite o valor total *"
-						defaultValue={transaction?.totalAmount ?? 0}
-						control={control}
-						error={errors.totalAmount?.message}
-						{...register('totalAmount')}
-					/>
-
-					<InputCurrency
-						id="current-balance"
-						label="Saldo atual"
-						placeholder="Digite o saldo atual *"
-						defaultValue={transaction?.currentBalance ?? 0}
-						control={control}
-						error={errors.currentBalance?.message}
-						{...register('currentBalance')}
 					/>
 
 					<div>
@@ -273,21 +228,6 @@ export function NewFundRealeaseContent({ transaction }: Props) {
 						error={errors.card?.message}
 						{...register('card')}
 					/>
-
-					<div className="flex w-full">
-						<Controller
-							control={control}
-							name="transactionDate"
-							render={({ field }) => (
-								<DatePicker
-									label="Data da transação"
-									selected={field.value}
-									onChange={(date) => field.onChange(date)}
-									error={errors.transactionDate?.message}
-								/>
-							)}
-						/>
-					</div>
 
 					{getFieldInfo('paymentMethod')?.isEnabled && (
 						<Input

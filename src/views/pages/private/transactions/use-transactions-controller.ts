@@ -13,7 +13,6 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { useTransaction } from '@app/hooks/use-transaction'
 import { categoriesService } from '@app/services/categories'
 import { type AppError, parseError } from '@app/services/http-client'
 import { settingsService } from '@app/services/settings'
@@ -34,6 +33,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { columns } from './components/columns'
+import { cn } from '@app/utils/cn'
+import { useSidebar } from '@app/hooks/use-sidebar'
+import { Format } from '@app/utils/format'
+import { conciliationsService } from '@app/services/conciliations'
 
 interface RowSelectionState {
 	[key: string]: boolean
@@ -45,50 +48,33 @@ export interface SearchParams {
 }
 
 const schema = z.object({
-	name: z
-		.string(strMessage('nome do lançamento'))
-		.min(1, 'O campo nome do lançamento é obrigatório.'),
-	description: z
-		.string(strMessage('descrição'))
-		.min(1, 'O campo descrição é obrigatório.'),
-	categoryId: z
-		.string(strMessage('categoria'))
-		.min(1, 'O campo categoria é obrigatório.'),
-	establishmentName: z
-		.string(strMessage('nome do estabelecimento'))
-		.min(1, 'O campo nome do estabelecimento é obrigatório.'),
-	accountType: z
-		.string(strMessage('tipo de conta'))
-		.min(1, 'O campo tipo de conta é obrigatório.'),
-	bankName: z
-		.string(strMessage('nome do banco'))
-		.min(1, 'O campo nome do banco é obrigatório.'),
-	transactionDate: z.date(dateMessage('data da transação')),
+	type: z.string(strMessage('tipo')),
+	date: z.string(dateMessage('data')),
+	amount: z
+		.union([z.string(strMessage('valor')), z.number(numbMessage('valor'))])
+		.transform((value: string | number) => {
+			const fmtValue = Format.cleanCurrency(value)
+			return fmtValue
+		}),
+	description: z.string(strMessage('descrição')),
+	account: z.string(strMessage('conta')),
 	status: z.string(strMessage('status')),
-	accountToTransfer: z
-		.string(strMessage('conta para transferência'))
-		.nullable(),
-	contact: z.string(strMessage('contato')).nullable(),
-	card: z.string(strMessage('cartão')).nullable(),
-	previousBalance: z
-		.string(numbMessage('saldo anterior'))
-		.transform((value) => +value.replace(',', '.')),
-	totalAmount: z
-		.string(numbMessage('valor total'))
-		.transform((value) => +value.replace(',', '.')),
-	currentBalance: z
-		.string(numbMessage('saldo atual'))
-		.transform((value) => +value.replace(',', '.')),
-	paymentMethod: z
-		.string(strMessage('forma de pagamento'))
-		.min(1, 'O campo forma de pagamento é obrigatório.'),
-	competencyDate: z.coerce.date(dateMessage('data de competência')).nullable(),
-	costAndProfitCenters: z.string(strMessage('centro de custo')).nullable(),
-	tags: z.string(strMessage('tags')).nullable(),
-	documentNumber: z.string(strMessage('número do documento')).nullable(),
-	associatedContracts: z.string(strMessage('contratos associados')).nullable(),
-	associatedProjects: z.string(strMessage('projetos associados')).nullable(),
-	additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
+	card: z.string(strMessage('cartão')).nullable().default(null),
+	category: z.string(strMessage('categoria')).nullable().default(null),
+	contact: z.string(strMessage('contato')).nullable().default(null),
+	center: z.string(strMessage('centro')).nullable().default(null),
+	project: z.string(strMessage('projeto')).nullable().default(null),
+	method: z.string(strMessage('forma')).nullable().default(null),
+	documentNumber: z.string(strMessage('nº documento')).nullable().default(null),
+	notes: z.string(strMessage('observações')).nullable().default(null),
+	competenceDate: z.coerce
+		.string(dateMessage('data competência'))
+		.nullable()
+		.default(null),
+	tags: z
+		.array(z.string(strMessage('tags')))
+		.nullable()
+		.default(null),
 })
 
 export type FormData = z.infer<typeof schema>
@@ -97,25 +83,27 @@ export function useTransactionsController() {
 	const queryClient = useQueryClient()
 	const [searchParams, setSearchParams] = useSearchParams()
 
-	const { openTransaction } = useTransaction()
-
 	const [selectedTransaction, setSelectedTransaction] = useState<ITransaction>(
 		{} as ITransaction,
 	)
 	const [openCreateDialog, setOpenCreateDialog] = useState(false)
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+	const [isTransactionOpen, setTransactionOpen] = useState(false)
+
+	const openTransaction = () => setTransactionOpen(true)
+	const closeTransaction = () => setTransactionOpen(false)
 
 	const methods = useForm<FormData>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			transactionDate: new Date(),
-			competencyDate: new Date(),
+			date: new Date().toISOString(),
+			competenceDate: new Date().toISOString(),
 		},
 	})
 
 	const { mutateAsync: createTransaction } = useMutation({
 		mutationFn: async (formData: FormData) => {
-			return transactionsService.create(formData)
+			return conciliationsService.addOne(formData)
 		},
 		onSuccess(newCategory) {
 			queryClient.setQueryData(['transactions'], (oldData: any) => {
@@ -159,9 +147,9 @@ export function useTransactionsController() {
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-		description: false,
-		establishmentName: false,
-		categoryName: false,
+		card: false,
+		contact: false,
+		project: false,
 	})
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 	const [globalFilter, setGlobalFilter] = useState('')
@@ -178,22 +166,11 @@ export function useTransactionsController() {
 		searchTerm,
 		sorting,
 	}: ITransactionSearchOptions) => {
-		const {
-			data: result,
-			isLoading,
-			// isError,
-			// error,
-		} = useQuery({
+		const { data: result, isLoading } = useQuery({
 			queryKey: ['transactions', pageIndex, searchTerm, sorting],
 			queryFn: () =>
 				transactionsService.fetch({ pageIndex, searchTerm, sorting }),
 		})
-
-		// useEffect(() => {
-		// 	if (isError && error) {
-		// 		toast.error(parseError(error))
-		// 	}
-		// }, [isError, error])
 
 		return { result, isLoading }
 	}
@@ -271,6 +248,20 @@ export function useTransactionsController() {
 
 	useGlobalShortcut('Ctrl+a', openModal)
 
+	const { isSidebarSmall } = useSidebar()
+	const containerClassName = useMemo(() => {
+		const transactionsLength = result?.transactions?.length || 0
+		return cn(
+			isSidebarSmall
+				? transactionsLength > 0
+					? 'lg:max-w-[calc(100vw-148px)]'
+					: 'lg:max-w-[calc(100vw-148px)]'
+				: transactionsLength > 0
+					? 'lg:max-w-[calc(100vw-294px)]'
+					: 'lg:max-w-[calc(100vw-294px)]',
+		)
+	}, [isSidebarSmall, result?.transactions?.length])
+
 	return {
 		table,
 		result,
@@ -281,6 +272,8 @@ export function useTransactionsController() {
 		globalFilter,
 		filteredCategories,
 		isLoading,
+		isTransactionOpen,
+		containerClassName,
 		handleRowDoubleClick,
 		mapBankName,
 		setGlobalFilter,
@@ -291,5 +284,7 @@ export function useTransactionsController() {
 		handleSubmit,
 		handleRemoveTransaction,
 		handlePaginate,
+		openTransaction,
+		closeTransaction,
 	}
 }

@@ -6,7 +6,7 @@ export interface IBankAccountSelectInput {
 }
 
 export async function selectInput(): Promise<IBankAccountSelectInput[]> {
-	const { data } = await httpClient.get('/bank-accounts/select-input')
+	const { data } = await httpClient.get('/accounts/select-input')
 
 	return data?.map((costAndProfitCenter: IBankAccountSelectInput) => ({
 		field: costAndProfitCenter.field,

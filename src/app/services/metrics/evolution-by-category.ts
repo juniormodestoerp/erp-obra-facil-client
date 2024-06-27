@@ -1,10 +1,8 @@
-import { toast } from 'sonner'
-
 import { httpClient } from '@app/services/http-client'
 
 interface IEvolution {
 	date: string
-	totalAmount: number
+	amount: number
 	percentageChange: number
 	accumulatedTotal: number
 }
@@ -29,16 +27,6 @@ export async function evolutionByCategory(): Promise<Response> {
 		}
 	}
 
-	if (response.status === 200) {
-		toast.success(
-			`${
-				response?.data?.length === 1
-					? 'Evolução carregada'
-					: 'Evoluções carregadas'
-			} com sucesso!`,
-		)
-	}
-
 	return {
 		transactions: response.data.map((transaction: IEvolutionByCategory) => ({
 			id: transaction.id,
@@ -46,7 +34,7 @@ export async function evolutionByCategory(): Promise<Response> {
 			categoryName: transaction.categoryName,
 			evolution: transaction.evolution.map((evolution: IEvolution) => ({
 				date: evolution.date,
-				totalAmount: evolution.totalAmount,
+				amount: evolution.amount,
 				percentageChange: evolution.percentageChange,
 				accumulatedTotal: evolution.accumulatedTotal,
 			})),

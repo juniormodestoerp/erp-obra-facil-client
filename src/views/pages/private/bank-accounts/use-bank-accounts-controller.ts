@@ -112,9 +112,11 @@ const updateSchema = z.object({
 		.nullable()
 		.default(null),
 	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
-	dueDateDay: z
+	dueDateDay: z.coerce
 		.string(strMessage('dia de vencimento'))
-		.transform((value) => +value)
+		.transform((value) => {
+			if (value !== null || value !== '') value.toString()
+		})
 		.nullable()
 		.default(null),
 	dueDateFirstInvoice: z
@@ -176,10 +178,6 @@ export function useBankAccountsController() {
 		resolver: zodResolver(createSchema),
 	})
 
-	console.log(hookFormErrorsCreate, '- create errors')
-	console.log(hookFormWatchCreate('dueDateDay'))
-	console.log(hookFormWatchCreate('dueDateFirstInvoice'))
-
 	const isCreateCreditCard =
 		hookFormWatchCreate('accountType') === 'Cartão de crédito'
 
@@ -193,6 +191,11 @@ export function useBankAccountsController() {
 	} = useForm<UpdateBankAccountFormData>({
 		resolver: zodResolver(updateSchema),
 	})
+
+	console.log(hookFormErrorsUpdate, '- x errors')
+	console.log(hookFormWatchCreate('dueDateDay'), '- create errors');
+	console.log(hookFormWatchUpdate('dueDateDay'), '- UPDATE errors');
+	
 
 	const isUpdateCreditCard =
 		hookFormWatchUpdate('accountType') === 'Cartão de crédito'
@@ -230,7 +233,7 @@ export function useBankAccountsController() {
 		hookFormSetValueUpdate('limitType', bankAccount.limitType)
 		hookFormSetValueUpdate(
 			'dueDateDay',
-			bankAccount.dueDateDay !== null ? +bankAccount.dueDateDay : 0,
+			bankAccount.dueDateDay !== null ? bankAccount.dueDateDay : 0,
 		)
 		hookFormSetValueUpdate(
 			'dueDateFirstInvoice',
@@ -332,6 +335,8 @@ export function useBankAccountsController() {
 			initialBalance,
 		}: UpdateBankAccountFormData) => {
 			try {
+				console.log(dueDateDay);
+				
 				await updateBankAccount({
 					id,
 					accountType,
@@ -340,20 +345,20 @@ export function useBankAccountsController() {
 					logo,
 					limit,
 					limitType,
-					dueDateDay: dueDateDay as any,
-					dueDateFirstInvoice,
+					dueDateDay: dueDateDay ? getDueDate(+dueDateDay) : null,
+					dueDateFirstInvoice: dueDateFirstInvoice ? dueDateFirstInvoice : null,
 					closingDateInvoice,
 					balanceFirstInvoice,
 					isFirstInvoice,
 					isCreditCard,
 					initialBalance,
-				})
-				handleCloseUpdateModal()
+				});
+				handleCloseUpdateModal();
 			} catch (error) {
-				toast.error(parseError(error as AppError))
+				toast.error(parseError(error as AppError));
 			}
 		},
-	)
+	);
 
 	function handleSubmitRemove(bankAccount: IBankAccountDTO) {
 		bankAccountsService
@@ -397,6 +402,8 @@ export function useBankAccountsController() {
 		isCreateCreditCard,
 		isUpdateCreditCard,
 		extractPath,
+		hookFormSetValueUpdate,
+		hookFormSetValueCreate,
 		hookFormRegisterCreate,
 		hookFormRegisterUpdate,
 		handleOpenCreateModal,

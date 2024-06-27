@@ -24,9 +24,11 @@ export function EvolutionByCategory() {
 
 				<div className="space-y-6">
 					{data?.transactions?.length === 0 && (
-						<p className="text-center text-gray-500">
-							Nenhum resultado encontrado.
-						</p>
+						<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
+							<div className="h-24 text-center flex items-center justify-center">
+								<p>Nenhum resultado encontrado</p>
+							</div>
+						</div>
 					)}
 					{data?.transactions?.map((transaction) => (
 						<div
@@ -48,7 +50,7 @@ export function EvolutionByCategory() {
 											{Format.parseIso(evolution.date)}
 										</div>
 										<div className="text-gray-800 font-medium text-center">
-											{Format.currency(evolution.totalAmount)}
+											{Format.currency(evolution.amount)}
 										</div>
 										<div
 											className={cn(

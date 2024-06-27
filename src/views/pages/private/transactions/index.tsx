@@ -1,4 +1,3 @@
-import { useTransaction } from '@app/hooks/use-transaction'
 import { mapBankName } from '@app/utils/bank-map'
 import { cn } from '@app/utils/cn'
 import { flexRender } from '@tanstack/react-table'
@@ -20,7 +19,6 @@ import { Fragment } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider } from 'react-hook-form'
 import { columns } from './components/columns'
-import { NewFundRealeaseContent } from './components/new-transaction-content'
 import { TransactionsTableFilters } from './components/transactions-table-filters'
 import { useTransactionsController } from './use-transactions-controller'
 
@@ -31,17 +29,14 @@ export function Transactions() {
 		methods,
 		globalFilter,
 		handleRowDoubleClick,
-		selectedTransaction,
+		containerClassName,
 		isLoading,
 		setGlobalFilter,
 		handlePaginate,
-		filteredCategories,
+		isTransactionOpen,
+		openTransaction,
+		closeTransaction,
 	} = useTransactionsController()
-
-	const { isTransactionOpen, openTransaction, closeTransaction } =
-		useTransaction()
-
-	if (isLoading) return <div>Carregando...</div>
 
 	return (
 		<Fragment>
@@ -51,7 +46,12 @@ export function Transactions() {
 				<h1 className="text-2xl font-bold tracking-tight">Lançamentos</h1>
 
 				<FormProvider {...methods}>
-					<div className="relative w-full space-y-2.5 !overflow-x-auto">
+					<div
+						className={cn(
+							'relative w-full space-y-2.5 !overflow-x-auto',
+							containerClassName,
+						)}
+					>
 						<TransactionsTableFilters
 							table={table}
 							globalFilter={globalFilter}
@@ -60,7 +60,7 @@ export function Transactions() {
 
 						{/* START OF TABLE */}
 						<div className="w-full !overflow-x-auto rounded-md border">
-							<Table className="w-full min-w-full table-fixed !overflow-x-auto bg-white">
+							<Table className="w-full bg-white">
 								<TableHeader>
 									{table.getHeaderGroups().map((headerGroup) => (
 										<TableRow key={headerGroup.id}>
@@ -167,10 +167,6 @@ export function Transactions() {
 				<DialogTrigger asChild>
 					<button type="button" className="hidden" />
 				</DialogTrigger>
-				<NewFundRealeaseContent
-					transaction={selectedTransaction}
-					filteredCategories={filteredCategories}
-				/>
 			</Dialog>
 		</Fragment>
 	)

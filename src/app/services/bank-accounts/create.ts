@@ -23,7 +23,7 @@ export async function create({
 	isCreditCard,
 	initialBalance,
 }: ICreateBankAccountDTO): Promise<IBankAccountDTO> {
-	const { data } = await httpClient.post('/bank-accounts', {
+	const { data } = await httpClient.post('/accounts', {
 		accountType,
 		name,
 		currency,

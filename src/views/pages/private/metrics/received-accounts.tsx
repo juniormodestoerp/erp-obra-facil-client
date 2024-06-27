@@ -15,20 +15,6 @@ export function ReceivedAccounts() {
 		queryFn: async () => await metricsService.receivedAccounts(),
 	})
 
-	if (!data) {
-		return (
-			<Fragment>
-				<Helmet title="Contas recebidas" />
-				<div className="p-8">
-					<h1 className="text-3xl font-bold mb-6 text-darker-blue">
-						Contas recebidas
-					</h1>
-					<p className="text-center text-gray-500">Carregando...</p>
-				</div>
-			</Fragment>
-		)
-	}
-
 	const groupByMonth = (transactions: IReceivedAccounts[]) => {
 		return transactions.reduce(
 			(
@@ -60,9 +46,11 @@ export function ReceivedAccounts() {
 					Contas recebidas
 				</h1>
 				{Object.keys(groupedTransactions).length === 0 ? (
-					<p className="text-center text-gray-500">
-						Nenhum resultado encontrado.
-					</p>
+					<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
+						<div className="h-24 text-center flex items-center justify-center">
+							<p>Nenhum resultado encontrado</p>
+						</div>
+					</div>
 				) : (
 					Object.entries(groupedTransactions).map(([month, transactions]) => (
 						<div key={month} className="mb-8">

@@ -6,7 +6,7 @@ export interface IPaymentMethodSelectInput {
 }
 
 export async function selectInput(): Promise<IPaymentMethodSelectInput[]> {
-	const { data } = await httpClient.get('/payment-methods/select-input')
+	const { data } = await httpClient.get('/methods/select-input')
 
 	return data?.map((costAndProfitCenter: IPaymentMethodSelectInput) => ({
 		field: costAndProfitCenter.field,

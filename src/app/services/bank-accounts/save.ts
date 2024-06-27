@@ -24,7 +24,7 @@ export async function save({
 	isCreditCard,
 	initialBalance,
 }: IUpdateBankAccountDTO): Promise<IBankAccountDTO> {
-	const { data } = await httpClient.patch(`/bank-accounts/${id}`, {
+	const { data } = await httpClient.patch(`/accounts/${id}`, {
 		accountType,
 		name,
 		currency,

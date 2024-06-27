@@ -45,6 +45,7 @@ const AccountSection = ({
 		isUpdateModalOpen,
 		isDeleteModalOpen,
 		selectedBankAccount,
+		hookFormSetValueUpdate,
 		hookFormErrorsUpdate,
 		hookFormControlUpdate,
 		isUpdateCreditCard,
@@ -122,7 +123,7 @@ const AccountSection = ({
 								{bankAccount.dueDateDay && (
 									<div className="flex items-center justify-start pb-1 w-full gap-1.5 text-zinc-600 text-[15px]">
 										<p className="font-medium">Próximo vencimento</p>
-										<p>{bankAccount.dueDateDay.toString()}</p>
+										<p>{bankAccount.dueDateDay}</p>
 									</div>
 								)}
 
@@ -161,6 +162,7 @@ const AccountSection = ({
 								label="Tipo da conta:"
 								name="accountType"
 								control={hookFormControlUpdate}
+								setValue={hookFormSetValueUpdate}
 								data={[
 									{ field: 'Conta corrente', value: 'Conta corrente' },
 									{ field: 'Conta poupança', value: 'Conta poupança' },
@@ -174,6 +176,7 @@ const AccountSection = ({
 								label="Moeda:"
 								name="currency"
 								control={hookFormControlUpdate}
+								setValue={hookFormSetValueUpdate}
 							/>
 							<div className="flex items-center gap-2">
 								<Input
@@ -195,6 +198,7 @@ const AccountSection = ({
 								label="Logo:"
 								name="logo"
 								control={hookFormControlUpdate}
+								setValue={hookFormSetValueUpdate}
 							/>
 							{isUpdateCreditCard && (
 								<>
@@ -203,6 +207,7 @@ const AccountSection = ({
 											label="Tipo do limite:"
 											name="limitType"
 											control={hookFormControlUpdate}
+											setValue={hookFormSetValueUpdate}
 											data={[
 												{ field: 'Total', value: 'Total' },
 												{ field: 'Mensal', value: 'Mensal' },
@@ -302,6 +307,7 @@ export function BankAccounts() {
 		hookFormErrorsCreate,
 		hookFormControlCreate,
 		isCreateCreditCard,
+		hookFormSetValueCreate,
 		hookFormRegisterCreate,
 		handleOpenCreateModal,
 		handleCloseCreateModal,
@@ -364,6 +370,7 @@ export function BankAccounts() {
 							label="Tipo da conta:"
 							name="accountType"
 							control={hookFormControlCreate}
+							setValue={hookFormSetValueCreate}
 							data={[
 								{ field: 'Conta corrente', value: 'Conta corrente' },
 								{ field: 'Conta poupança', value: 'Conta poupança' },
@@ -377,6 +384,7 @@ export function BankAccounts() {
 							label="Moeda:"
 							name="currency"
 							control={hookFormControlCreate}
+							setValue={hookFormSetValueCreate}
 						/>
 						<div className="flex items-center gap-2">
 							<Input
@@ -398,6 +406,7 @@ export function BankAccounts() {
 							label="Logo:"
 							name="logo"
 							control={hookFormControlCreate}
+							setValue={hookFormSetValueCreate}
 						/>
 						{isCreateCreditCard && (
 							<>
@@ -406,6 +415,7 @@ export function BankAccounts() {
 										label="Tipo do limite:"
 										name="limitType"
 										control={hookFormControlCreate}
+										setValue={hookFormSetValueCreate}
 										data={[
 											{ field: 'Total', value: 'Total' },
 											{ field: 'Mensal', value: 'Mensal' },

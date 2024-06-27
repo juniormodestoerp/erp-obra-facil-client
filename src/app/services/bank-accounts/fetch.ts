@@ -2,7 +2,7 @@ import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
 import { httpClient } from '@app/services/http-client'
 
 export async function fetch(): Promise<IBankAccountDTO[]> {
-	const { data } = await httpClient.get('/bank-accounts')
+	const { data } = await httpClient.get('/accounts')
 
 	return data.map((bankAccount: IBankAccountDTO) => ({
 		id: bankAccount.id,

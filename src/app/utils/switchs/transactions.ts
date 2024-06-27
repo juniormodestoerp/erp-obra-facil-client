@@ -1,27 +1,37 @@
 export function getColumnName(name: string): string {
 	switch (name) {
-		case 'name':
-			return 'Nome'
+		case 'date':
+			return 'Data'
+		case 'amount':
+			return 'Valor'
 		case 'description':
 			return 'Descrição'
-		case 'categoryName':
+		case 'account':
+			return 'Conta'
+		case 'transferAccount':
+			return 'Conta de transferência'
+		case 'card':
+			return 'Cartão'
+		case 'category':
 			return 'Categoria'
-		case 'establishmentName':
-			return 'Estabelecimento'
-		case 'bankName':
-			return 'Banco'
-		case 'transactionDate':
-			return 'Data'
-		case 'previousBalance':
-			return 'Saldo anterior'
-		case 'totalAmount':
-			return 'Valor total'
-		case 'currentBalance':
-			return 'Saldo atual'
-		case 'paymentMethod':
-			return 'Método de pagamento'
-		case 'actions':
-			return 'Ações'
+		case 'subcategory':
+			return 'Subcategoria'
+		case 'contact':
+			return 'Contato'
+		case 'center':
+			return 'Centro de custo'
+		case 'project':
+			return 'Projeto'
+		case 'method':
+			return 'Método'
+		case 'documentNumber':
+			return 'Nº do documento'
+		case 'notes':
+			return 'Observações'
+		case 'competenceDate':
+			return 'Data de competência'
+		case 'tags':
+			return 'Tags'
 		default:
 			break
 	}

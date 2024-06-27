@@ -1,9 +1,8 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import type { Column, Table } from '@tanstack/react-table'
 import axios from 'axios'
-import { ChevronDownIcon, X } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { ChevronDownIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+// import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import type { ITransaction } from '@app/services/transactions/fetch'
@@ -19,7 +18,7 @@ import {
 } from '@views/components/ui/dropdown-menu'
 
 import { ArrowUpOnSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
-import { DebouncedInput } from '@views/components/input/debounce'
+// import { DebouncedInput } from '@views/components/input/debounce'
 import { Dialog, DialogTrigger } from '@views/components/ui/dialog'
 
 import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
@@ -40,26 +39,26 @@ interface Props {
 
 export function TransactionsTableFilters({
 	table,
-	globalFilter,
-	setGlobalFilter,
+	// globalFilter,
+	// setGlobalFilter,
 }: Props) {
 	const { openCreateDialog, setOpenCreateDialog } = useTransactionsController()
 
-	const { reset } = useForm<SearchParams>({
-		resolver: zodResolver(searchParamsSchema),
-		defaultValues: {
-			pageIndex: 1,
-			searchTerm: '',
-		},
-	})
+	// const { reset } = useForm<SearchParams>({
+	// 	resolver: zodResolver(searchParamsSchema),
+	// 	defaultValues: {
+	// 		pageIndex: 1,
+	// 		searchTerm: '',
+	// 	},
+	// })
 
-	const handleResetFilter = useCallback(() => {
-		reset({
-			pageIndex: 1,
-			searchTerm: '',
-		})
-		setGlobalFilter('')
-	}, [reset, setGlobalFilter])
+	// const handleResetFilter = useCallback(() => {
+	// 	reset({
+	// 		pageIndex: 1,
+	// 		searchTerm: '',
+	// 	})
+	// 	setGlobalFilter('')
+	// }, [reset, setGlobalFilter])
 
 	const triggerRef = useRef<HTMLButtonElement>(null)
 	const [dropdownWidth, setDropdownWidth] = useState<number | undefined>(
@@ -95,9 +94,9 @@ export function TransactionsTableFilters({
 
 	return (
 		<form className="flex items-center gap-2 p-px">
-			<span className="text-sm font-semibold">Filtros:</span>
+			{/* <span className="text-sm font-semibold">Filtros:</span> */}
 
-			<DebouncedInput
+			{/* <DebouncedInput
 				tabIndex={0}
 				name="searchTerm"
 				autoComplete="off"
@@ -117,7 +116,7 @@ export function TransactionsTableFilters({
 			>
 				<X className="mr-1.5 size-4" />
 				Remover filtros
-			</Button>
+			</Button> */}
 
 			<div className="flex space-x-4 ml-auto !items-center">
 				<Dialog

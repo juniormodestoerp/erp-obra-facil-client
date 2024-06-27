@@ -1,12 +1,11 @@
 import { httpClient } from '@app/services/http-client'
-import { toast } from 'sonner'
 
 export interface IEntriesByCenter {
 	id: string
-	costAndProfitCenters: string | null
-	totalAmount: number
-	transactionDate: string
-	name: string
+	center: string | null
+	amount: number
+	date: string
+	description: string
 }
 
 interface Response {
@@ -22,23 +21,13 @@ export async function entriesByCenter(): Promise<Response> {
 		}
 	}
 
-	if (response.status === 200) {
-		toast.success(
-			`${
-				response?.data?.length === 1
-					? 'Entrada carregada'
-					: 'Entradas carregadas'
-			} com sucesso!`,
-		)
-	}
-
 	return {
 		transactions: response.data.map((transaction: IEntriesByCenter) => ({
 			id: transaction.id,
-			costAndProfitCenters: transaction.costAndProfitCenters,
-			totalAmount: transaction.totalAmount,
-			transactionDate: transaction.transactionDate,
-			name: transaction.name,
+			center: transaction.center,
+			amount: transaction.amount,
+			date: transaction.date,
+			description: transaction.description,
 		})),
 	}
 }

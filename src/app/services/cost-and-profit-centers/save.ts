@@ -15,7 +15,7 @@ export async function save({
 	id,
 	name,
 }: IUpdateCostAndProfitCenterDTO): Promise<ICostAndProfitCentersDTO> {
-	const { data } = await httpClient.patch(`/cost-and-profit-centers/${id}`, {
+	const { data } = await httpClient.patch(`/centers/${id}`, {
 		name,
 	})
 

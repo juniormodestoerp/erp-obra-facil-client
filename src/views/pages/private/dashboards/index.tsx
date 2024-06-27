@@ -9,7 +9,6 @@
 // import { RevenueChart } from './components/revenue-chart'
 
 // import { useGlobalShortcut } from '@app/utils/global-shortcut'
-// import { useTransaction } from '@app/hooks/use-transaction'
 // import {
 // 	Dialog,
 // 	DialogOverlay,
@@ -18,9 +17,6 @@
 // import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 // export function Dashboards() {
-// 	const { openTransaction, isTransactionOpen, closeTransaction } =
-// 		useTransaction()
-
 // 	useGlobalShortcut('Ctrl+a', openTransaction)
 
 // 	return (

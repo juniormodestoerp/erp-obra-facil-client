@@ -1,5 +1,4 @@
 import { httpClient } from '@app/services/http-client'
-import { toast } from 'sonner'
 
 interface ISorting {
 	id: string
@@ -14,29 +13,23 @@ export interface ITransactionSearchOptions {
 
 export interface ITransaction {
 	id: string
-	name: string
+	type: string | null
+	date: string
+	amount: number
 	description: string
-	categoryId: string
-	categoryName: string
-	establishmentName: string
-	bankName: string
-	accountType: string
-	accountToTransfer: string | null
+	account: string | null
+	transferAccount: string | null
 	card: string | null
+	category: string | null
+	subcategory: string | null
 	contact: string | null
-	transactionDate: string
-	previousBalance: number
-	totalAmount: number
-	currentBalance: number
-	paymentMethod: string
-	status: string
-	competencyDate: string | null
-	costAndProfitCenters: string | null
-	tags: string | null
+	center: string | null
+	project: string | null
+	method: string | null
 	documentNumber: string | null
-	associatedContracts: string | null
-	associatedProjects: string | null
-	additionalComments: string | null
+	notes: string | null
+	competenceDate: string | null
+	tags: string | null
 	createdAt: string
 }
 
@@ -75,42 +68,26 @@ export async function fetch({
 		`/transactions?pageIndex=${pageIndex}${searchTermQuery}${sortingQuery}`,
 	)
 
-	if (response?.status === 200) {
-		toast.success(
-			`${
-				response?.data?.transactions?.length === 1
-					? 'Lançamento carregado'
-					: 'Lançamentos carregados'
-			} com sucesso!`,
-		)
-	}
-
 	return {
 		transactions: response?.data.transactions.map((transaction) => ({
 			id: transaction.id,
-			name: transaction.name,
+			type: transaction.type,
+			date: transaction.date,
+			amount: transaction.amount,
 			description: transaction.description,
-			categoryId: transaction.categoryId,
-			categoryName: transaction.categoryName,
-			accountType: transaction.accountType,
-			accountToTransfer: transaction.accountToTransfer,
+			account: transaction.account,
+			transferAccount: transaction.transferAccount,
 			card: transaction.card,
-			establishmentName: transaction.establishmentName,
+			category: transaction.category,
+			subcategory: transaction.subcategory,
 			contact: transaction.contact,
-			bankName: transaction.bankName,
-			transactionDate: transaction.transactionDate,
-			previousBalance: transaction.previousBalance,
-			totalAmount: transaction.totalAmount,
-			currentBalance: transaction.currentBalance,
-			paymentMethod: transaction.paymentMethod,
-			status: transaction.status,
-			competencyDate: transaction.competencyDate,
-			costAndProfitCenters: transaction.costAndProfitCenters,
-			tags: transaction.tags,
+			center: transaction.center,
+			project: transaction.project,
+			method: transaction.method,
 			documentNumber: transaction.documentNumber,
-			associatedContracts: transaction.associatedContracts,
-			associatedProjects: transaction.associatedProjects,
-			additionalComments: transaction.additionalComments,
+			notes: transaction.notes,
+			competenceDate: transaction.competenceDate,
+			tags: transaction.tags,
 			createdAt: transaction.createdAt,
 		})),
 		meta: {

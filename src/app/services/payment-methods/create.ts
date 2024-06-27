@@ -10,7 +10,7 @@ export interface Params {
 export async function create({
 	name,
 }: ICreatePaymentMethodDTO): Promise<IPaymentMethodDTO> {
-	const { data } = await httpClient.post('/payment-methods', {
+	const { data } = await httpClient.post('/methods', {
 		name,
 	})
 

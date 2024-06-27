@@ -21,29 +21,31 @@ export function TotalsByCenter() {
 				</h1>
 				<div className="space-y-6">
 					{data?.transactions?.length === 0 && (
-						<p className="text-center text-gray-500">
-							Nenhum resultado encontrado.
-						</p>
+						<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
+							<div className="h-24 text-center flex items-center justify-center">
+								<p>Nenhum resultado encontrado</p>
+							</div>
+						</div>
 					)}
 					{data?.transactions?.map(
 						(transaction) =>
-							transaction.centerId !== null && (
+							transaction.center !== null && (
 								<div
 									key={transaction.id}
 									className="bg-white shadow border border-dark-blue rounded-lg p-6"
 								>
 									<h2 className="text-xl font-semibold text-gray-800">
-										{transaction.centerId}
+										{transaction.center}
 									</h2>
 									<div className="mt-4">
 										<span className="text-gray-800 font-medium">
 											Total de
 											<span className="text-cyan-500 font-semibold mx-1">
-												{Format.currency(transaction.totalAmount)}
+												{Format.currency(transaction.amount)}
 											</span>
 											gastos no centro
 											<span className="text-cyan-500 font-semibold mx-1">
-												{transaction.centerId}
+												{transaction.center}
 											</span>
 											até o momento.
 										</span>

@@ -16,16 +16,9 @@ import {
 	CardTitle,
 } from '@views/components/ui/card'
 
-import { useTransaction } from '@app/hooks/use-transaction'
 import { cn } from '@app/utils/cn'
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
+
 import { useProfileController } from '@views/pages/private/profile/use-profile-controller'
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 export function Profile() {
 	const {
@@ -44,11 +37,6 @@ export function Profile() {
 		handleFileChange,
 		handleSubmitProfilePicture,
 	} = useProfileController()
-
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
 
 	return (
 		<Fragment>
@@ -345,18 +333,6 @@ export function Profile() {
 					</Button>
 				</form>
 			</div>
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
 		</Fragment>
 	)
 }

@@ -8,22 +8,8 @@ import { HomeCard } from '@views/pages/private/initial-page/components/card'
 
 import { useInitialPageController } from '@views/pages/private/initial-page/use-initial-page-controller'
 
-import { useTransaction } from '@app/hooks/use-transaction'
-import { useGlobalShortcut } from '@app/utils/global-shortcut'
-import {
-	Dialog,
-	DialogOverlay,
-	DialogTrigger,
-} from '@views/components/ui/dialog'
-import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
-
 export function InitialPage() {
 	const { isBalanceVisible } = useInitialPageController()
-
-	const { openTransaction, isTransactionOpen, closeTransaction } =
-		useTransaction()
-
-	useGlobalShortcut('Ctrl+a', openTransaction)
 
 	return (
 		<Fragment>
@@ -70,18 +56,6 @@ export function InitialPage() {
 					<RevenueChart />
 				</div>
 			</div>
-			<Dialog
-				open={isTransactionOpen}
-				onOpenChange={(open) => {
-					open ? openTransaction() : closeTransaction()
-				}}
-			>
-				<DialogOverlay />
-				<DialogTrigger asChild>
-					<button type="button" className="hidden" />
-				</DialogTrigger>
-				<NewFundRealeaseContent />
-			</Dialog>
 		</Fragment>
 	)
 }

@@ -31,6 +31,8 @@ import {
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getColumnName } from '@app/utils/switchs/transactions'
+import { ArrowUpDown } from 'lucide-react'
 interface PropsActionMenu {
 	row: Row<ITransaction>
 }
@@ -122,20 +124,45 @@ function ActionMenu({ row }: PropsActionMenu) {
 
 export const columns: ColumnDef<ITransaction>[] = [
 	{
-		accessorKey: 'name',
+		accessorKey: 'date',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
-					Nome
+					Data
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
+
 		cell: ({ row }) => (
-			<div className="text-[13px]  tracking-tight">{row.getValue('name')}</div>
+			<div className="text-[13px] tracking-tight">
+				{Format.parseIso(row.getValue('date'))}
+			</div>
+		),
+	},
+	{
+		accessorKey: 'amount',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
+				>
+					Valor
+					<ArrowUpDown className="ml-1 size-4" />
+				</Button>
+			)
+		},
+
+		cell: ({ row }) => (
+			<div className="text-[13px] tracking-tight">
+				{Format.currency(row.getValue('amount'))}
+			</div>
 		),
 	},
 	{
@@ -144,175 +171,161 @@ export const columns: ColumnDef<ITransaction>[] = [
 			return (
 				<Button
 					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
 					Descrição
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
+
 		cell: ({ row }) => (
-			<div className="text-[13px]  tracking-tight">
+			<div className="text-[13px] tracking-tight">
 				{row.getValue('description')}
 			</div>
 		),
 	},
 	{
-		accessorKey: 'categoryName',
+		accessorKey: 'account',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
+				>
+					Conta
+					<ArrowUpDown className="ml-1 size-4" />
+				</Button>
+			)
+		},
+
+		cell: ({ row }) => (
+			<div className="text-[13px] tracking-tight">
+				{row.getValue('account')}
+			</div>
+		),
+	},
+	{
+		accessorKey: 'card',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
+				>
+					Cartão
+					<ArrowUpDown className="ml-1 size-4" />
+				</Button>
+			)
+		},
+
+		cell: ({ row }) => (
+			<div className="text-[13px] tracking-tight">{row.getValue('card')}</div>
+		),
+	},
+	{
+		accessorKey: 'category',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
 					Categoria
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
+
 		cell: ({ row }) => (
 			<div className="text-[13px] tracking-tight">
-				{row.getValue('categoryName') === 'padrão'
-					? 'Nenhuma categoria cadastrada'
-					: row.getValue('categoryName')}
+				{row.getValue('category')}
 			</div>
 		),
 	},
 	{
-		accessorKey: 'establishmentName',
+		accessorKey: 'contact',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
-					Estabelecimento
+					Contato
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
-		cell: ({ row }) => (
-			<div className="text-[13px]  tracking-tight">
-				{row.getValue('establishmentName')}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'bankName',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Banco
-				</Button>
-			)
-		},
-		cell: ({ row }) => (
-			<div className="text-[13px]  tracking-tight">
-				{row.getValue('bankName')}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'transactionDate',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Data
-				</Button>
-			)
-		},
-		cell: ({ row }) => (
-			<p className="w-fit text-[13px] tracking-tight">
-				{Format.parseIso(row.getValue('transactionDate'))}
-			</p>
-		),
-	},
-	{
-		accessorKey: 'previousBalance',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Saldo anterior
-				</Button>
-			)
-		},
-		cell: ({ row }) => (
-			<div className="text-[13px]  tracking-tight">
-				{Format.currency(Number(row.getValue('previousBalance')))}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'totalAmount',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Valor total
-				</Button>
-			)
-		},
+
 		cell: ({ row }) => (
 			<div className="text-[13px] tracking-tight">
-				{Format.currency(Number(row.getValue('totalAmount')))}
+				{row.getValue('contact')}
 			</div>
 		),
 	},
 	{
-		accessorKey: 'currentBalance',
+		accessorKey: 'center',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
-					className="px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
-					Saldo atual
+					Centro de custo
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
+
+		cell: ({ row }) => (
+			<div className="text-[13px] tracking-tight">{row.getValue('center')}</div>
+		),
+	},
+	{
+		accessorKey: 'project',
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
+				>
+					Projeto
+					<ArrowUpDown className="ml-1 size-4" />
+				</Button>
+			)
+		},
+
 		cell: ({ row }) => (
 			<div className="text-[13px] tracking-tight">
-				{Format.currency(Number(row.getValue('currentBalance')))}
+				{row.getValue('project')}
 			</div>
 		),
 	},
 	{
-		accessorKey: 'paymentMethod',
+		accessorKey: 'method',
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
-					className="flex flex-col px-0 text-dark-blue hover:text-darker-blue"
 					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					className="w-fit text-dark-blue hover:text-darker-blue"
 				>
-					<p className="w-12"> Método de</p>
-					<p className="w-12"> pagamento</p>
+					Método de pagamento
+					<ArrowUpDown className="ml-1 size-4" />
 				</Button>
 			)
 		},
+
 		cell: ({ row }) => (
 			<div className="text-[13px] tracking-tight">
-				{row.getValue('paymentMethod') === 'credit' ? (
-					<span className="text-dark-blue">Crédito</span>
-				) : (
-					<span className="text-red-600">Débito</span>
-				)}
+				{row.getValue('method')}
 			</div>
 		),
 	},

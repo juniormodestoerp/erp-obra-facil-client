@@ -1,5 +1,5 @@
 import { logoData } from '@/assets/data/logo-data'
-import iconComponents from '@/assets/icons/system'
+import { logoSystem } from '@/assets/data/logo-system'
 import { cn } from '@app/utils/cn'
 import { Format } from '@app/utils/format'
 import { getIconName } from '@app/utils/switchs/system-icons'
@@ -11,18 +11,16 @@ import {
 	CommandInput,
 	CommandList,
 } from '@views/components/ui/command'
-import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import { CommandItem } from 'cmdk'
 import {
 	type ComponentPropsWithoutRef,
 	type ElementRef,
 	type MouseEvent,
-	createElement,
 	forwardRef,
 	useEffect,
 	useState,
 } from 'react'
-import { Controller } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 
 const CommandItemOption = forwardRef<
 	ElementRef<typeof CommandItem>,
@@ -55,6 +53,7 @@ interface Props {
 	name: string
 	error?: string
 	control: any
+	setValue?: any
 	optional?: boolean
 }
 
@@ -65,22 +64,36 @@ export function SelectLogo({
 	name,
 	error,
 	control,
+	setValue,
 	optional,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false)
-	const { methods } = useTransactionsController()
 	const [selectedField, setSelectedField] = useState<IData | null>(null)
 	const inputId = id ?? name
 
+	const fieldValue = useWatch({
+		control,
+		name,
+	})
+
 	useEffect(() => {
-		const defaultOption = logoData.find(
+		const defaultOption = [...logoData, ...logoSystem].find(
 			(item: IData) => item.field === 'padrão',
 		)
 		if (defaultOption) {
-			methods.setValue(name as any, defaultOption.value)
+			setValue(name as any, defaultOption.value)
 			setSelectedField(defaultOption)
 		}
-	}, [name, methods])
+	}, [name, setValue])
+
+	useEffect(() => {
+		const selectedOption = [...logoData, ...logoSystem].find(
+			(item: IData) => item.value === fieldValue,
+		)
+		if (selectedOption) {
+			setSelectedField(selectedOption)
+		}
+	}, [fieldValue])
 
 	function handleSelect({ item, onChange }: IHandleSelect) {
 		onChange(item.value)
@@ -99,7 +112,7 @@ export function SelectLogo({
 	}
 
 	function getFormattedValue(value: string) {
-		const iconComponentNames = Object.keys(iconComponents)
+		const iconComponentNames = Object.keys(logoSystem)
 		if (iconComponentNames.includes(value)) {
 			return getIconName(value)
 		}
@@ -132,40 +145,21 @@ export function SelectLogo({
 						>
 							<div className="flex items-center">
 								{selectedField ? (
-									selectedField.field.includes(' - ') ? (
-										<>
-											<img
-												src={extractImagePath(selectedField)}
-												alt={selectedField?.field?.split(' - ')[1].trim()}
-												className="inline-block h-6 w-6 mr-2"
-											/>
-											<span
-												className={cn(
-													'text-zinc-900 dark:text-zinc-100',
-													value && 'text-zinc-900 dark:text-zinc-100',
-												)}
-											>
-												{selectedField?.field?.split(' - ')[1].trim()}
-											</span>
-										</>
-									) : (
-										<>
-											{createElement(
-												iconComponents[
-													selectedField.field as keyof typeof iconComponents
-												],
-												{ className: 'inline-block h-6 w-6 mr-2' },
+									<>
+										<img
+											src={extractImagePath(selectedField)}
+											alt={selectedField?.field?.split(' - ')[1].trim()}
+											className="inline-block size-6 mr-2"
+										/>
+										<span
+											className={cn(
+												'text-zinc-900 dark:text-zinc-100',
+												value && 'text-zinc-900 dark:text-zinc-100',
 											)}
-											<span
-												className={cn(
-													'text-zinc-400 dark:text-zinc-100',
-													value && 'text-zinc-900 dark:text-zinc-100',
-												)}
-											>
-												{getIconName(selectedField.field)}
-											</span>
-										</>
-									)
+										>
+											{selectedField?.field?.split(' - ')[1].trim()}
+										</span>
+									</>
 								) : (
 									<span className="text-zinc-400 dark:text-zinc-100">
 										Selecione uma opção...
@@ -186,28 +180,31 @@ export function SelectLogo({
 							/>
 							<CommandList>
 								<CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
-								<CommandGroup heading="Ícones do sistema">
-									{Object.keys(iconComponents).map((iconName) => {
-										const IconComponent =
-											iconComponents[iconName as keyof typeof iconComponents]
-										return (
-											<CommandItemOption
-												key={iconName}
-												onSelect={() => {
-													const selectedIcon = {
-														field: iconName,
-														value: iconName,
-													}
-													handleSelect({ item: selectedIcon, onChange })
-												}}
-												className="!px-1 !py-2.5 !cursor-pointer"
-											>
-												<IconComponent className="inline-block !size-7 mr-2" />
-												<span>{getIconName(iconName)}</span>
-											</CommandItemOption>
-										)
-									})}
-								</CommandGroup>
+								{logoSystem.length > 0 && (
+									<CommandGroup
+										heading="Ícones do sistema"
+										className="cursor-pointer"
+									>
+										{logoSystem.map((item: IData) => {
+											return (
+												<CommandItemOption
+													key={item.value}
+													onSelect={() => handleSelect({ item, onChange })}
+													className="!cursor-pointer"
+												>
+													<img
+														src={item.field?.split(' - ')[0].trim()}
+														alt={item.field?.split(' - ')[1].trim()}
+														className="inline-block size-6 mr-2"
+													/>
+													<span>
+														{Format.name(item.field?.split(' - ')[1].trim())}
+													</span>
+												</CommandItemOption>
+											)
+										})}
+									</CommandGroup>
+								)}
 
 								{filteredData.length > 0 && (
 									<CommandGroup

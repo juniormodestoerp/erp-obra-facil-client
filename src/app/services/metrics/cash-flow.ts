@@ -1,14 +1,13 @@
 import { httpClient } from '@app/services/http-client'
-import { toast } from 'sonner'
 
 export interface ICashFlow {
 	id: string
-	totalAmount: number
-	transactionDate: string
+	amount: number
+	date: string
 	description: string
 }
 
-export interface DailyBalance {
+export interface IDailyBalance {
 	date: string
 	previousDayBalance: number
 	totalEntries: number
@@ -18,25 +17,21 @@ export interface DailyBalance {
 	transactions: ICashFlow[]
 }
 
-interface Response {
-	dailyBalances: DailyBalance[]
+interface IResponse {
+	transactions: IDailyBalance[]
 }
 
-export async function cashFlow(): Promise<Response> {
+export async function cashFlow(): Promise<IResponse> {
 	const response = await httpClient.get('/metrics/cash-flow')
 
 	if (!response) {
 		return {
-			dailyBalances: [],
+			transactions: [],
 		}
 	}
 
-	if (response.status === 200) {
-		toast.success('Fluxo de caixa carregado com sucesso!')
-	}
-
 	return {
-		dailyBalances: response.data.map((balance: DailyBalance) => ({
+		transactions: response.data.map((balance: IDailyBalance) => ({
 			date: balance.date,
 			previousDayBalance: balance.previousDayBalance,
 			totalEntries: balance.totalEntries,
@@ -45,8 +40,8 @@ export async function cashFlow(): Promise<Response> {
 			endOfDayBalance: balance.endOfDayBalance,
 			transactions: balance.transactions.map((transaction: ICashFlow) => ({
 				id: transaction.id,
-				totalAmount: transaction.totalAmount,
-				transactionDate: transaction.transactionDate,
+				amount: transaction.amount,
+				date: transaction.date,
 				description: transaction.description,
 			})),
 		})),

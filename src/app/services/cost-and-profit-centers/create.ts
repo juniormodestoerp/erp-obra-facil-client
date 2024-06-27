@@ -13,7 +13,7 @@ export interface Params {
 export async function create({
 	name,
 }: ICreateCostAndProfitCentersDTO): Promise<ICostAndProfitCentersDTO> {
-	const { data } = await httpClient.post('/cost-and-profit-centers', {
+	const { data } = await httpClient.post('/centers', {
 		name,
 	})
 

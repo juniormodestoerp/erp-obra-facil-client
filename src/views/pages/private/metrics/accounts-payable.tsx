@@ -17,27 +17,13 @@ export function AccountsPayable() {
 		queryFn: async () => await metricsService.accountsPayable(),
 	})
 
-	if (!data) {
-		return (
-			<Fragment>
-				<Helmet title="Contas a pagar" />
-				<div className="p-8">
-					<h1 className="text-3xl font-bold mb-6 text-darker-blue">
-						Contas a pagar
-					</h1>
-					<p className="text-center text-gray-500">Carregando...</p>
-				</div>
-			</Fragment>
-		)
-	}
-
 	const groupByMonth = (transactions: IAccountsPayable[]) => {
 		return transactions.reduce(
 			(
 				acc: Record<string, IAccountsPayable[]>,
 				transaction: IAccountsPayable,
 			) => {
-				const month = new Date(transaction.transactionDate).toLocaleString(
+				const month = new Date(transaction.date).toLocaleString(
 					'default',
 					{ month: 'long', year: 'numeric' },
 				)
@@ -51,7 +37,7 @@ export function AccountsPayable() {
 		)
 	}
 
-	const groupedTransactions = groupByMonth(data.transactions)
+	const groupedTransactions = groupByMonth(data?.transactions ?? [])
 
 	return (
 		<Fragment>
@@ -61,9 +47,11 @@ export function AccountsPayable() {
 					Contas a pagar
 				</h1>
 				{Object.keys(groupedTransactions).length === 0 ? (
-					<p className="text-center text-gray-500">
-						Nenhum resultado encontrado.
-					</p>
+					<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
+						<div className="h-24 text-center flex items-center justify-center">
+							<p>Nenhum resultado encontrado</p>
+						</div>
+					</div>
 				) : (
 					Object.entries(groupedTransactions).map(([month, transactions]) => (
 						<div key={month} className="mb-8">
@@ -91,20 +79,20 @@ export function AccountsPayable() {
 											</div>
 											<p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 px-4">
 												<span className="font-medium text-gray-900 mr-1">
-													{transaction.name}
+													{transaction.description}
 												</span>
 												no valor de{' '}
 												<span
 													className={cn(
-														transaction.totalAmount > 0
+														transaction.amount > 0
 															? 'text-green-600'
 															: 'text-red-600',
 													)}
 												>
-													{Format.currency(transaction.totalAmount)}
+													{Format.currency(transaction.amount)}
 												</span>
 												<span className="mx-1">
-													{transaction?.tags?.split(', ').map((tag) => (
+													{transaction?.tags?.map((tag) => (
 														<Badge key={tag} className="bg-dark-blue">
 															{tag}
 														</Badge>
@@ -112,18 +100,18 @@ export function AccountsPayable() {
 												</span>
 												<span>
 													Método de Pagamento:{' '}
-													{transaction.paymentMethod === 'credit'
+													{transaction.method === 'credit'
 														? 'cartão de crédito'
-														: transaction.paymentMethod === 'debit'
+														: transaction.method === 'debit'
 															? 'cartão de débito'
-															: transaction.paymentMethod}
+															: transaction.method}
 												</span>
 											</p>
 											<time
-												dateTime={transaction.transactionDate}
+												dateTime={transaction.date}
 												className="flex-none py-0.5 text-xs leading-5 font-medium text-red-600"
 											>
-												{Format.parseIso(transaction.transactionDate)}
+												{Format.parseIso(transaction.date)}
 											</time>
 										</li>
 									))}

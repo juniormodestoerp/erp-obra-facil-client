@@ -1,6 +1,6 @@
 import { ChevronUpDownIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { type MouseEvent, useEffect, useState } from 'react'
-import { Controller } from 'react-hook-form'
+import { Controller, useWatch } from 'react-hook-form'
 
 import { cn } from '@app/utils/cn'
 
@@ -12,7 +12,6 @@ import {
 	CommandItem,
 	CommandList,
 } from '@views/components/ui/command'
-import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 
 interface IData {
 	field: string
@@ -32,6 +31,7 @@ interface Props {
 	error?: string
 	data: IData[] | any
 	control: any
+	setValue?: any
 	optional?: boolean
 }
 
@@ -43,20 +43,32 @@ export function Select({
 	error,
 	data,
 	control,
+	setValue,
 	optional,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false)
-	const { methods } = useTransactionsController()
 	const [selectedField, setSelectedField] = useState<string | null>(null)
 	const inputId = id ?? name
+
+	const fieldValue = useWatch({
+		control,
+		name,
+	})
 
 	useEffect(() => {
 		const defaultOption = data.find((item: IData) => item.field === 'padrão')
 		if (defaultOption) {
-			methods.setValue(name as any, defaultOption.value)
+			setValue(name as any, defaultOption.value)
 			setSelectedField(defaultOption.field)
 		}
-	}, [data, name, methods])
+	}, [data, name, setValue])
+
+	useEffect(() => {
+		const selectedOption = data.find((item: IData) => item.value === fieldValue)
+		if (selectedOption) {
+			setSelectedField(selectedOption.field)
+		}
+	}, [fieldValue, data])
 
 	function handleSelect({ item, onChange }: IHandleSelect) {
 		onChange(item.value)

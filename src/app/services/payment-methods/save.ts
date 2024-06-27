@@ -11,7 +11,7 @@ export async function save({
 	id,
 	name,
 }: IUpdatePaymentMethodDTO): Promise<IPaymentMethodDTO> {
-	const { data } = await httpClient.patch(`/payment-methods/${id}`, {
+	const { data } = await httpClient.patch(`/methods/${id}`, {
 		name,
 	})
 
