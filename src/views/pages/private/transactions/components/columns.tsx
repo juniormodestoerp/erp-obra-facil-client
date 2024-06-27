@@ -31,7 +31,6 @@ import {
 import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getColumnName } from '@app/utils/switchs/transactions'
 import { ArrowUpDown } from 'lucide-react'
 interface PropsActionMenu {
 	row: Row<ITransaction>
@@ -81,12 +80,14 @@ function ActionMenu({ row }: PropsActionMenu) {
 
 					<Dialog>
 						<DialogTrigger className="group mx-auto flex w-full gap-1.5 rounded-sm p-2 text-sm hover:bg-zinc-100">
-							<TrashIcon className="h-5 w-5 text-rose-600" />
-							<span className="group-hover:text-rose-600">Remover</span>
+							<TrashIcon className="h-5 w-5 text-rose-600 " />
+							<span className="text-rose-600 group-hover:text-rose-600/90">
+								Remover
+							</span>
 						</DialogTrigger>
-						<DialogContent>
+						<DialogContent title="Remover a lançamento">
 							<DialogHeader>
-								<DialogTitle>Deseja remover a clinica?</DialogTitle>
+								<DialogTitle>Deseja remover o lançamento?</DialogTitle>
 								<DialogDescription>
 									Você está prestes a remover um registro. Por favor, confirme
 									sua decisão antes de prosseguir.
@@ -104,15 +105,17 @@ function ActionMenu({ row }: PropsActionMenu) {
 									</Button>
 								</DialogClose>
 
-								<Button
-									type="submit"
-									variant="outline"
-									onClick={() => handleRemoveTransaction(row.original.id)}
-									className="mx-0 rounded-md border border-red-600 bg-transparent text-red-600 hover:bg-red-100 hover:text-white"
-								>
-									<TrashIcon className="mr-1 h-5 w-5 " />
-									<span className="pt-px">Remover</span>
-								</Button>
+								<DialogClose>
+									<Button
+										type="submit"
+										variant="outline"
+										onClick={() => handleRemoveTransaction(row.original.id)}
+										className="mx-0 rounded-md border border-red-600 bg-transparent text-red-600 hover:bg-red-100 hover:text-red-600/90"
+									>
+										<TrashIcon className="mr-1 h-5 w-5 " />
+										<span className="pt-px">Remover</span>
+									</Button>
+								</DialogClose>
 							</div>
 						</DialogContent>
 					</Dialog>
@@ -324,9 +327,7 @@ export const columns: ColumnDef<ITransaction>[] = [
 		},
 
 		cell: ({ row }) => (
-			<div className="text-[13px] tracking-tight">
-				{row.getValue('method')}
-			</div>
+			<div className="text-[13px] tracking-tight">{row.getValue('method')}</div>
 		),
 	},
 	{

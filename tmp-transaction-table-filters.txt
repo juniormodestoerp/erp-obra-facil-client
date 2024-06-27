@@ -1,0 +1,44 @@
+// import { useForm } from 'react-hook-form'
+// import { DebouncedInput } from '@views/components/input/debounce'
+	// globalFilter,
+	// setGlobalFilter,
+  
+	// const { reset } = useForm<SearchParams>({
+	// 	resolver: zodResolver(searchParamsSchema),
+	// 	defaultValues: {
+	// 		pageIndex: 1,
+	// 		searchTerm: '',
+	// 	},
+	// })
+
+	// const handleResetFilter = useCallback(() => {
+	// 	reset({
+	// 		pageIndex: 1,
+	// 		searchTerm: '',
+	// 	})
+	// 	setGlobalFilter('')
+	// }, [reset, setGlobalFilter])
+
+			{/* <span className="text-sm font-semibold">Filtros:</span> */}
+
+			{/* <DebouncedInput
+				tabIndex={0}
+				name="searchTerm"
+				autoComplete="off"
+				placeholder="Busque por informações da clínica..."
+				className="mr-2 h-8 w-[320px] !rounded-md border-zinc-300 shadow-sm placeholder:text-[13px]"
+				value={globalFilter ?? ''}
+				onChange={(value) => setGlobalFilter(String(value))}
+				debounce={500}
+			/>
+
+			<Button
+				type="button"
+				variant="outline"
+				size="xs"
+				className="!py-0 text-[13px] font-medium"
+				onClick={handleResetFilter}
+			>
+				<X className="mr-1.5 size-4" />
+				Remover filtros
+			</Button> */}

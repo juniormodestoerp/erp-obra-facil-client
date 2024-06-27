@@ -6,7 +6,7 @@ export interface IAccountsReceivable {
 	description: string
 	amount: number
 	date: string
-	tags: string[] | null
+	tags: string | null
 	method: string | null
 }
 
@@ -37,7 +37,7 @@ export async function accountsReceivable(): Promise<Response> {
 			description: transaction.description,
 			amount: transaction.amount,
 			date: transaction.date,
-			tags: transaction.tags?.map((tag: string) => tag) || null,
+			tags: transaction.tags,
 			method: transaction.method,
 		})),
 	}

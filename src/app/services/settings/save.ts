@@ -30,7 +30,7 @@ export async function save({
 	description,
 	createdAt,
 }: Params): Promise<Response> {
-	const { data } = await httpClient.put<Response>(`/settings/${id}`, {
+	const { data } = await httpClient.patch<Response>(`/settings/${id}`, {
 		fieldName,
 		isFieldEnable,
 		isFieldRequired,

@@ -6,7 +6,7 @@ export interface IAccountsPayable {
 	description: string
 	amount: number
 	date: string
-	tags: string[]
+	tags: string
 	method: string | null
 }
 
@@ -37,7 +37,7 @@ export async function accountsPayable(): Promise<Response> {
 			description: transaction.description,
 			amount: transaction.amount,
 			date: transaction.date,
-			tags: transaction.tags.map((tag: string) => tag),
+			tags: transaction.tags,
 			method: transaction.method,
 		})),
 	}

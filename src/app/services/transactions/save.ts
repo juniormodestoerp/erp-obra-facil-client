@@ -82,7 +82,7 @@ export async function save({
 	associatedProjects,
 	additionalComments,
 }: Params): Promise<Response> {
-	const { data } = await httpClient.put<Response>(`/transactions/${id}`, {
+	const { data } = await httpClient.patch<Response>(`/transactions/${id}`, {
 		name,
 		description,
 		categoryId,

@@ -1,0 +1,55 @@
+	// const useFetchTransactions = ({
+	// 	pageIndex,
+	// 	searchTerm,
+	// 	sorting,
+	// }: ITransactionSearchOptions) => {
+	// 	const { data: result, isLoading } = useQuery({
+	// 		queryKey: ['transactions', pageIndex, searchTerm, sorting],
+	// 		queryFn: () =>
+	// 			transactionsService.fetch({ pageIndex, searchTerm, sorting }),
+	// 	})
+	// 	return { result, isLoading }
+	// }
+	// const queryPageIndex = useMemo(() => {
+	// 	return z.coerce
+	// 		.number(numbMessage('index da página'))
+	// 		.transform((page) => page - 1)
+	// 		.parse(searchParams.get('page') ?? '1')
+	// }, [searchParams])
+	// const { result, isLoading } = useFetchTransactions({
+	// 	pageIndex: queryPageIndex,
+	// 	searchTerm: globalFilter,
+	// 	sorting,
+	// })
+	// const transactionsData = result?.transactions ?? []
+	// const { perPage, totalCount } = result?.meta ?? {}
+	// const totalPages = Math.ceil((totalCount ?? 0) / (perPage ?? 12))
+	// const table = useReactTable({
+	// 	data: transactionsData,
+	// 	columns,
+	// 	state: {
+	// 		sorting,
+	// 		columnFilters,
+	// 		columnVisibility,
+	// 		rowSelection,
+	// 		globalFilter,
+	// 	},
+	// 	onGlobalFilterChange: setGlobalFilter,
+	// 	onSortingChange: setSorting,
+	// 	onColumnFiltersChange: setColumnFilters,
+	// 	onColumnVisibilityChange: setColumnVisibility,
+	// 	onRowSelectionChange: setRowSelection,
+	// 	getCoreRowModel: getCoreRowModel(),
+	// 	getPaginationRowModel: getPaginationRowModel(),
+	// 	getSortedRowModel: getSortedRowModel(),
+	// 	getFilteredRowModel: getFilteredRowModel(),
+	// 	manualSorting: true,
+	// 	manualFiltering: true,
+	// 	manualPagination: true,
+	// 	autoResetPageIndex: true,
+	// 	// pageCount: totalPages,
+	// 	// rowCount: totalCount ?? 0,
+	// })
+	// function handlePaginate(newPageIndex: number) {
+	// 	setSearchParams({ page: (newPageIndex + 1).toString() })
+	// }

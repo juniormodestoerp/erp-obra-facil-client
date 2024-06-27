@@ -79,17 +79,17 @@ function name(name: string): string {
 
 	if (names.length > 2) {
 		const firstName =
-			names[0].charAt(0).toUpperCase() + names[0].slice(1).toLowerCase()
+			names[0].charAt(0).toUpperCase() + names[0].slice(1)?.toLowerCase()
 		const middleInitial = `${names[1].charAt(0).toUpperCase()}.`
 		const lastName =
 			names[names.length - 1].charAt(0).toUpperCase() +
-			names[names.length - 1].slice(1).toLowerCase()
+			names[names.length - 1].slice(1)?.toLowerCase()
 		return `${firstName} ${middleInitial} ${lastName}`
 	}
 	return names
 		.map(
 			(namePart) =>
-				namePart.charAt(0).toUpperCase() + namePart.slice(1).toLowerCase(),
+				namePart.charAt(0).toUpperCase() + namePart.slice(1)?.toLowerCase(),
 		)
 		.join(' ')
 }

@@ -192,11 +192,6 @@ export function useBankAccountsController() {
 		resolver: zodResolver(updateSchema),
 	})
 
-	console.log(hookFormErrorsUpdate, '- x errors')
-	console.log(hookFormWatchCreate('dueDateDay'), '- create errors');
-	console.log(hookFormWatchUpdate('dueDateDay'), '- UPDATE errors');
-	
-
 	const isUpdateCreditCard =
 		hookFormWatchUpdate('accountType') === 'Cartão de crédito'
 

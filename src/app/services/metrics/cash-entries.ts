@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 export interface ICashEntries {
 	id: string
 	amount: number
-	tags: string[]
+	tags: string
 	description: string
 	method: string | null
 	date: string
@@ -37,7 +37,7 @@ export async function cashEntries(): Promise<Response> {
 		transactions: response.data.map((transaction: ICashEntries) => ({
 			id: transaction.id,
 			amount: transaction.amount,
-			tags: transaction.tags.map((tag: string) => tag),
+			tags: transaction.tags,
 			description: transaction.description,
 			method: transaction.method,
 			date: transaction.date,

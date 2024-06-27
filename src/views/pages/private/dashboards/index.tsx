@@ -14,7 +14,6 @@
 // 	DialogOverlay,
 // 	DialogTrigger,
 // } from '@views/components/ui/dialog'
-// import { NewFundRealeaseContent } from '@views/pages/private/transactions/components/new-transaction-content'
 
 // export function Dashboards() {
 // 	useGlobalShortcut('Ctrl+a', openTransaction)

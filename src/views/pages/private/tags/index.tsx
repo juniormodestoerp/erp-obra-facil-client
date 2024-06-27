@@ -101,7 +101,7 @@ export function Tags() {
 					</button>
 				</DialogTrigger>
 
-				<DialogContent className="sm:max-w-[425px]">
+				<DialogContent className="sm:max-w-[425px]" title='Cadastrar tag'>
 					<DialogHeader>
 						<DialogTitle>Cadastrar tag</DialogTitle>
 						<DialogDescription>
@@ -132,7 +132,7 @@ export function Tags() {
 
 			{isUpdateModalOpen && (
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Editar tag'>
 						<DialogHeader>
 							<DialogTitle>Editar {selectedTag?.name}</DialogTitle>
 							<DialogDescription>
@@ -170,7 +170,7 @@ export function Tags() {
 
 			{isDeleteModalOpen && (
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Remover tag'>
 						<DialogHeader>
 							<DialogTitle>Remover {selectedTag.name}</DialogTitle>
 							<DialogDescription>

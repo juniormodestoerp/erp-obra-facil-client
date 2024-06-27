@@ -19,7 +19,6 @@ import { Reports } from '@views/pages/private/reports'
 import { Settings } from '@views/pages/private/settings'
 import { Tags } from '@views/pages/private/tags'
 import { Transactions } from '@views/pages/private/transactions'
-import { Transfers } from '@views/pages/private/transfers'
 
 /* Public Routes */
 import { ForgotPassword } from '@views/pages/authentication/forgot-password'
@@ -74,7 +73,6 @@ export function AppRoutes() {
 						/>
 						<Route path="/payment-methods" element={<PaymentMethods />} />
 						<Route path="/tags" element={<Tags />} />
-						<Route path="/transfers" element={<Transfers />} />
 						<Route path="/settings" element={<Settings />} />
 						<Route path="/profile" element={<Profile />} />
 					</Route>

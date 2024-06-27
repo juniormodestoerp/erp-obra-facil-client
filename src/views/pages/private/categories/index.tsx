@@ -202,7 +202,7 @@ export function Categories() {
 					</button>
 				</DialogTrigger>
 
-				<DialogContent className="sm:max-w-[425px]">
+				<DialogContent className="sm:max-w-[425px]" title='Cadastrar categoria'>
 					<DialogHeader>
 						<DialogTitle>Cadastrar categoria</DialogTitle>
 						<DialogDescription>
@@ -272,7 +272,7 @@ export function Categories() {
 
 			{isUpdateModalOpen && (
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Editar categoria'>
 						<DialogHeader>
 							<DialogTitle>Editar {selectedCategory?.name}</DialogTitle>
 							<DialogDescription>
@@ -342,7 +342,7 @@ export function Categories() {
 
 			{isDeleteModalOpen && (
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Remover categoria'>
 						<DialogHeader>
 							<DialogTitle>Remover {selectedCategory.name}</DialogTitle>
 							<DialogDescription>

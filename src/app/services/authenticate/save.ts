@@ -41,7 +41,7 @@ export async function save({
 	number,
 	complement,
 }: Params): Promise<Response> {
-	const { data } = await httpClient.put<Response>('/users', {
+	const { data } = await httpClient.patch<Response>('/users', {
 		name,
 		email,
 		phone: `+${phone.replace(/\D/g, '')}`,

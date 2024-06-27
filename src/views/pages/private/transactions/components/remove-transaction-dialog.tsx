@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 } from '@views/components/ui/dialog'
 
-import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
+// import { useTransactionsController } from '@views/pages/private/transactions/use-transactions-controller'
 
 interface Props {
 	transactionId: string
@@ -18,12 +18,12 @@ interface Props {
 }
 
 export function RemoveTransactionDialog({
-	transactionId,
+	// transactionId,
 	transactionName,
 	isDeleteModalOpen,
 	setIsDeleteModalOpen,
 }: Props) {
-	const { handleRemoveTransaction } = useTransactionsController()
+	// const { handleRemoveTransaction } = useTransactionsController()
 
 	function handleClose() {
 		setIsDeleteModalOpen(false)
@@ -31,7 +31,7 @@ export function RemoveTransactionDialog({
 
 	return (
 		<Dialog open={isDeleteModalOpen} onOpenChange={handleClose}>
-			<DialogContent className="sm:max-w-[425px]">
+			<DialogContent className="sm:max-w-[425px]" title='Remover o lançamento'>
 				<DialogHeader>
 					<DialogTitle>Remover o lançamento {transactionName}</DialogTitle>
 					<DialogDescription>
@@ -45,7 +45,7 @@ export function RemoveTransactionDialog({
 						type="submit"
 						variant="destructive"
 						onClick={() => {
-							handleRemoveTransaction(transactionId)
+							// handleRemoveTransaction(transactionId)
 							handleClose()
 						}}
 					>

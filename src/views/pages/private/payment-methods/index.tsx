@@ -104,7 +104,7 @@ export function PaymentMethods() {
 					</button>
 				</DialogTrigger>
 
-				<DialogContent className="sm:max-w-[425px]">
+				<DialogContent className="sm:max-w-[425px]" title='Cadastrar método de pagamento'>
 					<DialogHeader>
 						<DialogTitle>Cadastrar método de pagamento</DialogTitle>
 						<DialogDescription>
@@ -135,7 +135,7 @@ export function PaymentMethods() {
 
 			{isUpdateModalOpen && (
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Editar método de pagamento'>
 						<DialogHeader>
 							<DialogTitle>Editar {selectedPaymentMethod?.name}</DialogTitle>
 							<DialogDescription>
@@ -173,7 +173,7 @@ export function PaymentMethods() {
 
 			{isDeleteModalOpen && (
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Remover método de pagamento'>
 						<DialogHeader>
 							<DialogTitle>Remover {selectedPaymentMethod.name}</DialogTitle>
 							<DialogDescription>

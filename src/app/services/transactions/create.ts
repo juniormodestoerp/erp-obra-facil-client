@@ -24,7 +24,7 @@ export async function create({
 }: ICreateTransactionDTO): Promise<ITransactionDTO> {
 	const { data } = await httpClient.post('/transactions', {
 		type,
-		date,
+		date: Format.parseIso(date.toISOString()),
 		amount,
 		description,
 		account,
@@ -37,14 +37,16 @@ export async function create({
 		method,
 		documentNumber,
 		notes,
-		competenceDate,
-		tags,
+		competenceDate: competenceDate
+			? Format.parseIso(competenceDate.toISOString())
+			: null,
+		tag: tags,
 	})
 
 	return {
 		id: data.id,
 		type: data.type,
-		date: Format.parseIso(data.date),
+		date: data.date,
 		amount: data.amount,
 		description: data.description,
 		account: data.account,

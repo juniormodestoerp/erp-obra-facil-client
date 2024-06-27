@@ -110,7 +110,7 @@ export function CostAndProfitCenters() {
 					</button>
 				</DialogTrigger>
 
-				<DialogContent className="sm:max-w-[425px]">
+				<DialogContent className="sm:max-w-[425px]" title="Cadastrar centro de custo">
 					<DialogHeader>
 						<DialogTitle>Cadastrar centro de custo</DialogTitle>
 						<DialogDescription>
@@ -141,7 +141,7 @@ export function CostAndProfitCenters() {
 
 			{isUpdateModalOpen && (
 				<Dialog open={isUpdateModalOpen} onOpenChange={handleCloseUpdateModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title='Editar centro de custo'>
 						<DialogHeader>
 							<DialogTitle>
 								Editar {selectedCostAndProfitCenter?.name}
@@ -181,7 +181,7 @@ export function CostAndProfitCenters() {
 
 			{isDeleteModalOpen && (
 				<Dialog open={isDeleteModalOpen} onOpenChange={handleCloseDeleteModal}>
-					<DialogContent className="sm:max-w-[425px]">
+					<DialogContent className="sm:max-w-[425px]" title="Remover centro de custo">
 						<DialogHeader>
 							<DialogTitle>
 								Remover {selectedCostAndProfitCenter.name}
