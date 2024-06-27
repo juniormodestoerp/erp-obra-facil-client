@@ -73,13 +73,13 @@ export function Categories() {
 				</div>
 			) : (
 				<div className="lg:flex-row flex gap-4 flex-col items-start">
-					<div className="w-full">
-						<h2 className="text-lg font-semibold text-foreground mb-2">
-							Receitas
-						</h2>
-						<div className="h-auto border-collapse w-full overflow-hidden rounded border border-zinc-300 dark:border-slate-400 dark:bg-slate-800">
-							{organizedIncomeCategories.length > 0 &&
-								organizedIncomeCategories.map((category: ICategoryDTO) => {
+					{organizedIncomeCategories.length > 0 && (
+						<div className="w-full">
+							<h2 className="text-lg font-semibold text-foreground mb-2">
+								Receitas
+							</h2>
+							<div className="h-auto border-collapse w-full overflow-hidden rounded border border-zinc-300 dark:border-slate-400 dark:bg-slate-800">
+								{organizedIncomeCategories.map((category: ICategoryDTO) => {
 									const isPrimary = category.subcategoryOf === ''
 									return (
 										<div
@@ -91,9 +91,9 @@ export function Categories() {
 													: 'pl-8',
 											)}
 										>
-											{isPrimary ? (
+											{isPrimary && (
 												<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
-											) : null}
+											)}
 											<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
 												<p
 													className={cn(
@@ -128,16 +128,17 @@ export function Categories() {
 										</div>
 									)
 								})}
+							</div>
 						</div>
-					</div>
+					)}
 
-					<div className="w-full mt-px">
-						<h2 className="text-[17px] font-semibold text-foreground mb-2">
-							Despesas
-						</h2>
-						<div className="h-auto border-collapse w-full overflow-hidden rounded border border-zinc-300 dark:border-slate-400 dark:bg-slate-800">
-							{organizedExpenseCategories.length > 0 &&
-								organizedExpenseCategories.map((category: ICategoryDTO) => {
+					{organizedExpenseCategories.length > 0 && (
+						<div className="w-full mt-px">
+							<h2 className="text-[17px] font-semibold text-foreground mb-2">
+								Despesas
+							</h2>
+							<div className="h-auto border-collapse w-full overflow-hidden rounded border border-zinc-300 dark:border-slate-400 dark:bg-slate-800">
+								{organizedExpenseCategories.map((category: ICategoryDTO) => {
 									const isPrimary = category.subcategoryOf === ''
 									return (
 										<div
@@ -148,9 +149,9 @@ export function Categories() {
 													: 'pl-8'
 											}`}
 										>
-											{isPrimary ? (
+											{isPrimary && (
 												<ExpenseIcon className="h-5 w-5 text-red-500" />
-											) : null}
+											)}
 											<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
 												<p
 													className={`font-medium tracking-tight ${
@@ -184,8 +185,9 @@ export function Categories() {
 										</div>
 									)
 								})}
+							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			)}
 

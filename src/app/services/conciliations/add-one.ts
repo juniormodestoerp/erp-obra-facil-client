@@ -1,27 +1,7 @@
 import { httpClient } from '@app/services/http-client'
 import { Format } from '@app/utils/format'
 
-export interface IOFXTransactionParams {
-	date: string
-	amount: number
-	description: string
-	account: string | null
-	transferAccount: string | null
-	card: string | null
-	category: string | null
-	subcategory: string | null
-	contact: string | null
-	center: string | null
-	project: string | null
-	method: string | null
-	documentNumber: string | null
-	notes: string | null
-	competenceDate: string | null
-	tags: string | null
-}
-
-export interface IVerifiedTransaction {
-	id: string
+export interface IAddOneParams {
 	date: string
 	amount: number
 	description: string
@@ -41,14 +21,30 @@ export interface IVerifiedTransaction {
 }
 
 export interface IResponse {
-	newTransactions: IVerifiedTransaction[]
-	conflictingTransactions: IVerifiedTransaction[]
+	id: string
+	date: string
+	amount: number
+	description: string
+	account: string | null
+	transferAccount: string | null
+	card: string | null
+	category: string | null
+	subcategory: string | null
+	contact: string | null
+	center: string | null
+	project: string | null
+	method: string | null
+	documentNumber: string | null
+	notes: string | null
+	competenceDate: string | null
+	tags: string | null
+	createdAt: string
 }
 
-export async function verifyOfx(
-	transactions: IOFXTransactionParams[],
-): Promise<IResponse> {
-	const mappedTransactions = transactions.map((transaction) => ({
+export async function addOne(transaction: IAddOneParams): Promise<IResponse> {
+	console.log('chegou no service', transaction.date)
+
+	const mappedTransactions = {
 		date: Format.formatOfxDate(transaction.date),
 		amount: transaction.amount,
 		description: Format.formatDescription(transaction.description),
@@ -60,24 +56,21 @@ export async function verifyOfx(
 		contact: transaction.contact,
 		center: transaction.center,
 		project: transaction.project,
-		method: transaction.method
-			? Format.translateAndCapitalize(transaction.method)
-			: null,
+		method: transaction.method,
 		documentNumber: transaction.documentNumber,
-		notes: transaction.notes
-			? Format.formatDescription(transaction.notes)
-			: null,
+		notes: transaction.notes,
 		competenceDate: transaction.competenceDate,
 		tags: transaction.tags,
-	}))
+	}
 
 	const { data } = await httpClient.post(
-		'/conciliations/import-ofx',
+		'/conciliations/add-one',
 		mappedTransactions,
 	)
 
 	return {
-		newTransactions: data.newTransactions,
-		conflictingTransactions: data.conflictingTransactions,
+		...data,
+		date: Format.parseIso(data.date),
+		createdAt: Format.parseIso(data.createdAt),
 	}
 }

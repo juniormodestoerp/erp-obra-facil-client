@@ -167,7 +167,7 @@ export function DesktopOptions({ path, small, balance }: Props) {
 							title="Tags"
 							selected={path.startsWith('/tags')}
 						/>
-
+						{/* 
 						<SubOption
 							open={!small}
 							small={small}
@@ -175,7 +175,7 @@ export function DesktopOptions({ path, small, balance }: Props) {
 							linkTo="/transfers"
 							title="Tranferências"
 							selected={path.startsWith('/transfers')}
-						/>
+						/> */}
 					</GroupOption>
 				</div>
 

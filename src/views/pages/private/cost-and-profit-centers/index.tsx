@@ -1,6 +1,9 @@
-import { IncomeIcon } from '@/assets/icons/income'
 import type { ICostAndProfitCentersDTO } from '@app/dtos/cost-and-profit-center-dto'
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+	CurrencyDollarIcon,
+	PencilSquareIcon,
+	TrashIcon,
+} from '@heroicons/react/24/outline'
 import { Input } from '@views/components/input'
 import { PageTitle } from '@views/components/page-title'
 import { Tooltip } from '@views/components/tooltip'
@@ -50,18 +53,17 @@ export function CostAndProfitCenters() {
 				description="Crie e gerencie seus centros de custo."
 			/>
 
-			<div className="my-8 h-auto border-collapse overflow-hidden rounded border shadow dark:border-slate-400 dark:bg-slate-800">
+			<div className="my-8 h-auto border-collapse overflow-hidden rounded border border-zinc-300 divide-y divide-zinc-300 dark:border-slate-400 dark:bg-slate-800">
 				{costAndProfitCenters.length > 0 ? (
 					costAndProfitCenters.map(
 						(costAndProfitCenter: ICostAndProfitCentersDTO) => (
 							<div
 								key={costAndProfitCenter.id}
-								className="flex items-center justify-start px-3 border-collapse border-t border-gy-200 dark:border-slate-400"
+								className="flex items-center justify-start px-3 border-collapse dark:border-slate-400"
 							>
-								<IncomeIcon className="mt-1 h-5 w-5 text-green-500" />
-								<div className="flex w-full items-center justify-between px-2 py-2 text-foreground">
+								<CurrencyDollarIcon className="h-5 w-5 text-dark-blue" />
+								<div className="flex w-full items-center justify-between px-1.5 py-2 text-foreground">
 									<p className="font-medium tracking-tight">
-										<span className="mr-2">&bull;</span>
 										<span className="w-full">{costAndProfitCenter.name}</span>
 									</p>
 									<div className="flex gap-2">

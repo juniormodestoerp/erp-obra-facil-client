@@ -116,18 +116,35 @@ function excelSerialToDate(serialNumber: number): string {
 	return `${day}/${month}/${year}`
 }
 
-function formatOfxDate(ofxDate: string): string {
-	if (ofxDate.length !== 8) {
-		throw new Error('Invalid date format')
+const formatOfxDate = (date: string): string => {
+	// Verifica se a data está no formato OFX (YYYYMMDD)
+	if (date.length === 8) {
+		const year = date.slice(0, 4)
+		const month = date.slice(4, 6)
+		const day = date.slice(6, 8)
+		return `${day}/${month}/${year}`
 	}
 
-	const year = ofxDate.slice(0, 4)
-	const month = ofxDate.slice(4, 6)
-	const day = ofxDate.slice(6, 8)
+	// Verifica se a data está no formato ISO 8601 (YYYY-MM-DDTHH:MM:SS.SSSZ)
+	const isoDatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+	if (isoDatePattern.test(date)) {
+		const dateObj = new Date(date)
+		const day = String(dateObj.getUTCDate()).padStart(2, '0')
+		const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0') // Janeiro é 0!
+		const year = dateObj.getUTCFullYear()
+		return `${day}/${month}/${year}`
+	}
 
-	return `${day}/${month}/${year}`
+	// Verifica se a data está no formato DD/MM/YYYY
+	const dmyDatePattern = /^\d{2}\/\d{2}\/\d{4}$/
+	if (dmyDatePattern.test(date)) {
+		const [day, month, year] = date.split('/')
+		return `${day}/${month}/${year}`
+	}
+
+	// Lança um erro se o formato da data for inválido
+	throw new Error('Invalid date format')
 }
-
 /**
  * Converte uma data no formato 'DD/MM/YYYY' para um número de série do Excel.
  * @param date Data no formato 'DD/MM/YYYY'.

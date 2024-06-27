@@ -89,14 +89,15 @@ export function Select({
 							type="button"
 							onClick={handleButtonClick}
 							className={cn(
-								'relative block min-h-8 w-full rounded-md border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-900 hover:border-primary focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100',
+								'relative block min-h-8 w-full rounded-md border border-zinc-400 px-3 py-1.5 text-left text-xs text-zinc-900 shadow outline-none ring-0 placeholder:text-zinc-900 hover:border-primary focus:border-primary focus:outline-none focus:ring-0 disabled:pointer-events-none sm:text-sm sm:leading-6 dark:bg-zinc-600 dark:text-zinc-100 truncate',
 								error && '!border-red-600',
 							)}
 						>
 							<span
 								className={cn(
 									'text-zinc-900 dark:text-zinc-100',
-									value && 'text-zinc-900 dark:text-zinc-100',
+									value &&
+										'text-zinc-900 dark:text-zinc-100 !overflow-ellipsis !whitespace-nowrap mr-5',
 								)}
 							>
 								{selectedField === 'padrão'

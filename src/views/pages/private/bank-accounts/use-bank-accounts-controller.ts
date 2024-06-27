@@ -44,7 +44,9 @@ const createSchema = z.object({
 	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
 	dueDateDay: z
 		.string(strMessage('dia de vencimento'))
-		.transform((value) => +value)
+		.transform((value) => {
+			if (value !== null || value !== '') +value
+		})
 		.nullable()
 		.default(null),
 	dueDateFirstInvoice: z
@@ -174,6 +176,10 @@ export function useBankAccountsController() {
 		resolver: zodResolver(createSchema),
 	})
 
+	console.log(hookFormErrorsCreate, '- create errors')
+	console.log(hookFormWatchCreate('dueDateDay'))
+	console.log(hookFormWatchCreate('dueDateFirstInvoice'))
+
 	const isCreateCreditCard =
 		hookFormWatchCreate('accountType') === 'Cartão de crédito'
 
@@ -203,10 +209,10 @@ export function useBankAccountsController() {
 		hookFormSetValueCreate('limit', 0)
 		hookFormSetValueCreate('initialBalance', 0)
 		hookFormSetValueCreate('limitType', null)
-		hookFormSetValueCreate('dueDateDay', 0)
-		hookFormSetValueCreate('dueDateFirstInvoice', '')
-		hookFormSetValueCreate('closingDateInvoice', 0)
-		hookFormSetValueCreate('balanceFirstInvoice', 0)
+		hookFormSetValueCreate('dueDateDay', null)
+		hookFormSetValueCreate('dueDateFirstInvoice', null)
+		hookFormSetValueCreate('closingDateInvoice', null)
+		hookFormSetValueCreate('balanceFirstInvoice', null)
 		setIsCreateModalOpen(!isCreateModalOpen)
 	}
 	function handleCloseCreateModal() {
