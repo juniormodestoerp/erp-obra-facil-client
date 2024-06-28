@@ -8,11 +8,14 @@ import { Helmet } from 'react-helmet-async'
 import { cn } from '@app/utils/cn'
 import { FormProvider } from 'react-hook-form'
 import { PageTitle } from './components/page-title'
-import { UseSettingsController } from './use-settings-controller'
+import { useSettingsController } from './use-settings-controller'
 
 export function Settings() {
 	const { methods, settings, toggleFieldRequired, toggleFieldEnable } =
-		UseSettingsController()
+		useSettingsController()
+
+		console.log(settings);
+		
 
 	return (
 		<Fragment>

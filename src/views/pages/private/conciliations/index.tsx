@@ -525,31 +525,22 @@ export function Conciliations() {
 						{isSingleImport && (
 							<>
 								<div className="flex gap-x-4">
-									<Select
-										label="Tipo:"
-										name="type"
-										control={createControl}
-										data={[
-											{ field: 'Receita', value: 'Receita' },
-											// { field: 'Transferência', value: 'Transferência' },
-											{ field: 'Despesa', value: 'Despesa' },
-										]}
+									<Input
+										label="Descrição:"
+										placeholder="Digite a descrição"
+										className='max-w-lg'
+										error={createErrors?.description?.message}
+										{...createRegister('description')}
 									/>
+								</div>
+
+								<div className="flex gap-x-4">
 									<InputCurrency
 										label="Valor:"
 										placeholder="Digite o valor"
 										control={createControl}
 										error={createErrors?.amount?.message}
 										{...createRegister('amount')}
-									/>
-								</div>
-
-								<div className="flex gap-x-4">
-									<Input
-										label="Descrição:"
-										placeholder="Digite a descrição"
-										error={createErrors?.description?.message}
-										{...createRegister('description')}
 									/>
 									<div className="w-[30%]">
 										<InputMask
@@ -569,12 +560,14 @@ export function Conciliations() {
 								label="Conta:"
 								name="account"
 								control={createControl}
+								setValue={createSetValue}
 								data={transformedAccounts}
 							/>
 							<Select
 								label="Categoria:"
 								name="category"
 								control={createControl}
+								setValue={createSetValue}
 								data={transformedCategories}
 							/>
 						</div>
@@ -583,12 +576,14 @@ export function Conciliations() {
 								label="Centro de custo:"
 								name="center"
 								control={createControl}
+								setValue={createSetValue}
 								data={transformedCenters}
 							/>
 							<Select
 								label="Forma de pagamento:"
 								name="method"
 								control={createControl}
+								setValue={createSetValue}
 								data={transformedMethod}
 							/>
 						</div>
@@ -607,10 +602,14 @@ export function Conciliations() {
 								label="Tags:"
 								name="tags"
 								control={createControl}
+								setValue={createSetValue}
 								data={transformedTags}
 							/>
 						</div>
-						<Button type="submit" className="w-full bg-dark-blue hover:bg-dark-blue/90">
+						<Button
+							type="submit"
+							className="w-full bg-dark-blue hover:bg-dark-blue/90"
+						>
 							Salvar
 						</Button>
 					</form>

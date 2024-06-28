@@ -3,7 +3,7 @@ import { TRANSACTION_QUERY_KEY } from '@app/hooks/transactions/use-transactions'
 import { transactionsService } from '@app/services/transactions'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export function useUpdateTransactionCenter() {
+export function useUpdateTransaction() {
 	const queryClient = useQueryClient()
 
 	const { mutateAsync, isPending } = useMutation({

@@ -1,139 +1,71 @@
+import type { ITransactionDTO } from '@app/dtos/transaction-dto'
 import { httpClient } from '@app/services/http-client'
+import { Format } from '@app/utils/format'
 
-export interface Params {
+type IUpdatePaymentMethodDTO = Partial<
+	Omit<ITransactionDTO, 'id' | 'createdAt'>
+> & {
 	id: string
-	name: string
-	description: string
-	categoryId: string
-	establishmentName: string
-	bankName: string
-	transactionDate: string
-	previousBalance: number
-	totalAmount: number
-	currentBalance: number
-	paymentMethod: string
-	status: string
-	accountType: string
-	fitId: string
-	accountToTransfer: string | null
-	contact: string | null
-	card: string | null
-	competencyDate: string | null
-	costAndProfitCenters: string | null
-	tags: string | null
-	documentNumber: string | null
-	associatedContracts: string | null
-	associatedProjects: string | null
-	additionalComments: string | null
-}
-
-export interface Response {
-	id: string
-	name: string
-	description: string
-	categoryId: string
-	categoryName: string
-	establishmentName: string
-	bankName: string
-	transactionDate: string
-	previousBalance: number
-	totalAmount: number
-	currentBalance: number
-	paymentMethod: string
-	status: string
-	accountType: string
-	fitId: string
-	accountToTransfer: string | null
-	contact: string | null
-	card: string | null
-	competencyDate: string | null
-	costAndProfitCenters: string | null
-	tags: string | null
-	documentNumber: string | null
-	associatedContracts: string | null
-	associatedProjects: string | null
-	additionalComments: string | null
-	createdAt: string
 }
 
 export async function save({
 	id,
-	name,
+	type,
+	date,
+	amount,
 	description,
-	categoryId,
-	establishmentName,
-	bankName,
-	transactionDate,
-	previousBalance,
-	totalAmount,
-	currentBalance,
-	paymentMethod,
+	account,
 	status,
-	accountType,
-	fitId,
-	accountToTransfer,
-	contact,
 	card,
-	competencyDate,
-	costAndProfitCenters,
-	tags,
+	category,
+	contact,
+	center,
+	project,
+	method,
 	documentNumber,
-	associatedContracts,
-	associatedProjects,
-	additionalComments,
-}: Params): Promise<Response> {
-	const { data } = await httpClient.patch<Response>(`/transactions/${id}`, {
-		name,
+	notes,
+	competenceDate,
+	tags,
+}: IUpdatePaymentMethodDTO): Promise<ITransactionDTO> {
+	const { data } = await httpClient.patch(`/transactions/${id}`, {
+		type,
+		date: date ? Format.parseIso(date?.toISOString()) : null,
+		amount,
 		description,
-		categoryId,
-		establishmentName,
-		bankName,
-		transactionDate,
-		previousBalance,
-		totalAmount,
-		currentBalance,
-		paymentMethod,
+		account,
 		status,
-		accountType,
-		fitId,
-		accountToTransfer,
-		contact,
 		card,
-		competencyDate: competencyDate || null,
-		costAndProfitCenters,
-		tags,
+		category,
+		contact,
+		center,
+		project,
+		method,
 		documentNumber,
-		associatedContracts,
-		associatedProjects,
-		additionalComments,
+		notes,
+		competenceDate: competenceDate
+			? Format.parseIso(competenceDate.toISOString())
+			: null,
+		tag: tags,
 	})
 
 	return {
 		id: data.id,
-		name: data.name,
+		type: data.type,
+		date: data.date,
+		amount: data.amount,
 		description: data.description,
-		categoryId: data.categoryId,
-		categoryName: data.categoryName,
-		establishmentName: data.establishmentName,
-		bankName: data.bankName,
-		transactionDate: data.transactionDate,
-		previousBalance: data.previousBalance,
-		totalAmount: data.totalAmount,
-		currentBalance: data.currentBalance,
-		paymentMethod: data.paymentMethod,
+		account: data.account,
 		status: data.status,
-		accountType: data.accountType,
-		fitId: data.fitId,
-		accountToTransfer: data.accountToTransfer,
-		contact: data.contact,
 		card: data.card,
-		competencyDate: data.competencyDate,
-		costAndProfitCenters: data.costAndProfitCenters,
-		tags: data.tags,
+		category: data.category,
+		contact: data.contact,
+		center: data.center,
+		project: data.project,
+		method: data.method,
 		documentNumber: data.documentNumber,
-		associatedContracts: data.associatedContracts,
-		associatedProjects: data.associatedProjects,
-		additionalComments: data.additionalComments,
+		notes: data.notes,
+		competenceDate: data.competenceDate,
+		tags: data.tags,
 		createdAt: data.createdAt,
 	}
 }

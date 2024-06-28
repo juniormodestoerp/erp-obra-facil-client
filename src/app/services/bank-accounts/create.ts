@@ -31,9 +31,7 @@ export async function create({
 		limit,
 		limitType: limitType === 'Mensal' ? 'MONTHLY' : 'TOTAL',
 		dueDateDay,
-		dueDateFirstInvoice: dueDateFirstInvoice
-			? Format.formatIso(dueDateFirstInvoice)
-			: null,
+		dueDateFirstInvoice: dueDateFirstInvoice,
 		closingDateInvoice,
 		balanceFirstInvoice,
 		isFirstInvoice,

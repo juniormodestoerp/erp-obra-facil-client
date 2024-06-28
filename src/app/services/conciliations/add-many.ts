@@ -48,8 +48,6 @@ export interface IResponse {
 export async function addMany(
 	transactions: IAddManyParams[],
 ): Promise<IResponse> {
-	console.log('chegou no service', transactions)
-
 	const isValidDate = (dateString: string) => {
 		const date = new Date(dateString)
 		return !Number.isNaN(date.getTime())
@@ -57,7 +55,6 @@ export async function addMany(
 
 	const mappedTransactions = transactions.map((transaction) => {
 		try {
-			console.log('processing transaction', transaction)
 			const date = isValidDate(transaction.date)
 				? Format.formatOfxDate(transaction.date)
 				: null
@@ -88,8 +85,6 @@ export async function addMany(
 			return null
 		}
 	})
-
-	console.log('mappedTransactions', mappedTransactions)
 
 	const { data } = await httpClient.post(
 		'/conciliations/add-many',

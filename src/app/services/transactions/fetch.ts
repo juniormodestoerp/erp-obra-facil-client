@@ -2,9 +2,9 @@ import type { ITransactionDTO } from '@app/dtos/transaction-dto'
 import { httpClient } from '@app/services/http-client'
 
 export async function fetch(): Promise<ITransactionDTO[]> {
-	const { data } = await httpClient.get('/transactions')
-
-	return data.map((transaction: ITransactionDTO) => ({
+	const response = await httpClient.get('/transactions')
+	
+	return response.data.map((transaction: ITransactionDTO) => ({
 		id: transaction.id,
 		type: transaction.type,
 		date: transaction.date,

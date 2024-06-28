@@ -104,24 +104,6 @@ export const columns: ColumnDef<IVerifiedTransaction>[] = [
 			</div>
 		),
 	},
-	// {
-	// 	accessorKey: 'transferAccount',
-	// 	header: ({ column }) => (
-	// 		<Button
-	// 			variant="ghost"
-	// 			onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-	// 			className="w-fit text-dark-blue hover:text-darker-blue"
-	// 		>
-	// 			{getColumnName('transferAccount')}
-	// 			<ArrowUpDown className="ml-2 h-4 w-4" />
-	// 		</Button>
-	// 	),
-	// 	cell: ({ row }) => (
-	// 		<div className="min-h-10 flex items-center  w-fit ">
-	// 			{row.getValue('transferAccount')}
-	// 		</div>
-	// 	),
-	// },
 	{
 		accessorKey: 'card',
 		header: ({ column }) => (

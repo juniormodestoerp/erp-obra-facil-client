@@ -8,8 +8,11 @@ import {
 	dateMessage,
 	strMessage,
 } from '@app/utils/custom-zod-error'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+	SETTINGS_QUERY_KEY,
+	useSettings,
+} from '@app/hooks/settings/use-settings'
 
 const schema = z.object({
 	id: z.string(strMessage('id')),
@@ -23,45 +26,36 @@ const schema = z.object({
 
 export type SettingsData = z.infer<typeof schema>
 
-export function UseSettingsController() {
-	const [settings, setSettings] = useState<SettingsData[]>([])
+export function useSettingsController() {
+	const queryClient = useQueryClient()
 
 	const methods = useForm<SettingsData>({
 		resolver: zodResolver(schema),
 	})
 
-	const { data: response } = useQuery({
-		queryKey: ['settings'],
-		queryFn: () => settingsService.fetch({ pageIndex: 1 }),
-	})
+	const { settings } = useSettings()
 
 	const { mutateAsync: saveSetting } = useMutation({
 		mutationFn: async (data: SettingsData) => {
 			return settingsService.save(data)
 		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
+		},
 	})
 
-	useEffect(() => {
-		if (response?.settings) {
-			setSettings(response.settings)
-		}
-	}, [response])
-
-	const handleToggle = (
+	const handleToggle = async (
 		id: string,
 		field: 'isFieldRequired' | 'isFieldEnable',
 	) => {
-		setSettings((prevState) => {
-			const newState = prevState.map((setting) => {
-				if (setting.id === id) {
-					const updatedSetting = { ...setting, [field]: !setting[field] }
-					saveSetting(updatedSetting)
-					return updatedSetting
-				}
-				return setting
-			})
-			return newState
-		})
+		const settingToUpdate = settings.find((setting) => setting.id === id)
+		if (settingToUpdate) {
+			const updatedSetting = {
+				...settingToUpdate,
+				[field]: !settingToUpdate[field],
+			}
+			await saveSetting(updatedSetting)
+		}
 	}
 
 	const toggleFieldRequired = (id: string) => {

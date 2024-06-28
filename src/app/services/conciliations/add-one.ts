@@ -42,8 +42,6 @@ export interface IResponse {
 }
 
 export async function addOne(transaction: IAddOneParams): Promise<IResponse> {
-	console.log('chegou no service', transaction.date)
-
 	const mappedTransactions = {
 		date: Format.formatOfxDate(transaction.date),
 		amount: transaction.amount,
