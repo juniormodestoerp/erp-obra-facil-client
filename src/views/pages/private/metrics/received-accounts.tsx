@@ -16,7 +16,7 @@ export function ReceivedAccounts() {
 	})
 
 	const groupByMonth = (transactions: IReceivedAccounts[]) => {
-		return transactions.reduce(
+		return transactions?.reduce(
 			(
 				acc: Record<string, IReceivedAccounts[]>,
 				transaction: IReceivedAccounts,
@@ -35,7 +35,7 @@ export function ReceivedAccounts() {
 		)
 	}
 
-	const groupedTransactions = groupByMonth(data.transactions)
+	const groupedTransactions = data?.transactions ? groupByMonth(data.transactions) : {}
 
 	return (
 		<Fragment>

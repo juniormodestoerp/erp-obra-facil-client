@@ -1,12 +1,11 @@
 import { httpClient } from '@app/services/http-client'
-import { toast } from 'sonner'
 
 export interface IAccountsPayable {
 	id: string
 	description: string
 	amount: number
 	date: string
-	tags: string
+	// tags: string
 	method: string | null
 }
 
@@ -23,21 +22,13 @@ export async function accountsPayable(): Promise<Response> {
 		}
 	}
 
-	if (response.status === 200) {
-		toast.success(
-			`${
-				response?.data?.length === 1 ? 'Conta carregada' : 'Contas carregadas'
-			} com sucesso!`,
-		)
-	}
-
 	return {
 		transactions: response.data.map((transaction: IAccountsPayable) => ({
 			id: transaction.id,
 			description: transaction.description,
 			amount: transaction.amount,
 			date: transaction.date,
-			tags: transaction.tags,
+			// tags: transaction.tags,
 			method: transaction.method,
 		})),
 	}

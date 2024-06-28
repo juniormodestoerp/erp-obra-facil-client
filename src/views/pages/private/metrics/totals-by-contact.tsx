@@ -42,7 +42,7 @@ export function TotalsByContact() {
 										{Format.currency(transaction.amount)}
 									</span>
 									gastos com o contato
-									<span className="text-cyan-500 font-semibold mx-1">
+									<span className="text-cyan-500 font-semibold mx-1 lowercase">
 										{transaction.contact ?? 'não informado'}
 									</span>
 									até o momento.

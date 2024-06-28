@@ -32,6 +32,8 @@ export function getColumnName(name: string): string {
 			return 'Data de competência'
 		case 'tags':
 			return 'Tags'
+		case 'actions':
+			return 'Ações'
 		default:
 			break
 	}

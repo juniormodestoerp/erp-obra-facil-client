@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 /* Auth Guard */
 import { AuthGuard } from '@/router/auth-guard'
@@ -51,6 +51,7 @@ export function AppRoutes() {
 		<BrowserRouter>
 			<Routes>
 				{/* Public Routes */}
+				<Route path="/" element={<Navigate to="/login" />} />
 				<Route element={<AuthenticateLayout />}>
 					<Route index path="/login" element={<SignIn />} />
 					<Route path="/sign-up" element={<SignUp />} />

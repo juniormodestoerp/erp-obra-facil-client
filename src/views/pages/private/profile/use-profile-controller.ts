@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ChangeEvent, DragEvent } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -89,17 +89,16 @@ export function useProfileController() {
 		queryFn: authService.profile,
 	})
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (data?.profilePicture) {
-			const profilePictureFilename = data.profilePicture.split('/').pop()
+			const profilePictureFilename = data?.profilePicture?.split('/')?.pop()
 			setPreviewSrc(
 				`http://localhost:8080/uploads/profile-pictures/${profilePictureFilename}` ??
 					'',
 			)
 			refetch()
 		}
-	}, [data])
+	}, [data, refetch])
 
 	const {
 		control,
@@ -170,40 +169,38 @@ export function useProfileController() {
 		}
 	}
 
-	const zipCode = watch('zipCode')
+	// const zipCode = watch('zipCode')
 
-	const { data: address } = useQuery({
-		queryKey: ['address', zipCode],
-		queryFn: () => {
-			if (!zipCode || zipCode.length !== 9) {
-				return Promise.resolve(null)
-			}
+	// const { data: address } = useQuery({
+	// 	queryKey: ['address', zipCode],
+	// 	queryFn: () => {
+	// 		if (!zipCode || zipCode.length !== 9) {
+	// 			return Promise.resolve(null)
+	// 		}
 
-			return utilsService.showAddress({ zipCode })
-		},
-		enabled: !!(zipCode && zipCode.length === 9 && !zipCode.includes('_')),
-	})
+	// 		return utilsService.showAddress({ zipCode })
+	// 	},
+	// 	enabled: !!(zipCode && zipCode.length === 9 && !zipCode.includes('_')),
+	// })
 
-	useEffect(() => {
-		if (address) {
-			setValue('zipCode', address.zipCode)
-			setValue('state', address.state)
-			setValue('city', address.city)
-			setValue(
-				'neighborhood',
-				Number(address.neighborhood) === 0 ? '' : address.neighborhood ?? '',
-			)
-			setValue('street', address.street ?? '')
+	// if (address) {
+	// 	setValue('zipCode', address.zipCode)
+	// 	setValue('state', address.state)
+	// 	setValue('city', address.city)
+	// 	setValue(
+	// 		'neighborhood',
+	// 		Number(address.neighborhood) === 0 ? '' : address.neighborhood ?? '',
+	// 	)
+	// 	setValue('street', address.street ?? '')
 
-			if (address.neighborhood && address.street) {
-				setFocus('number')
-			} else if (!address.neighborhood) {
-				setFocus('neighborhood')
-			} else if (!address.street) {
-				setFocus('street')
-			}
-		}
-	}, [address, setFocus, setValue])
+	// 	if (address.neighborhood && address.street) {
+	// 		setFocus('number')
+	// 	} else if (!address.neighborhood) {
+	// 		setFocus('neighborhood')
+	// 	} else if (!address.street) {
+	// 		setFocus('street')
+	// 	}
+	// }
 
 	return {
 		errors,
@@ -222,24 +219,3 @@ export function useProfileController() {
 		handleSubmitProfilePicture,
 	}
 }
-
-// const state = watch('state')
-// const city = watch('city')
-// const street = watch('street')
-
-// const { data: addressData } = useQuery({
-// 	queryKey: ['address', zipCode, state, city, street],
-// 	queryFn: () => {
-// 		if (!zipCode || zipCode.length !== 9) {
-// 			return Promise.resolve(null)
-// 		}
-
-// 		return utilsService.showAddress({ zipCode })
-// 	},
-// 	enabled: !!(!zipCode && state && city && street),
-// })
-
-// if (addressData) {
-// 	setValue('zipCode', addressData.zipCode)
-// 	setFocus('complement')
-// }

@@ -29,31 +29,29 @@ export function TotalsByProject() {
 							</div>
 						</div>
 					)}
-					{data?.transactions?.map(
-						(transaction) => (
-								<div
-									key={transaction.id}
-									className="bg-white shadow border border-dark-blue rounded-lg p-6"
-								>
-									<h2 className="text-xl font-semibold text-gray-800">
-										{transaction.project ?? 'Não informado'}
-									</h2>
-									<div className="mt-4">
-										<span className="text-gray-800 font-medium">
-											Total de
-											<span className="text-cyan-500 font-semibold mx-1">
-												{Format.currency(transaction.amount)}
-											</span>
-											gastos no projeto
-											<span className="text-cyan-500 font-semibold mx-1">
-												{transaction.project ?? 'não informado'}
-											</span>
-											até o momento.
-										</span>
-									</div>
-								</div>
-							),
-					)}
+					{data?.transactions?.map((transaction) => (
+						<div
+							key={transaction.id}
+							className="bg-white shadow border border-dark-blue rounded-lg p-6"
+						>
+							<h2 className="text-xl font-semibold text-gray-800">
+								{transaction.project ?? 'Não informado'}
+							</h2>
+							<div className="mt-4">
+								<span className="text-gray-800 font-medium">
+									Total de
+									<span className="text-cyan-500 font-semibold mx-1">
+										{Format.currency(transaction.amount)}
+									</span>
+									gastos no projeto
+									<span className="text-cyan-500 font-semibold mx-1 lowercase">
+										{transaction.project ?? 'não informado'}
+									</span>
+									até o momento.
+								</span>
+							</div>
+						</div>
+					))}
 				</div>
 				<div className="w-full flex justify-end mt-8">
 					<Button

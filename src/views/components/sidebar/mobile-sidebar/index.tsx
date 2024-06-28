@@ -46,7 +46,6 @@ export function MobileSidebar() {
 									title="Métodos de pagamento"
 								/>
 								<MobileOption linkTo="/tags" title="Tags" />
-								<MobileOption linkTo="/transfers" title="Transferências" />
 								<MobileOption linkTo="/settings" title="Configurações" />
 								<MobileOption linkTo="/profile" title="Perfil" />
 								<MobileOption linkTo="/logout" title="Sair" />

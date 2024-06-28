@@ -192,8 +192,7 @@ export function Transactions() {
 		formState: { errors: hookFormErrosUpdate },
 		register: hookFormRegisterUpdate,
 	} = updateMethods
-	console.log('hookFormErrosUpdate', hookFormErrosUpdate);
-	
+
 	/**
 	 * FIM HOOKFORM
 	 */
@@ -225,23 +224,23 @@ export function Transactions() {
 	function handleCloseCreateModal() {
 		setIsCreateModalOpen(false)
 	}
-	function handleOpenUpdateModal() {
-		hookFormSetValueUpdate('id', selectedTransaction.id)
-		hookFormSetValueUpdate('type', selectedTransaction.type)
-		hookFormSetValueUpdate('date', selectedTransaction.date)
-		hookFormSetValueUpdate('amount', selectedTransaction.amount)
-		hookFormSetValueUpdate('description', selectedTransaction.description)
-		hookFormSetValueUpdate('account', selectedTransaction.account)
-		hookFormSetValueUpdate('status', selectedTransaction.status)
-		hookFormSetValueUpdate('category', selectedTransaction.category)
-		hookFormSetValueUpdate('card', selectedTransaction.card)
-		hookFormSetValueUpdate('contact', selectedTransaction.contact)
-		hookFormSetValueUpdate('center', selectedTransaction.center)
-		hookFormSetValueUpdate('project', selectedTransaction.project)
-		hookFormSetValueUpdate('method', selectedTransaction.method)
-		hookFormSetValueUpdate('documentNumber', selectedTransaction.documentNumber)
-		hookFormSetValueUpdate('notes', selectedTransaction.notes)
-		hookFormSetValueUpdate('competenceDate', selectedTransaction.competenceDate)
+	function handleOpenUpdateModal(transaction: ITransactionDTO) {
+		hookFormSetValueUpdate('id', transaction.id)
+		hookFormSetValueUpdate('type', transaction.type)
+		hookFormSetValueUpdate('date', transaction.date)
+		hookFormSetValueUpdate('amount', transaction.amount)
+		hookFormSetValueUpdate('description', transaction.description)
+		hookFormSetValueUpdate('account', transaction.account)
+		hookFormSetValueUpdate('status', transaction.status)
+		hookFormSetValueUpdate('category', transaction.category)
+		hookFormSetValueUpdate('card', transaction.card)
+		hookFormSetValueUpdate('contact', transaction.contact)
+		hookFormSetValueUpdate('center', transaction.center)
+		hookFormSetValueUpdate('project', transaction.project)
+		hookFormSetValueUpdate('method', transaction.method)
+		hookFormSetValueUpdate('documentNumber', transaction.documentNumber)
+		hookFormSetValueUpdate('notes', transaction.notes)
+		hookFormSetValueUpdate('competenceDate', transaction.competenceDate)
 		hookFormSetValueUpdate('tags', '')
 		setIsUpdateModalOpen(true)
 	}
@@ -354,7 +353,7 @@ export function Transactions() {
 							className="group gap-1.5"
 							onClick={() => {
 								setIsViewModalOpen(true)
-								handleOpenUpdateModal()
+								handleOpenUpdateModal(row.original)
 								setSelectedTransaction(row.original)
 							}}
 						>
@@ -365,7 +364,7 @@ export function Transactions() {
 						<DropdownMenuItem
 							className="group gap-1.5"
 							onClick={() => {
-								handleOpenUpdateModal()
+								handleOpenUpdateModal(row.original)
 								setSelectedTransaction(row.original)
 							}}
 						>
@@ -717,38 +716,41 @@ export function Transactions() {
 	 * INÍCIO EXPORTAR PLANILHA EXCEL
 	 */
 	function exportWorksheet(transactions: ITransactionDTO[]) {
-		const worksheetData = transactions.map((transaction) => ({
-			Type: transaction.type,
-			Date: transaction.date,
-			Amount: transaction.amount,
-			Description: transaction.description,
-			Status: transaction.status,
-			Card: transaction.card,
-			Contact: transaction.contact,
-			Project: transaction.project,
-			DocumentNumber: transaction.documentNumber,
-			Notes: transaction.notes,
-			CompetenceDate: transaction.competenceDate,
-			Account: transaction.account,
-			Category: transaction.category,
-			Center: transaction.center,
-			Method: transaction.method,
-			CreatedAt: transaction.createdAt,
-		}))
-		const worksheet = XLSX.utils.json_to_sheet(worksheetData)
-		const workbook = XLSX.utils.book_new()
-		XLSX.utils.book_append_sheet(workbook, worksheet, 'Transactions')
-		const excelBuffer = XLSX.write(workbook, {
-			bookType: 'xlsx',
-			type: 'array',
-		})
-		const blob = new Blob([excelBuffer], { type: 'application/octet-stream' })
-		const link = document.createElement('a')
-		link.href = URL.createObjectURL(blob)
-		link.download = 'transactions.xlsx'
-		link.click()
-		URL.revokeObjectURL(link.href)
-	}
+    const worksheetData = transactions.map((transaction) => ({
+        Tipo: transaction.type,
+        Data: transaction.date,
+        Valor: transaction.amount,
+        Descrição: transaction.description,
+        Status: transaction.status,
+        Cartão: transaction.card,
+        Contato: transaction.contact,
+        Projeto: transaction.project,
+        'Número do documento': transaction.documentNumber,
+        Notas: transaction.notes,
+        'Data de competência': transaction.competenceDate,
+        Conta: transaction.account,
+        Categoria: transaction.category,
+        Centro: transaction.center,
+        Método: transaction.method,
+        'Data de criação': Format.parseIso(transaction.createdAt),
+    }));
+    
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Lançamentos - Obra Fácil');
+    const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+    });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `lancamentos-obra-facil-${Format.parseIso(new Date().toISOString())}.xlsx`
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+	// link.download = `lancamentos-obra-facil-${Format.parseIso(new Date().toISOString())}.xlsx`
+
 	/**
 	 * FIM EXPORTAR PLANILHA EXCEL
 	 */
@@ -1059,8 +1061,12 @@ export function Transactions() {
 													key={row.original.id}
 													data-state={row.getIsSelected() && 'selected'}
 													onDoubleClick={() => {
-														setSelectedTransaction(row.original)
-														handleOpenUpdateModal()
+														new Promise<void>((resolve) => {
+															setSelectedTransaction(row.original)
+															resolve()
+														}).then(() => {
+															handleOpenUpdateModal(row.original)
+														})
 													}}
 												>
 													{row.getVisibleCells().map((cell) => (

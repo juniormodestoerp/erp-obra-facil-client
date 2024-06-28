@@ -36,7 +36,7 @@ export function EvolutionByContact() {
 							className="bg-white shadow border border-dark-blue rounded-lg p-6"
 						>
 							<h2 className="text-xl font-semibold text-gray-800">
-								{transaction.contact ?? 'Contacto não informado'}
+								{transaction.contact ?? 'Contato não informado'}
 							</h2>
 							<ul className="mt-4 space-y-2">
 								{transaction.evolution.map((evolution) => (

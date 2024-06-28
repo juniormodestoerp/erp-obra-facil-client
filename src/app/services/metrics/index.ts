@@ -15,8 +15,10 @@ import { totalsByCategory } from '@app/services/metrics/totals-by-category'
 import { totalsByCenter } from '@app/services/metrics/totals-by-center'
 import { totalsByContact } from '@app/services/metrics/totals-by-contact'
 import { totalsByProject } from '@app/services/metrics/totals-by-project'
+import { fetchStats } from '@app/services/metrics/initial-page'
 
 export const metricsService = {
+	fetchStats,
 	accountsPayable,
 	accountsReceivable,
 	cashEntries,

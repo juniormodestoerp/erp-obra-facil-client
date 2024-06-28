@@ -8,7 +8,7 @@ import type { IAccountsReceivable } from '@app/services/metrics/accounts-receiva
 import { cn } from '@app/utils/cn'
 import { Format } from '@app/utils/format'
 
-import { Badge } from '@views/components/ui/badge'
+// import { Badge } from '@views/components/ui/badge'
 import { Button } from '@views/components/ui/button'
 
 export function AccountsReceivable() {
@@ -91,14 +91,14 @@ export function AccountsReceivable() {
 												>
 													{Format.currency(transaction.amount)}
 												</span>
-												<span className="mx-1">
+												{/* <span className="mx-1">
 													{transaction?.tags?.map((tag) => (
 														<Badge key={tag} className="bg-dark-blue">
 															{tag}
 														</Badge>
 													))}
-												</span>
-												<span>
+												</span> */}
+												<span className='ml-1'>
 													Método de Pagamento:{' '}
 													{transaction.method === 'credit'
 														? 'cartão de crédito'

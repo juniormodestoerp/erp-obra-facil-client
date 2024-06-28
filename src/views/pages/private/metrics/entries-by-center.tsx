@@ -66,7 +66,7 @@ export function EntriesByCenter() {
                                             </div>
                                             <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 px-4">
                                                 <span className="font-medium text-gray-900 mr-1">
-                                                    {transaction.description}
+                                                    {Format.capitalizeFirstLetter(transaction.description)}
                                                 </span>
                                                 no valor de{' '}
                                                 <span
