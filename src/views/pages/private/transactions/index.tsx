@@ -749,8 +749,6 @@ export function Transactions() {
     link.click();
     URL.revokeObjectURL(link.href);
 }
-	// link.download = `lancamentos-obra-facil-${Format.parseIso(new Date().toISOString())}.xlsx`
-
 	/**
 	 * FIM EXPORTAR PLANILHA EXCEL
 	 */
@@ -1085,7 +1083,7 @@ export function Transactions() {
 													colSpan={columns.length}
 													className="h-24 text-center relative"
 												>
-													<p className="fixed top-[43.8%] left-[55%] transform -translate-x-1/2 -translate-y-1/2 h-24 text-center">
+													<p className="fixed top-[38.5%] left-[55%] transform -translate-x-1/2 -translate-y-1/2 h-24 text-center">
 														Nenhum registro encontrado.
 													</p>
 												</TableCell>
