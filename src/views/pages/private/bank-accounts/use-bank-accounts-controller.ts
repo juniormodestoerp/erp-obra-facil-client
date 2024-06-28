@@ -112,13 +112,14 @@ const updateSchema = z.object({
 		.nullable()
 		.default(null),
 	limitType: z.enum(['Total', 'Mensal']).nullable().default(null),
-	dueDateDay: z.coerce
-		.string(strMessage('dia de vencimento'))
-		.transform((value) => {
-			if (value !== null || value !== '') value.toString()
-		})
-		.nullable()
-		.default(null),
+	dueDateDay: z
+	.string(strMessage('dia de vencimento'))
+	.min(1, { message: 'O dia de vencimento é obrigatório!' })
+	.transform((value) => {
+		return value !== null && value !== '' ? value.toString() : null;
+	})
+	.nullable()
+	.default(null),
 	dueDateFirstInvoice: z
 		.string(strMessage('data da primeira fatura'))
 		.nullable()
@@ -226,10 +227,7 @@ export function useBankAccountsController() {
 		hookFormSetValueUpdate('logo', bankAccount.logo)
 		hookFormSetValueUpdate('limit', bankAccount.limit)
 		hookFormSetValueUpdate('limitType', bankAccount.limitType)
-		hookFormSetValueUpdate(
-			'dueDateDay',
-			bankAccount.dueDateDay !== null ? bankAccount.dueDateDay : 0,
-		)
+		hookFormSetValueUpdate('dueDateDay', bankAccount.dueDateDay)
 		hookFormSetValueUpdate(
 			'dueDateFirstInvoice',
 			bankAccount.dueDateFirstInvoice,
@@ -330,8 +328,8 @@ export function useBankAccountsController() {
 			initialBalance,
 		}: UpdateBankAccountFormData) => {
 			try {
-				console.log(dueDateDay);
-				
+				console.log(dueDateDay)
+
 				await updateBankAccount({
 					id,
 					accountType,
@@ -347,13 +345,13 @@ export function useBankAccountsController() {
 					isFirstInvoice,
 					isCreditCard,
 					initialBalance,
-				});
-				handleCloseUpdateModal();
+				})
+				handleCloseUpdateModal()
 			} catch (error) {
-				toast.error(parseError(error as AppError));
+				toast.error(parseError(error as AppError))
 			}
 		},
-	);
+	)
 
 	function handleSubmitRemove(bankAccount: IBankAccountDTO) {
 		bankAccountsService

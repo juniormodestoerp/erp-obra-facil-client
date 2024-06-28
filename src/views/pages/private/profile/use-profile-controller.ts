@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ChangeEvent, DragEvent } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { authService } from '@app/services/authenticate'
 import { profilePicture } from '@app/services/authenticate/profile-picture'
-import { utilsService } from '@app/services/utils'
 import { strMessage } from '@app/utils/custom-zod-error'
 import { Format } from '@app/utils/format'
 
@@ -104,8 +103,6 @@ export function useProfileController() {
 		control,
 		register,
 		setValue,
-		watch,
-		setFocus,
 		formState: { errors },
 		handleSubmit: hookFormHandleSubmit,
 	} = useForm<FormData>({

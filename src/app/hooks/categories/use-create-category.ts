@@ -20,7 +20,6 @@ export function useCreateCategory() {
 					return old?.concat({
 						...variables,
 						id: tmpCategoryId,
-						status: 'pending',
 						createdAt: new Date().toISOString(),
 					})
 				},

@@ -20,7 +20,6 @@ export function useCreatePaymentMethod() {
 					return old?.concat({
 						...variables,
 						id: tmpPaymentMethodId,
-						status: 'pending',
 						createdAt: new Date().toISOString(),
 					})
 				},

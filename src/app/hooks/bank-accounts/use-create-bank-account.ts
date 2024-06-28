@@ -20,7 +20,6 @@ export function useCreateBankAccount() {
 					return old?.concat({
 						...variables,
 						id: tmpBankAccountId,
-						status: 'pending',
 						createdAt: new Date().toISOString(),
 					})
 				},

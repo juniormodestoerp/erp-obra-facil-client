@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const DatePicker = forwardRef<HTMLDivElement, Props>(
-	({ label, selected, inputId, optional, onChange, error }, ref) => {
+	({ label, selected, inputId, optional, onChange, error }, ) => {
 		const [triggerWidth, setTriggerWidth] = useState<number | undefined>(
 			undefined,
 		)

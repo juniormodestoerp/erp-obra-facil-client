@@ -1,6 +1,5 @@
 import type { IBankAccountDTO } from '@app/dtos/bank-account-dto'
 import { httpClient } from '@app/services/http-client'
-import { Format } from '@app/utils/format'
 
 type ICreateBankAccountDTO = Omit<IBankAccountDTO, 'id' | 'createdAt'>
 

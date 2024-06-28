@@ -37,7 +37,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider, useForm } from 'react-hook-form'
 import { getColumnName } from '../conciliations/components/get-column-name'
-import { PaginationControls } from '../conciliations/components/pagination-controls'
+import { PaginationControls } from '@views/components/transaction-pagination-controls'
 import { z } from 'zod'
 import {
 	dateMessage,

@@ -69,22 +69,16 @@ interface IVerifiedExcelData {
 }
 
 const createSchema = z.object({
-	type: z.string(strMessage('tipo')).nullable().default(null),
-	date: z.string(dateMessage('data')).nullable().default(null),
+	type: z.string(strMessage('tipo')),
+	date: z.string(dateMessage('data')),
 	amount: z
 		.union([z.string(strMessage('valor')), z.number(numbMessage('valor'))])
 		.transform((value: string | number) => {
 			const fmtValue = Format.cleanCurrency(value)
 			return fmtValue
-		})
-		.nullable()
-		.default(null),
-	description: z.string(strMessage('descrição')).nullable().default(null),
-	account: z.string(strMessage('conta')).nullable().default(null),
-	transferAccount: z
-		.string(strMessage('conta transferência'))
-		.nullable()
-		.default(null),
+		}),
+	description: z.string(strMessage('descrição')),
+	account: z.string(strMessage('conta')),
 	card: z.string(strMessage('cartão')).nullable().default(null),
 	category: z.string(strMessage('categoria')).nullable().default(null),
 	subcategory: z.string(strMessage('subcategoria')).nullable().default(null),

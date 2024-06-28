@@ -1,4 +1,4 @@
-import type { IVerifiedTransaction } from '@app/services/conciliations/verify-ofx'
+import type { ITransactionDTO } from '@app/dtos/transaction-dto'
 import {
 	ChevronDoubleLeftIcon,
 	ChevronDoubleRightIcon,
@@ -10,7 +10,7 @@ import { Button } from '@views/components/ui/button'
 import { Input } from '@views/components/ui/input'
 
 interface Props {
-	table: Table<IVerifiedTransaction>
+	table: Table<ITransactionDTO>
 }
 
 export function PaginationControls({ table }: Props) {

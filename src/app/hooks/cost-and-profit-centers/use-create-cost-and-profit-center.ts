@@ -20,7 +20,6 @@ export function useCreateCostAndProfitCenter() {
 					return old?.concat({
 						...variables,
 						id: tmpCostAndProfitCenterId,
-						status: 'pending',
 						createdAt: new Date().toISOString(),
 					})
 				},

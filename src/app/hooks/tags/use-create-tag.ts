@@ -15,7 +15,6 @@ export function useCreateTag() {
 				return old?.concat({
 					...variables,
 					id: tmpTagId,
-					status: 'pending',
 					createdAt: new Date().toISOString(),
 				})
 			})
